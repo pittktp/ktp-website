@@ -1,27 +1,35 @@
-# [Start Bootstrap](http://startbootstrap.com/) - [New Age](http://startbootstrap.com/template-overviews/new-age/)
+# Kappa Theta Pi at the University of Pittsburgh
 
-[New Age](http://startbootstrap.com/template-overviews/new-age/) is a web app landing page theme for [Bootstrap](http://getbootstrap.com/) created by [Start Bootstrap](http://startbootstrap.com/).
+## About us
+We are a co-ed professional technology fraternity located at the University of Pittsburgh that participate fully in the thriving tech scene in our city. Our organizations aims to better its members through:
+* Community service
+* Field experience such as hackathons
+* Mentoring
+* Attending tech talks with local companies such as Google, Dick's Sporting Goods, UPMC
+* Social events 
 
-## Getting Started
+## Our website
+Our website is meant to not only give an outsider a perspective on our fraternity, but to also allow existing members to login and view important information that pertain to their role in the fraternity. 
 
-To begin using this template, choose one of the following options to get started:
-* [Download the latest release on Start Bootstrap](http://startbootstrap.com/template-overviews/new-age/)
-* Clone the repo: `git clone https://github.com/BlackrockDigital/startbootstrap-new-age.git`
-* Fork the repo
+### The website right now
+Current functionality allows for members to create accounts and login in order to view a community board of how many brotherhoods points each member has obtained. With this, members can submit point requests that state how many points they received (through means of community service, events, etc.) and a member of the executive board can accept or deny this request. Members of e-board are given the role of "admins" and have additional power to edit current members.
 
-## Bugs and Issues
+### The website in the future
+In the future (as soon as tomorrow or a year from now) we would like to implement helpful features such as:
+* Easy logging of who attends chapter meetings and how many unexcused absences they have
+* A community page where members can submit ideas they have for future KTP events or even just general questions
+* Functionality to handle live voting (for when we elect new e-board members once per year)
 
-Have a bug or an issue with this template? [Open a new issue](https://github.com/BlackrockDigital/startbootstrap-new-age/issues) here on GitHub or leave a comment on the [template overview page at Start Bootstrap](http://startbootstrap.com/template-overviews/new-age/).
+## The tech behind the website
+We are using the popular MEAN webstack (MongoDB, Express.js, Angular6, and NodeJS) for development.
 
-## Creator
+### Frontend
+For the frontend (the user interface) we are using Angular6 due to its extensive premade components. Angular is an awesome framework that essentially does the heavy lifting for you so you can focus solely on creating the best UI for your user. We are in the age of reactive programming, so we take advantage of the rxjs library to have asyncronous calls when possible for better performance.
 
-Start Bootstrap was created by and is maintained by **[David Miller](http://davidmiller.io/)**, Owner of [Blackrock Digital](http://blackrockdigital.io/).
+### Backend
+For the backend (server-side) we use NodeJS which is a very popular JavaScript backend tool. NodeJS is awesome because it also has extensive libraries to take advantage of. For example, when a user creates an account and sends that password to the backend, a library called bcrypt is used to hash this password so that we don't store the user's plaintext password in the database. Express.js is middleware that makes setting up a NodeJS server extremely easy. MongoDB is a No SQL database that works perfectly for our situation due to the ease of hooking up to our backend through the middleware Mongoose.
 
-* https://twitter.com/davidmillerskt
-* https://github.com/davidtmiller
+### Deployment
+Currently we are hosted on GitHub but have an intention in the very near future of migrating to AWS.
 
-Start Bootstrap is based on the [Bootstrap](http://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
 
-## Copyright and License
-
-Copyright 2013-2016 Blackrock Digital LLC. Code released under the [MIT](https://github.com/BlackrockDigital/startbootstrap-new-age/blob/gh-pages/LICENSE) license.
