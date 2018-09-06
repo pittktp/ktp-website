@@ -1,0 +1,109 @@
+<header>
+
+  <!-- Points Submit Modal -->
+  <div class="modal fade" id="pointsSubmitModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form (ngSubmit)="onPointRequestSubmit(pointsForm)" #pointsForm="ngForm" autocomplete="off">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 style="color:black;"class="modal-title">Log Points</h4>
+          </div>
+          <div class="modal-body">
+            <div class="input-field">
+              <label style="color:black" for="points">Points earned</label>
+              <input style="text-align:left;" [(ngModel)]="pointForm.points" name="points" #name="ngModel" type="number" class="form-control" id="points" placeholder="Enter number of brotherhood points" required>
+            </div>
+            <br />
+            <div class="input-field">
+              <label style="color:black" for="description">Description</label>
+              <input style="text-align:left;" [(ngModel)]="pointForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these points?" required>
+            </div>
+            <br />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!pointsForm.valid">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Point Requests Modal - for admins only -->
+  <div class="modal fade" id="reviewRequestsModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 style="color:black;"class="modal-title">Review Point Requests</h4>
+        </div>
+        <div class="modal-body">
+          <h3 class="black-text" *ngIf="pointRequests < 1; else showTable">No remaining requests</h3>
+          <ng-template #showTable>
+            <table class="table table-bordered black-text">
+              <thead>
+                <tr>
+                  <th>Submitted by</th>
+                  <th>Points</th>
+                  <th>Description</th>
+                  <th>Accept/Deny</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let pointRequest of pointRequests">
+                  <td *ngIf="pointRequest.approved == 0">{{ pointRequest.submittedBy }}</td>
+                  <td *ngIf="pointRequest.approved == 0">{{ pointRequest.points }}</td>
+                  <td *ngIf="pointRequest.approved == 0">{{ pointRequest.description }}</td>
+                  <td *ngIf="pointRequest.approved == 0">
+                    <button type="button" class="btn btn-default" (click)="onAcceptRequest(pointRequest)">Accept</button>
+                    <button type="button" class="btn btn-default" (click)="onDenyRequest(pointRequest)">Deny</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-template>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table to display all members' points -->
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-xs-8">
+          <h2>Brotherhood points for Fall 2018</h2>
+        </div>
+        <div class="col-xs-4 text-right">
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#pointsSubmitModal">Log Points</button>
+            <button *ngIf="userPriviledge == 'admin'" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#reviewRequestsModal">Review Requests</button>
+        </div>
+      </div>
+      <div class="row">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Brotherhood Points</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let member of members">
+              <td>{{ member.name }}</td>
+              <td>{{ member.email }}</td>
+              <td>{{ member.points }}</td>
+              <td>{{ member.role }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</header>

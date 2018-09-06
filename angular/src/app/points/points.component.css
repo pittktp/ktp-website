@@ -1,0 +1,29 @@
+.container {
+  margin-top: 15vh;
+}
+
+.modal-backdrop.fade
+{
+  opacity: 0.5;
+}
+.modal-open .modal
+{
+  opacity: 1;
+}
+
+.btn {
+  margin-left: 5px !important;
+}
+
+#buttonContainer {
+  position: absolute !important;
+  right:0 !important;
+}
+
+.black-text {
+  color: black;
+}
+
+.clicked {
+  background-color: green !important;
+}

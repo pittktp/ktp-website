@@ -1,0 +1,26 @@
+.divider {
+  display: inline;
+  border-left:2px solid white;
+  background: transparent;
+}
+
+.dropdown-toggle {
+  background-color: transparent !important;
+}
+
+.dropdown-menu a {
+  color: black;
+}
+
+.dropdown-item a{
+  text-align: right !important;
+}
+
+.dropdown-menu a:hover {
+  color: #0d95e8;
+  text-decoration: none;
+}
+
+.pointer {
+  cursor: pointer !important;
+}
