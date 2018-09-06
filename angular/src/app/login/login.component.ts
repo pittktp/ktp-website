@@ -7,6 +7,7 @@ import { first } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 
 import { Member } from '../shared/models/member.model';
+import { ToastrService } from 'ngx-toastr';
 
 import '../../assets/js/new-age.min.js';
 
@@ -20,7 +21,7 @@ declare var $: any;
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private auth: AuthService, private router: Router, private sharedService: SharedService, private memberService: MemberService) { }
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private sharedService: SharedService, private memberService: MemberService) { }
 
   error: string;
   showIncorrectLogin = false;
@@ -50,6 +51,7 @@ export class LoginComponent implements OnInit {
           var member = res as Member;
           this.sharedService.emitChange({"name": member.name, "role": member.role});
           this.router.navigate(['home']);
+          this.toastr.show('Hello ' + member.name + "!");
         });
       },
         (err) => {
@@ -104,6 +106,7 @@ export class LoginComponent implements OnInit {
                 var member = res as Member;
                 this.sharedService.emitChange({"name": member.name, "role": member.role});
                 this.router.navigate(['home']);
+                this.toastr.show('Hello ' + member.name + "!");
               });
             },
               (err) => {

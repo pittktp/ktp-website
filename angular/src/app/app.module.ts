@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
+import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -29,9 +32,14 @@ export function tokenGetter() {
     EditMembersComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-left'
+    }),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

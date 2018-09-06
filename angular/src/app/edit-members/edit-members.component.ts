@@ -6,6 +6,7 @@ import { AuthService } from '../auth.service';
 import { MemberService } from '../shared/api/member.service';
 import { SharedService } from '../shared.service';
 import { Member } from '../shared/models/member.model';
+import { ToastrService } from 'ngx-toastr';
 
 import '../../assets/js/new-age.min.js';
 
@@ -21,7 +22,7 @@ export class EditMembersComponent implements OnInit {
   private members: Array<object> = [];
   private memberClicked: Member;
 
-  constructor(private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
 
     // hacked up way of memberClicked not being null on startup of this component
     var dummyMember = new Member();
@@ -74,6 +75,7 @@ export class EditMembersComponent implements OnInit {
       this.memberService.deleteMember(this.memberClicked._id).subscribe((res) => {
         this.getMembers();
         $("#memberEditSubmitModal").modal("hide");
+        this.toastr.success('Successfully deleted member ' + this.memberClicked.name);
       });
     }
   }
@@ -93,6 +95,7 @@ export class EditMembersComponent implements OnInit {
       this.memberService.putMember(this.memberClicked._id, updatedMember).subscribe((res) => {
         this.getMembers();
         $("#memberEditSubmitModal").modal("hide");
+        this.toastr.success('Successfully edited member ' + res.name);
       });
     }
   }

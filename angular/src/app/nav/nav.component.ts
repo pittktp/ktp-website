@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { SharedService } from '../shared.service';
 import { Router } from '@angular/router';
 
+import { ToastrService } from 'ngx-toastr';
 import { MemberService } from '../shared/api/member.service';
 import { Member } from '../shared/models/member.model';
 
@@ -17,7 +18,7 @@ export class NavComponent implements OnInit {
   userId = '';
   userPriviledge = '';
 
-  constructor(private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
@@ -60,6 +61,7 @@ export class NavComponent implements OnInit {
       this.auth.logout();
       this.user = '';
       this.router.navigate(['home']);
+      this.toastr.success('Successfully logged out');
     }
   }
 
