@@ -12,12 +12,12 @@
           <div class="modal-body">
             <div class="input-field">
               <label style="color:black" for="points">Points earned</label>
-              <input style="text-align:left;" [(ngModel)]="pointForm.points" name="points" #name="ngModel" type="number" class="form-control" id="points" placeholder="Enter number of brotherhood points" required>
+              <input style="text-align:left;" [(ngModel)]="pointForm.points" name="points" #name="ngModel" type="number" class="form-control" id="points" placeholder="Enter number of brotherhood points" autocomplete="off" required>
             </div>
             <br />
             <div class="input-field">
               <label style="color:black" for="description">Description</label>
-              <input style="text-align:left;" [(ngModel)]="pointForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these points?" required>
+              <input style="text-align:left;" [(ngModel)]="pointForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these points?" autocomplete="off" required>
             </div>
             <br />
           </div>
@@ -56,8 +56,8 @@
                   <td *ngIf="pointRequest.approved == 0">{{ pointRequest.points }}</td>
                   <td *ngIf="pointRequest.approved == 0">{{ pointRequest.description }}</td>
                   <td *ngIf="pointRequest.approved == 0">
-                    <button type="button" class="btn btn-default" (click)="onAcceptRequest(pointRequest)">Accept</button>
-                    <button type="button" class="btn btn-default" (click)="onDenyRequest(pointRequest)">Deny</button>
+                    <button type="button" id="acceptPoints" class="btn btn-default" (click)="onAcceptRequest(pointRequest)">Accept</button>
+                    <button type="button" id="denyPoints" class="btn btn-default" (click)="onDenyRequest(pointRequest)">Deny</button>
                   </td>
                 </tr>
               </tbody>
@@ -90,6 +90,7 @@
               <th>Name</th>
               <th>Email</th>
               <th>Brotherhood Points</th>
+              <th>Unexcused Absences</th>
               <th>Role</th>
             </tr>
           </thead>
@@ -98,6 +99,7 @@
               <td>{{ member.name }}</td>
               <td>{{ member.email }}</td>
               <td>{{ member.points }}</td>
+              <td> {{ member.absences }}</td>
               <td>{{ member.role }}</td>
             </tr>
           </tbody>

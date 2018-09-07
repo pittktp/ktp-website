@@ -64,6 +64,7 @@ export class EditMembersComponent implements OnInit {
 
     $('#studentId').val(this.memberClicked.studentId);
     $('#points').val(this.memberClicked.points);
+    $('#absences').val(this.memberClicked.absences);
     $('#role').val(this.memberClicked.role);
     $('#name').val(this.memberClicked.name);
 
@@ -89,6 +90,7 @@ export class EditMembersComponent implements OnInit {
     updatedMember.name = $('#name').val();
     updatedMember.studentId = $('#studentId').val();
     updatedMember.points = $('#points').val();
+    updatedMember.absences = $('#absences').val();
     updatedMember.role = $('#role').val();
 
     if(confirm("Finish editing member " + updatedMember.name + "?")) {

@@ -23,6 +23,7 @@
           <div class="dropdown-menu">
             <li><a class="pointer dropdown-item" (click)="onPointsClicked()">View/Log Points</a></li>
             <li *ngIf="userPriviledge == 'admin'"><a class="pointer dropdown-item" (click)="onEditMembersClicked()">Edit Members</a></li>
+            <li *ngIf="userPriviledge == 'admin'"><a class="pointer dropdown-item" (click)="onAttendanceClicked()">Take Attendance</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="pointer dropdown-item" (click)="onLogout()">Logout</a></li>
           </div>
@@ -31,3 +32,36 @@
     </div>
   </div>
 </nav>
+
+<div class="modal fade" id="attendanceModal" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="onAttendanceClosed()">&times;</button>
+        <h4 style="color:black;"class="modal-title">Attendance</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered black-text">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Present</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let member of members">
+              <td *ngIf="!membersNotHere.includes(member)">{{ member.name }}</td>
+              <td *ngIf="!membersNotHere.includes(member)">
+                <button type="button" id="notHere" class="btn btn-default" (click)="onNotHere(member)">Not Here</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onAttendanceClosed()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onAttendanceSubmit()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

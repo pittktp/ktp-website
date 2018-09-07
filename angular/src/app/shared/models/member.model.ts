@@ -7,6 +7,7 @@ export class Member {
   points: number;
   studentId: number;
   role: string;
+  absences: number;
 
   constructor() { }
 

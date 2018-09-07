@@ -114,6 +114,7 @@ export class PointsComponent implements OnInit {
   onDenyRequest(request: PointRequest) {
     this.pointsService.deletePointRequest(request._id).subscribe((res) => {
       this.refreshPointRequests();
+      this.toastr.error('Point request denied for ' + request.submittedBy);
     });
   }
 

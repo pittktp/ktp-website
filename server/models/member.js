@@ -6,7 +6,8 @@ var Member = mongoose.model('Member', {
   password: { type: String },
   studentId: { type: String },
   points: { type: Number },
-  role: { type: String }
+  role: { type: String },
+  absences: { type: Number }
 });
 
 module.exports = { Member };

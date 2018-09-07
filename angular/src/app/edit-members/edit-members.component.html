@@ -14,6 +14,7 @@
               <th>Name</th>
               <th>Email</th>
               <th>Brotherhood Points</th>
+              <th>Unexcused Absences</th>
               <th>Pitt ID</th>
               <th>Role</th>
             </tr>
@@ -23,6 +24,7 @@
               <td>{{ member.name }}</td>
               <td>{{ member.email }}</td>
               <td>{{ member.points }}</td>
+              <td>{{ member.absences }}</td>
               <td>{{ member.studentId }}</td>
               <td>{{ member.role }}</td>
             </tr>
@@ -55,6 +57,11 @@
             <div class="input-field">
               <label style="color:black" for="points">Points earned</label>
               <input style="text-align:left;" [(ngModel)]="memberEditForm.points" name="points" #name="ngModel" type="number" class="form-control" id="points" autocomplete="off">
+            </div>
+            <br />
+            <div class="input-field">
+              <label style="color:black" for="absences">Absences</label>
+              <input style="text-align:left;" [(ngModel)]="memberEditForm.absences" name="absences" #name="ngModel" type="number" class="form-control" id="absences" autocomplete="off">
             </div>
             <br />
             <div class="input-field">

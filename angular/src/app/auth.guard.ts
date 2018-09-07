@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
     this.auth.logout();
     alert('You have been logged out - automatically logs you out after 2 hours');
     this.sharedService.emitChange({"name": ''});
-    this.router.navigate(['home']);
+    this.router.navigate(['login']);
     return false;
   }
 }

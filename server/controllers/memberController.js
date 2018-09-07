@@ -43,7 +43,8 @@ router.post('/', (req, res) => {
       password: hash,
       studentId: req.body.studentId,
       points: req.body.points,
-      role: req.body.role
+      role: req.body.role,
+      absences: req.body.absences
     });
 
     member.save((err, doc) =>{
@@ -69,7 +70,8 @@ router.put('/:id', (req, res) => {
     email: req.body.email,
     studentId: req.body.studentId,
     points: req.body.points,
-    role: req.body.role
+    role: req.body.role,
+    absences: req.body.absences
   };
 
   Member.findByIdAndUpdate(req.params.id, { $set: member }, { new: true }, (err, doc) => {

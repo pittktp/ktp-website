@@ -24,6 +24,10 @@
   color: black;
 }
 
-.clicked {
-  background-color: green !important;
+#acceptPoints:hover {
+  background-color: rgba(0, 255, 0, 0.3) !important;
+}
+
+#denyPoints:hover {
+  background-color: rgba(255, 0, 0, 0.3) !important;
 }

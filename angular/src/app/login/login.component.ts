@@ -93,6 +93,7 @@ export class LoginComponent implements OnInit {
       newMember.points = 0;
       newMember.studentId = form.value.registerStudentId;
       newMember.role = "member";
+      newMember.absences = 0;
 
       if(exists == null) {
         this.emailInUse = false;

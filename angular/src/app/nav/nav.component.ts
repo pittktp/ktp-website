@@ -6,6 +6,10 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MemberService } from '../shared/api/member.service';
 import { Member } from '../shared/models/member.model';
+import { AuthGuard } from '../auth.guard';
+
+
+declare var $: any;
 
 @Component({
   selector: 'app-nav',
@@ -17,6 +21,8 @@ export class NavComponent implements OnInit {
   user = '';
   userId = '';
   userPriviledge = '';
+  private members: Array<object> = [];
+  private membersNotHere: Array<object> = [];
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
@@ -40,6 +46,19 @@ export class NavComponent implements OnInit {
   ngOnInit() {
   }
 
+  // Gets and sorts members based on first name
+  getMembers() {
+    this.memberService.getMembers().subscribe((data: Array<object>) => {
+      var mems = data as Member[]
+      mems.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
+      this.members = data;
+    });
+  }
+
   onLoginClicked() {
     this.router.navigate(['login'])
   }
@@ -50,6 +69,43 @@ export class NavComponent implements OnInit {
 
   onEditMembersClicked() {
     this.router.navigate(['edit-members']);
+  }
+
+  onAttendanceClicked() {
+    if(!this.auth.isTokenExpired()) {
+      this.getMembers();
+      $("#attendanceModal").modal("show");
+    }
+    else {
+      this.auth.logout();
+      alert('You have been logged out - automatically logs you out after 2 hours');
+      this.user = '';
+      this.router.navigate(['login']);
+    }
+  }
+
+  onAttendanceSubmit() {
+    for(var i = 0; i < this.membersNotHere.length; i++) {
+      var currentMember = this.membersNotHere[i] as Member;
+      var abs = currentMember.absences;
+      abs = abs + 1;
+      currentMember.absences = abs;
+      this.memberService.putMember(currentMember._id, currentMember).subscribe((res) => {
+        this.toastr.error(res.name + ' unexcused absence');
+      });
+    }
+    this.onAttendanceClosed();
+  }
+
+  onAttendanceClosed() {
+    this.membersNotHere = [];
+    $("#attendanceModal").modal("hide");
+  }
+
+  onNotHere(member: Member) {
+    this.membersNotHere.push(member);
+
+    console.log(this.membersNotHere);
   }
 
   onHomeClicked() {
