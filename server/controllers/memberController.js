@@ -43,6 +43,7 @@ router.post('/', (req, res) => {
       password: hash,
       studentId: req.body.studentId,
       points: req.body.points,
+      serviceHours: req.body.serviceHours,
       role: req.body.role,
       absences: req.body.absences
     });
@@ -70,6 +71,7 @@ router.put('/:id', (req, res) => {
     email: req.body.email,
     studentId: req.body.studentId,
     points: req.body.points,
+    serviceHours: req.body.serviceHours,
     role: req.body.role,
     absences: req.body.absences
   };

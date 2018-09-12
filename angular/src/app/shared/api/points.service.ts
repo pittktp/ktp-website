@@ -10,6 +10,7 @@ import { PointRequest } from '../models/point-request.model';
 export class PointsService {
 
   API_URL = 'http://localhost:3000/api/points/';
+  pointRequests: PointRequest[];
 
   constructor(private httpClient: HttpClient) { }
 

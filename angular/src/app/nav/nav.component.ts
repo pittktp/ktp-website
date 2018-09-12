@@ -18,11 +18,9 @@ declare var $: any;
 })
 export class NavComponent implements OnInit {
 
-  user = '';
-  userId = '';
-  userPriviledge = '';
-  private members: Array<object> = [];
   private membersNotHere: Array<object> = [];
+  private user = '';
+  private userRole = '';
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
@@ -30,7 +28,7 @@ export class NavComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userPriviledge = member.role;
+        this.userRole = member.role;
       });
     }
 
@@ -38,7 +36,7 @@ export class NavComponent implements OnInit {
       change => {
         console.log(change.name + ' ' + change.role);
         this.user = change.name;
-        this.userPriviledge = change.role;
+        this.userRole = change.role;
       }
     );
   }
@@ -55,7 +53,7 @@ export class NavComponent implements OnInit {
         var textB = b.name.toUpperCase();
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       });
-      this.members = data;
+      this.memberService.members = mems;
     });
   }
 
@@ -78,27 +76,31 @@ export class NavComponent implements OnInit {
     }
     else {
       this.auth.logout();
-      alert('You have been logged out - automatically logs you out after 2 hours');
+      alert('You have been logged out - automatically logs you out after 3 hours');
       this.user = '';
       this.router.navigate(['login']);
     }
   }
 
   onAttendanceSubmit() {
-    for(var i = 0; i < this.membersNotHere.length; i++) {
-      var currentMember = this.membersNotHere[i] as Member;
-      var abs = currentMember.absences;
-      abs = abs + 1;
-      currentMember.absences = abs;
-      this.memberService.putMember(currentMember._id, currentMember).subscribe((res) => {
-        this.toastr.error(res.name + ' unexcused absence');
-      });
+    if(confirm("Finish taking attendance?")) {
+      for(var i = 0; i < this.membersNotHere.length; i++) {
+        var currentMember = this.membersNotHere[i] as Member;
+        var abs = currentMember.absences;
+        abs = abs + 1;
+        currentMember.absences = abs;
+        this.memberService.putMember(currentMember._id, currentMember).subscribe((res) => {
+          this.toastr.error(res.name + ' unexcused absence');
+        });
+      }
+      this.membersNotHere = [];
+      $("#attendanceModal").modal("hide");
     }
-    this.onAttendanceClosed();
   }
 
   onAttendanceClosed() {
     this.membersNotHere = [];
+    this.toastr.error('Take attendance canceled');
     $("#attendanceModal").modal("hide");
   }
 

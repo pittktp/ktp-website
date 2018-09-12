@@ -19,19 +19,19 @@ declare var $: any;
 })
 export class EditMembersComponent implements OnInit {
 
-  private members: Array<object> = [];
   private memberClicked: Member;
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
 
     // hacked up way of memberClicked not being null on startup of this component
-    var dummyMember = new Member();
-    dummyMember._id = '';
-    dummyMember.name = '';
-    dummyMember.email = '';
-    dummyMember.points = 0;
-    dummyMember.studentId = 0;
-    this.memberClicked = dummyMember;
+    // var dummyMember = new Member();
+    // dummyMember._id = '';
+    // dummyMember.name = '';
+    // dummyMember.email = '';
+    // dummyMember.points = 0;
+    // dummyMemb
+    // dummyMember.studentId = 0;
+    // this.memberClicked = dummyMember;
 
   }
 
@@ -55,7 +55,7 @@ export class EditMembersComponent implements OnInit {
         var textB = b.name.toUpperCase();
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       });
-      this.members = data;
+      this.memberService.members = mems;
     });
   }
 
@@ -64,6 +64,7 @@ export class EditMembersComponent implements OnInit {
 
     $('#studentId').val(this.memberClicked.studentId);
     $('#points').val(this.memberClicked.points);
+    $('#serviceHours').val(this.memberClicked.serviceHours);
     $('#absences').val(this.memberClicked.absences);
     $('#role').val(this.memberClicked.role);
     $('#name').val(this.memberClicked.name);
@@ -90,6 +91,7 @@ export class EditMembersComponent implements OnInit {
     updatedMember.name = $('#name').val();
     updatedMember.studentId = $('#studentId').val();
     updatedMember.points = $('#points').val();
+    updatedMember.serviceHours = $('#serviceHours').val();
     updatedMember.absences = $('#absences').val();
     updatedMember.role = $('#role').val();
 

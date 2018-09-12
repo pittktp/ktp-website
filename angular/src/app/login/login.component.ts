@@ -91,6 +91,7 @@ export class LoginComponent implements OnInit {
       newMember.email = form.value.registerEmail;
       newMember.password = form.value.registerPassword;
       newMember.points = 0;
+      newMember.serviceHours = 0;
       newMember.studentId = form.value.registerStudentId;
       newMember.role = "member";
       newMember.absences = 0;
@@ -106,8 +107,10 @@ export class LoginComponent implements OnInit {
               this.memberService.getMemberById(currentUserId).subscribe((res) => {
                 var member = res as Member;
                 this.sharedService.emitChange({"name": member.name, "role": member.role});
+                this.memberService.user = member.name;
+                this.memberService.userRole = member.role;
                 this.router.navigate(['home']);
-                this.toastr.show('Hello ' + member.name + "!");
+                this.toastr.show('Welcome to the site ' + member.name + "!");
               });
             },
               (err) => {

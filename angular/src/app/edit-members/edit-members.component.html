@@ -14,16 +14,18 @@
               <th>Name</th>
               <th>Email</th>
               <th>Brotherhood Points</th>
+              <th>Service Hours</th>
               <th>Unexcused Absences</th>
               <th>Pitt ID</th>
               <th>Role</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let member of members" (click)="onMemberClicked(member)" class="pointer">
+            <tr *ngFor="let member of memberService.members" (click)="onMemberClicked(member)" class="pointer">
               <td>{{ member.name }}</td>
               <td>{{ member.email }}</td>
               <td>{{ member.points }}</td>
+              <td>{{ member.serviceHours }}</td>
               <td>{{ member.absences }}</td>
               <td>{{ member.studentId }}</td>
               <td>{{ member.role }}</td>
@@ -52,6 +54,11 @@
             <div class="input-field">
               <label style="color:black" for="studentId">Student ID</label>
               <input style="text-align:left;" [(ngModel)]="memberEditForm.studentId" name="studentId" #name="ngModel" type="text" class="form-control" id="studentId" autocomplete="off">
+            </div>
+            <br />
+            <div class="input-field">
+              <label style="color:black" for="points">Service Hours</label>
+              <input style="text-align:left;" [(ngModel)]="memberEditForm.serviceHours" name="serviceHours" #name="ngModel" type="number" class="form-control" id="serviceHours" autocomplete="off">
             </div>
             <br />
             <div class="input-field">

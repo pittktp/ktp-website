@@ -10,6 +10,11 @@ export class MemberService {
 
   API_URL = 'http://localhost:3000/api/members/';
 
+  members: Member[];
+  user = '';
+  userId = '';
+  userRole = 'member';
+
   constructor(private httpClient: HttpClient) { }
 
   getMembers() {
