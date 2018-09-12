@@ -1,7 +1,7 @@
 # Kappa Theta Pi at the University of Pittsburgh
 
 ## About us
-We are a co-ed professional technology fraternity located at the University of Pittsburgh that participate fully in the thriving tech scene in our city. Our organizations aims to better its members through:
+We are a co-ed professional technology fraternity located at the University of Pittsburgh that participates fully in the thriving tech scene of our city. Our organization aims to better its members through:
 * Community service
 * Field experience such as hackathons
 * Mentoring
