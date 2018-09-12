@@ -12,11 +12,10 @@ We are a co-ed professional technology fraternity located at the University of P
 Our website is meant to not only give an outsider a perspective on our fraternity, but to also allow existing members to login and view important information that pertain to their role in the fraternity. 
 
 ### The website right now
-Current functionality allows for members to create accounts and login in order to view a community board of how many brotherhoods points each member has obtained. With this, members can submit point requests that state how many points they received (through means of community service, events, etc.) and a member of the executive board can accept or deny this request. Members of e-board are given the role of "admins" and have additional power to edit current members.
+Current functionality allows for members to create accounts and login in order to view a community board of how many brotherhoods points each member has obtained. With this, members can submit point requests or service hour reqeusts that state how many points or service hours they have received (through means of community service, events, etc.) and a member of the executive board can accept or deny this request. Members of e-board are given the role of "admins" and have additional power to edit current members. There is also functionality for attendance taking that increments unexcused absences as chapter meetings.
 
 ### The website in the future
 In the future (as soon as tomorrow or a year from now) we would like to implement helpful features such as:
-* Easy logging of who attends chapter meetings and how many unexcused absences they have
 * A community page where members can submit ideas they have for future KTP events or even just general questions
 * Functionality to handle live voting (for when we elect new e-board members once per year)
 
