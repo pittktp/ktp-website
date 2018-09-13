@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   passwordsMatch = true;
   validEmail = true;
   emailInUse = false;
+  validCode = true;
 
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');
@@ -79,6 +80,13 @@ export class LoginComponent implements OnInit {
       this.validEmail = false;
   }
 
+  onCodeKey() {
+    if($('#registerCode').val() == "g62dz9t4qm" || $('#registerCode').val() == "6edwxvuh06")
+      this.validCode = true;
+    else
+      this.validCode = false;
+  }
+
   onRegisterSubmit(form: NgForm) {
 
     this.memberService.getMembers().subscribe((data: Array<object>) => {
@@ -93,8 +101,10 @@ export class LoginComponent implements OnInit {
       newMember.points = 0;
       newMember.serviceHours = 0;
       newMember.studentId = form.value.registerStudentId;
-      newMember.role = "member";
       newMember.absences = 0;
+
+      if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";
+      else if(form.value.registerCode == "6edwxvuh06") newMember.role = "admin";
 
       if(exists == null) {
         this.emailInUse = false;

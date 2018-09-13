@@ -23,16 +23,6 @@ export class EditMembersComponent implements OnInit {
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
 
-    // hacked up way of memberClicked not being null on startup of this component
-    // var dummyMember = new Member();
-    // dummyMember._id = '';
-    // dummyMember.name = '';
-    // dummyMember.email = '';
-    // dummyMember.points = 0;
-    // dummyMemb
-    // dummyMember.studentId = 0;
-    // this.memberClicked = dummyMember;
-
   }
 
   ngOnInit() {
