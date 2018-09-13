@@ -16,7 +16,8 @@ var serviceHourRequestController = require('./controllers/serviceHourRequestCont
 
 var app = express();
 app.use(bodyParser.json());
-app.use(cors({ origin: 'http://localhost:4200' }));
+//app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: 'http://52.6.239.231:4200' }));
 
 app.listen(3000, () => console.log('Server started on port 3000'));
 
