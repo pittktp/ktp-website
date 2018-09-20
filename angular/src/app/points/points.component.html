@@ -76,6 +76,7 @@
                 <tr>
                   <th>Type</th>
                   <th>Submitted by</th>
+                  <th>Submitted date</th>
                   <th>Points</th>
                   <th>Description</th>
                   <th>Accept/Deny</th>
@@ -83,8 +84,9 @@
               </thead>
               <tbody>
                 <tr *ngFor="let pointRequest of pointsService.pointRequests">
-                  <td *ngIf="pointRequest.approved == 0">Service Hours</td>
+                  <td *ngIf="pointRequest.approved == 0">Points</td>
                   <td *ngIf="pointRequest.approved == 0">{{ pointRequest.submittedBy }}</td>
+                  <td *ngIf="pointRequest.approved == 0">{{ pointRequest.submittedDate }}</td>
                   <td *ngIf="pointRequest.approved == 0">{{ pointRequest.points }}</td>
                   <td *ngIf="pointRequest.approved == 0">{{ pointRequest.description }}</td>
                   <td *ngIf="pointRequest.approved == 0">

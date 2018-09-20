@@ -39,6 +39,7 @@ router.post('/', (req, res) => {
     description: req.body.description,
     submittedBy: req.body.submittedBy,
     submittedById: req.body.submittedById,
+    submittedDate: req.body.submittedDate,
     approved: req.body.approved
   });
 
@@ -62,6 +63,7 @@ router.put('/:id', (req, res) => {
     description: req.body.description,
     submittedBy: req.body.submittedBy,
     submittedById: req.body.submittedById,
+    submittedDate: req.body.submittedDate,
     approved: req.body.approved
   };
 

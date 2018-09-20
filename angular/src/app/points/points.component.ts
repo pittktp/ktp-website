@@ -91,6 +91,7 @@ export class PointsComponent implements OnInit {
     pointRequest.setDescription(form.value.description);
     pointRequest.setSubmittedById(this.userId);
     pointRequest.setSubmittedBy(this.user);
+    pointRequest.submittedDate = this.getCurrentDateTime();
     pointRequest.setApproved(0);
     this.pointsService.postPointRequest(pointRequest).subscribe((res) => {
       $("#pointsSubmitModal").modal("hide");
@@ -105,12 +106,25 @@ export class PointsComponent implements OnInit {
     serviceHourRequest.description = form.value.description;
     serviceHourRequest.submittedById = this.userId;
     serviceHourRequest.submittedBy = this.user;
+    serviceHourRequest.submittedDate = this.getCurrentDateTime();
     serviceHourRequest.approved = 0;
     this.serviceHourService.postServiceHourRequest(serviceHourRequest).subscribe((res) => {
       $("#serviceHoursSubmitModal").modal("hide");
       this.getPointRequests();
       this.toastr.success('Service Hours request submitted');
     });
+  }
+
+  getCurrentDateTime() {
+    var currentdate = new Date();
+    var datetime = currentdate.getMonth() + "/"
+                    + (currentdate.getDate()+1)  + "/"
+                    + currentdate.getFullYear() + " "
+                    + currentdate.getHours() + ":"
+                    + currentdate.getMinutes() + ":"
+                    + currentdate.getSeconds();
+
+    return datetime;
   }
 
   getPointRequests() {
