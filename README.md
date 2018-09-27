@@ -31,19 +31,19 @@ For the backend (server-side) we use NodeJS which is a very popular JavaScript b
 ### Deployment
 Currently we are hosted on GitHub but have an intention in the very near future of migrating to AWS.
 
-### Ok cool, but how do I run this?
+## Ok cool, but how do I run this?
 In order to run this locally, you have to install some dependencies for all layers of the application (Angular6, NodeJS, and MongoDB). Start by cloning this project to your local machine with:
 ```
 git clone https://github.com/jdepp/ktp-website.git
 ```
 And then navigate to this directory.
 
-#### Prerequisites
+### Prerequisites
 You have to have the Node package manager install called npm. Npm is a nice command line tool that lets you easily set up dependencies that you may need for Angular and NodeJS.
 To check if you have npm installed go to command line and type "node -v".
 If you don't have it installed, go to https://www.npmjs.com/get-npm
 
-#### Angular (frontend)
+### Angular (frontend)
 Angular has a nice command line tool called ng which gives you shortcuts for things like: setting up a new Angular project, or adding a component to your Angular project, but the most common one you'll use is to serve your application which makes it accessible through your browser. So start by installing the Angular command line tool by navigating to the "angular" folder and typing:
 ```
 npm install -g @angular/cli
@@ -58,7 +58,7 @@ ng serve
 ```
 Go to localhost:4200 in your browser and you're able to see the webpage. However, since we don't have the backend or database setup yet, you won't be able to do things like login which require the server.
 
-#### MongoDB (database)
+### MongoDB (database)
 First, install a command line tool called Homebrew which makes installing MongoDB super easy:
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -72,14 +72,14 @@ sudo chown -R `id -un` /data/db
 ```
 So what this did was install MongoDB, then made a directory called db where your MongoDB will store its data on your local computer (data you store in the database will only be accessible from your computer and is nice for testing locally).
 
-#### MongoDB Compass
+### MongoDB Compass
 This isn't required but is super helpful. It's basically just a program that shows you the data you have in your database and allows you to edit it. It's nice to be able to visually see your data and makes debugging easier. Get it at https://www.mongodb.com/products/compass at the bottom of the page. It'll prompt you for your business info but you can just BS that.
 
 
-#### NodeJS (backend)
+### NodeJS (backend)
 The backend isn't as heavy code-wise as the frontend, as it's only really responsible for taking stuff from the frontend and saving it to the database, or pulling from the database and giving it to the frontend. I don't think you have to install anything, but if you do let me know and I'll help.
 
-#### Typical flow of execution
+### Typical flow of execution
 So there are 3 parts to this app: database, backend (aka server), and frontend. You have to run all 3 of these things in this order:
 (open 3 command line windows/tabs because we need these 3 processes running at the same time)
 1. Run the database with the command (doesn't matter what directory you're in):
@@ -98,5 +98,5 @@ ng serve
 
 By default, your local Mongo database will be empty and won't have any members in it, so you'll have to Register yourself and any other "dummy" members you want displayed. For now, the code "g62dz9t4qm" when registering is to indicate a person of type "member" (which have less privilege than an admin). Use the code "6edwxvuh06" to make the person you're registering an "admin" which have increased privileges. When you start adding members, you'll see in Compass the database called KtpDB is created along with a collection of type "members". When you submit a service hour or point request, it'll create a collection called "requests" that store these requests.
 
-#### Quit the application
+### Quit the application
 To stop the app from running, just go to all 3 command line windows/tabs and ctrl+c them. It's good practice to do this especially with the Mongo process to prevent data corruption.
