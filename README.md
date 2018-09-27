@@ -96,7 +96,7 @@ node index.js
 ng serve
 ```
 
-By default, your local Mongo database will be empty and won't have any members in it, so you'll have to Register yourself and any other "dummy" members you want displayed. For now, the code "g62dz9t4qm" when registering is to indicate a person of type "member" (which have less privilege than an admin). Use the code "6edwxvuh06" to make the person you're registering an "admin" which have increased privileges. When you start adding members, you'll see in Compass the database calld KtpDB is created along with a collection of type "members". When you submit a service hour or point request, it'll create a collection called "requests" that store these requests.
+By default, your local Mongo database will be empty and won't have any members in it, so you'll have to Register yourself and any other "dummy" members you want displayed. For now, the code "g62dz9t4qm" when registering is to indicate a person of type "member" (which have less privilege than an admin). Use the code "6edwxvuh06" to make the person you're registering an "admin" which have increased privileges. When you start adding members, you'll see in Compass the database called KtpDB is created along with a collection of type "members". When you submit a service hour or point request, it'll create a collection called "requests" that store these requests.
 
 #### Quit the application
 To stop the app from running, just go to all 3 command line windows/tabs and ctrl+c them. It's good practice to do this especially with the Mongo process to prevent data corruption.
