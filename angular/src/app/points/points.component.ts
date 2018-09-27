@@ -3,12 +3,10 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { MemberService } from '../shared/api/member.service';
-import { PointsService } from '../shared/api/points.service';
-import { ServiceHourService } from '../shared/api/service-hour.service';
+import { RequestsService } from '../shared/api/requests.service';
 import { LoginComponent } from '../login/login.component';
 import { Member } from '../shared/models/member.model';
-import { PointRequest } from '../shared/models/point-request.model';
-import { ServiceHourRequest } from '../shared/models/service-hour-request.model';
+import { Request } from '../shared/models/request.model';
 import { AuthService } from '../auth.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -26,9 +24,9 @@ export class PointsComponent implements OnInit {
   userId: string;
   user: string;
   userRole: string;
-  pointForm: PointRequest = new PointRequest();
+  requestForm: Request = new Request();
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private pointsService: PointsService, private serviceHourService: ServiceHourService, private router: Router) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestsService: RequestsService, private router: Router) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.userId = currentUserId;
@@ -36,7 +34,7 @@ export class PointsComponent implements OnInit {
         var member = res as Member;
         this.user = member.name;
         this.userRole = member.role;
-        if(member.role == 'admin') { this.getPointRequests(); }
+        if(member.role == 'admin') { this.getRequests(); }
       });
     }
   }
@@ -45,8 +43,7 @@ export class PointsComponent implements OnInit {
     this.loadScript('../assets/js/new-age.js');
     this.getMembers();
     if(this.userRole == 'admin') {
-      this.getPointRequests();
-      this.getServiceHourRequests();
+      this.getRequests();
      }
   }
 
@@ -61,12 +58,8 @@ export class PointsComponent implements OnInit {
     this.getMembers();
   }
 
-  refreshPointRequests() {
-    this.getPointRequests();
-  }
-
-  refreshServiceHourRequests() {
-    this.getServiceHourRequests();
+  refreshRequests() {
+    this.getRequests();
   }
 
   getMembers() {
@@ -82,35 +75,37 @@ export class PointsComponent implements OnInit {
   }
 
   onReviewRequestsOpened() {
-    this.refreshPointRequests();
+    this.refreshRequests();
   }
 
   onPointRequestSubmit(form: NgForm) {
-    var pointRequest = new PointRequest();
-    pointRequest.setPoints(form.value.points);
-    pointRequest.setDescription(form.value.description);
-    pointRequest.setSubmittedById(this.userId);
-    pointRequest.setSubmittedBy(this.user);
-    pointRequest.submittedDate = this.getCurrentDateTime();
-    pointRequest.setApproved(0);
-    this.pointsService.postPointRequest(pointRequest).subscribe((res) => {
+    var request = new Request();
+    request.type = "Brotherhood Points";
+    request.value = form.value.points;
+    request.description = form.value.description;
+    request.submittedById = this.userId;
+    request.submittedBy = this.user;
+    request.submittedDate = this.getCurrentDateTime();
+    request.approved = 0;
+    this.requestsService.postRequest(request).subscribe((res) => {
       $("#pointsSubmitModal").modal("hide");
-      this.getPointRequests();
+      this.getRequests();
       this.toastr.success('Point request submitted');
     });
   }
 
   onServiceHourRequestSubmit(form: NgForm) {
-    var serviceHourRequest = new ServiceHourRequest();
-    serviceHourRequest.serviceHours = form.value.serviceHours;
-    serviceHourRequest.description = form.value.description;
-    serviceHourRequest.submittedById = this.userId;
-    serviceHourRequest.submittedBy = this.user;
-    serviceHourRequest.submittedDate = this.getCurrentDateTime();
-    serviceHourRequest.approved = 0;
-    this.serviceHourService.postServiceHourRequest(serviceHourRequest).subscribe((res) => {
+    var request = new Request();
+    request.type = "Service Hours";
+    request.value = form.value.serviceHours;
+    request.description = form.value.description;
+    request.submittedById = this.userId;
+    request.submittedBy = this.user;
+    request.submittedDate = this.getCurrentDateTime();
+    request.approved = 0;
+    this.requestsService.postRequest(request).subscribe((res) => {
       $("#serviceHoursSubmitModal").modal("hide");
-      this.getPointRequests();
+      this.getRequests();
       this.toastr.success('Service Hours request submitted');
     });
   }
@@ -127,28 +122,25 @@ export class PointsComponent implements OnInit {
     return datetime;
   }
 
-  getPointRequests() {
-    this.pointsService.getPointRequests().subscribe((data: Array<object>) => {
-      this.pointsService.pointRequests = data as PointRequest[];
-    });
-  }
-
-  getServiceHourRequests() {
-    this.serviceHourService.getServiceHourRequests().subscribe((data: Array<object>) => {
-      this.serviceHourService.serviceHours = data as ServiceHourRequest[];
+  getRequests() {
+    this.requestsService.getRequests().subscribe((data: Array<object>) => {
+      this.requestsService.requests = data as Request[];
     });
   }
 
   // Update member's points and delete point request from DB
-  onAcceptRequest(request: PointRequest) {
+  onAcceptRequest(request: Request) {
     this.memberService.getMemberById(request.submittedById).subscribe((res) => {
       var member = res as Member;
-      member.points = member.points + request.points;
+      if(request.type == "Brotherhood Points")
+        member.points = member.points + request.value;
+      else
+        member.serviceHours = member.serviceHours + request.value;
       this.memberService.putMember(request.submittedById, member).subscribe((res) => {
-        this.toastr.success('Point request accepted for ' + request.submittedBy);
-        this.pointsService.deletePointRequest(request._id).subscribe((res) => {
-          this.refreshPointRequests();
-          this.refreshServiceHourRequests();
+        if(request.type == "Brotherhood Points") { this.toastr.success('Point request accepted for ' + request.submittedBy); }
+        else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
+        this.requestsService.deleteRequest(request._id).subscribe((res) => {
+          this.refreshRequests();
           this.getMembers();
         });
       });
@@ -156,10 +148,9 @@ export class PointsComponent implements OnInit {
   }
 
   // Don't update member's points - just delete point request from DB
-  onDenyRequest(request: PointRequest) {
-    this.pointsService.deletePointRequest(request._id).subscribe((res) => {
-      this.refreshPointRequests();
-      this.refreshServiceHourRequests();
+  onDenyRequest(request: Request) {
+    this.requestsService.deleteRequest(request._id).subscribe((res) => {
+      this.refreshRequests();
       this.toastr.error('Point request denied for ' + request.submittedBy);
     });
   }

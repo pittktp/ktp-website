@@ -38,7 +38,7 @@
 								</form>
 								<form id="register-form" (ngSubmit)="onRegisterSubmit(registerForm)" #registerForm="ngForm" style="display: none;" autocomplete="off">
 									<div class="form-group">
-                    <input type="text" [(ngModel)]="registerForm.registerName" name="registerName" id="registerName" style="text-transform: capitalize" tabindex="1" class="form-control" placeholder="Full Name" value="" required>
+                    <input type="text" [(ngModel)]="registerForm.registerName" name="registerName" id="registerName" tabindex="1" class="form-control" placeholder="Full Name" value="" required>
                   </div>
 									<div class="form-group">
 										<input type="email" [(ngModel)]="registerForm.registerEmail" (ngModelChange)="onEmailKey()" name="registerEmail" id="registerEmail" tabindex="2" class="form-control" placeholder="Email Address" email pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" required>

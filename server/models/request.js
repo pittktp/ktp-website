@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
-var ServiceHourRequest = mongoose.model('ServiceHourRequest', {
-  serviceHours: { type: Number },
+var Request = mongoose.model('Request', {
+  type: { type: String },
+  value: { type: Number },
   description: { type: String },
   submittedBy: { type: String },
   submittedById: { type: String },
@@ -9,4 +10,4 @@ var ServiceHourRequest = mongoose.model('ServiceHourRequest', {
   approved: { type: Number }
 });
 
-module.exports = { ServiceHourRequest };
+module.exports = { Request };

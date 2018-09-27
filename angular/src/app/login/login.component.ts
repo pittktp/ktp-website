@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
 
       var newMember: Member = new Member();
 
-      newMember.name = form.value.registerName.toLowerCase().split(' ').map(x=>x[0].toUpperCase()+x.slice(1)).join(' ');
+      newMember.name = form.value.registerName;
       newMember.email = form.value.registerEmail;
       newMember.password = form.value.registerPassword;
       newMember.points = 0;

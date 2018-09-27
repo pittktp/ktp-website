@@ -11,8 +11,7 @@ const { mongoose } = require('./db.js');
 var { Member } = require('./models/member');
 
 var memberController = require('./controllers/memberController.js');
-var pointRequestController = require('./controllers/pointRequestController.js');
-var serviceHourRequestController = require('./controllers/serviceHourRequestController.js');
+var requestsController = require('./controllers/requestsController.js');
 
 var app = express();
 app.use(bodyParser.json());
@@ -23,8 +22,7 @@ app.listen(3000, () => console.log('Server started on port 3000'));
 
 
 app.use('/api/members', memberController);
-app.use('/api/points', pointRequestController);
-app.use('/api/hours', serviceHourRequestController);
+app.use('/api/requests', requestsController);
 
 
 // auth endpoint

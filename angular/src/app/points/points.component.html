@@ -12,12 +12,12 @@
           <div class="modal-body">
             <div class="input-field">
               <label style="color:black" for="points">Points earned</label>
-              <input style="text-align:left;" [(ngModel)]="pointForm.points" name="points" #name="ngModel" type="number" class="form-control" id="points" placeholder="Enter number of brotherhood points" autocomplete="off" required>
+              <input style="text-align:left;" [(ngModel)]="pointsForm.points" name="points" #name="ngModel" type="number" class="form-control" id="points" placeholder="Enter number of brotherhood points" autocomplete="off" required>
             </div>
             <br />
             <div class="input-field">
               <label style="color:black" for="description">Description</label>
-              <input style="text-align:left;" [(ngModel)]="pointForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these points?" autocomplete="off" required>
+              <input style="text-align:left;" [(ngModel)]="pointsForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these points?" autocomplete="off" required>
             </div>
             <br />
           </div>
@@ -66,32 +66,32 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 style="color:black;"class="modal-title">Review Point Requests</h4>
+          <h4 style="color:black;"class="modal-title">Review Requests</h4>
         </div>
         <div class="modal-body">
-          <h3 class="black-text" *ngIf="pointsService.pointRequests < 1; else showTable">No remaining requests</h3>
+          <h3 class="black-text" *ngIf="requestsService.requests < 1; else showTable">No remaining requests</h3>
           <ng-template #showTable>
             <table class="table table-bordered black-text">
               <thead>
                 <tr>
-                  <th>Type</th>
                   <th>Submitted by</th>
-                  <th>Submitted date</th>
-                  <th>Points</th>
+                  <th>Submitted on</th>
+                  <th>Type</th>
+                  <th>Value</th>
                   <th>Description</th>
                   <th>Accept/Deny</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let pointRequest of pointsService.pointRequests">
-                  <td *ngIf="pointRequest.approved == 0">Points</td>
-                  <td *ngIf="pointRequest.approved == 0">{{ pointRequest.submittedBy }}</td>
-                  <td *ngIf="pointRequest.approved == 0">{{ pointRequest.submittedDate }}</td>
-                  <td *ngIf="pointRequest.approved == 0">{{ pointRequest.points }}</td>
-                  <td *ngIf="pointRequest.approved == 0">{{ pointRequest.description }}</td>
-                  <td *ngIf="pointRequest.approved == 0">
-                    <button type="button" id="acceptPoints" class="btn btn-default" (click)="onAcceptRequest(pointRequest)">Accept</button>
-                    <button type="button" id="denyPoints" class="btn btn-default" (click)="onDenyRequest(pointRequest)">Deny</button>
+                <tr *ngFor="let request of requestsService.requests">
+                  <td *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
+                  <td *ngIf="request.approved == 0">{{ request.submittedDate }}</td>
+                  <td *ngIf="request.approved == 0">{{ request.type }}</td>
+                  <td *ngIf="request.approved == 0">{{ request.value }}</td>
+                  <td *ngIf="request.approved == 0">{{ request.description }}</td>
+                  <td *ngIf="request.approved == 0">
+                    <button type="button" id="acceptPoints" class="btn btn-default" (click)="onAcceptRequest(request)">Accept</button>
+                    <button type="button" id="denyPoints" class="btn btn-default" (click)="onDenyRequest(request)">Deny</button>
                   </td>
                 </tr>
               </tbody>
