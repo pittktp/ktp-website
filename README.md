@@ -32,7 +32,11 @@ For the backend (server-side) we use NodeJS which is a very popular JavaScript b
 Currently we are hosted on GitHub but have an intention in the very near future of migrating to AWS.
 
 ### Ok cool, but how do I run this?
-In order to run this locally, you have to install some dependencies for all layers of the application (Angular6, NodeJS, and MongoDB)
+In order to run this locally, you have to install some dependencies for all layers of the application (Angular6, NodeJS, and MongoDB). Start by cloning this project to your local machine with:
+```
+git clone https://github.com/jdepp/ktp-website.git
+```
+And then navigate to this directory.
 
 #### Prerequisites
 You have to have the Node package manager install called npm. Npm is a nice command line tool that lets you easily set up dependencies that you may need for Angular and NodeJS.
@@ -44,3 +48,12 @@ Angular has a nice command line tool called ng which gives you shortcuts for thi
 ```
 npm install -g @angular/cli
 ```
+Then navigate to the "angular" folder and install your dependencies that Angular needs with:
+```
+npm install
+```
+Now you're able to run the frontend with:
+```
+ng serve
+```
+Go to localhost:4200 in your browser and you're able to see the webpage. However, since we don't have the backend or database setup yet, you won't be able to do things like login which require the server.
