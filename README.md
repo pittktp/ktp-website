@@ -33,7 +33,14 @@ Currently we are hosted on GitHub but have an intention in the very near future 
 
 ### Ok cool, but how do I run this?
 In order to run this locally, you have to install some dependencies for all layers of the application (Angular6, NodeJS, and MongoDB)
+
 #### Prerequisites
 You have to have the Node package manager install called npm. Npm is a nice command line tool that lets you easily set up dependencies that you may need for Angular and NodeJS.
 To check if you have npm installed go to command line and type "node -v".
-If you don't have it installed, go to https://www.npmjs.com/get-npm 
+If you don't have it installed, go to https://www.npmjs.com/get-npm
+
+#### Angular
+Angular has a nice command line tool called ng which gives you shortcuts for things like: setting up a new Angular project, or adding a component to your Angular project, but the most common one you'll use is to serve your project which makes it accessible through your browser.
+```
+npm install -g @angular/cli
+```
