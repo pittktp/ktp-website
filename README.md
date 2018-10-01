@@ -39,7 +39,7 @@ git clone https://github.com/jdepp/ktp-website.git
 And then navigate to this directory.
 
 ### Prerequisites
-You have to have the Node package manager install called npm. Npm is a nice command line tool that lets you easily set up dependencies that you may need for Angular and NodeJS.
+You have to have the Node package manager installed called npm. Npm is a nice command line tool that lets you easily set up dependencies that you may need for Angular and NodeJS.
 To check if you have npm installed go to command line and type "node -v".
 If you don't have it installed, go to https://www.npmjs.com/get-npm
 
