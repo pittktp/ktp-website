@@ -87,7 +87,7 @@ So there are 3 parts to this app: database, backend (aka server), and frontend. 
 mongod
 ```
 This runs the database, and also allows you to open MongoDB Compass and view your data (when Compass boots up, don't type anything in those boxes, just hit Connect).<br/><br/>
-2. The backend needs Mongo to be running, so now that Mongo is running, run the backend by navigating to the "server" folder and typing:
+  2. The backend needs Mongo to be running, so now that Mongo is running, run the backend by navigating to the "server" folder and typing:
 ```
 node index.js
 ```
