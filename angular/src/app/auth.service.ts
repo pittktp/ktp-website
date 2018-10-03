@@ -44,7 +44,7 @@ export class AuthService {
 
   isTokenExpired(): boolean {
     var token = this.getToken();
-    
+
     if(!token) return true;
 
     const date = this.getTokenExpirationDate(token);
@@ -53,7 +53,7 @@ export class AuthService {
   }
 
   loggedIn(): boolean {
-    return (localStorage.getItem('access_token') !== null);
+    return (localStorage.getItem('access_token') !== null && !this.isTokenExpired());
   }
 
   getCurrentUserId() {

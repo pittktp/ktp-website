@@ -31,6 +31,10 @@ export class NavComponent implements OnInit {
         this.userRole = member.role;
       });
     }
+    else {
+      this.user = '';
+      this.userRole = '';
+    }
 
     this.sharedService.changeEmitted$.subscribe(
       change => {
