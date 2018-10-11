@@ -20,8 +20,14 @@ declare var $: any;
 export class EditMembersComponent implements OnInit {
 
   private memberClicked: Member;
+  private userId: string;
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+
+    if(this.auth.loggedIn()) {
+      var currentUserId = this.auth.getCurrentUserId();
+      this.userId = currentUserId;
+    }
 
   }
 
@@ -64,11 +70,15 @@ export class EditMembersComponent implements OnInit {
 
   onDeleteMember() {
     if(confirm("Delete member " + this.memberClicked.name + "?")) {
-      this.memberService.deleteMember(this.memberClicked._id).subscribe((res) => {
-        this.getMembers();
-        $("#memberEditSubmitModal").modal("hide");
-        this.toastr.success('Successfully deleted member ' + this.memberClicked.name);
-      });
+      if(this.userId == this.memberClicked._id)
+        this.toastr.error("You can't delete yourself -_-");
+      else {
+        this.memberService.deleteMember(this.memberClicked._id).subscribe((res) => {
+          this.getMembers();
+          $("#memberEditSubmitModal").modal("hide");
+          this.toastr.success('Successfully deleted member ' + this.memberClicked.name);
+        });
+      }
     }
   }
 

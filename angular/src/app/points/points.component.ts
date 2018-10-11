@@ -137,7 +137,7 @@ export class PointsComponent implements OnInit {
       else
         member.serviceHours = member.serviceHours + request.value;
       this.memberService.putMember(request.submittedById, member).subscribe((res) => {
-        if(request.type == "Brotherhood Points") { this.toastr.success('Point request accepted for ' + request.submittedBy); }
+        if(request.type == "Brotherhood Points") { this.toastr.success('Brotherhood point request accepted for ' + request.submittedBy); }
         else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
         this.requestsService.deleteRequest(request._id).subscribe((res) => {
           this.refreshRequests();
@@ -151,7 +151,10 @@ export class PointsComponent implements OnInit {
   onDenyRequest(request: Request) {
     this.requestsService.deleteRequest(request._id).subscribe((res) => {
       this.refreshRequests();
-      this.toastr.error('Point request denied for ' + request.submittedBy);
+      if(request.type == "Brotherhood Points")
+        this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
+      else
+        this.toastr.error('Service hour request denied for ' + request.submittedBy);
     });
   }
 
