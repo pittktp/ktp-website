@@ -50,7 +50,7 @@ npm install -g @angular/cli
 ```
 Next install your dependencies that Angular needs with:
 ```
-npm install
+sudo npm install
 ```
 Now you're able to run the frontend with:
 ```
@@ -67,7 +67,7 @@ Now type:
 ```
 brew update
 brew install mongodb
-mkdir -p /data/db
+sudo mkdir -p /data/db
 sudo chown -R `id -un` /data/db
 ```
 So what this did was install MongoDB, then made a directory called db where your MongoDB will store its data on your local computer (data you store in the database will only be accessible from your computer and is nice for testing locally).
