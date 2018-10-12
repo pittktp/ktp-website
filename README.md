@@ -77,7 +77,10 @@ This isn't required but is super helpful. It's basically just a program that sho
 
 
 ### NodeJS (backend)
-The backend isn't as heavy code-wise as the frontend, as it's only really responsible for taking stuff from the frontend and saving it to the database, or pulling from the database and giving it to the frontend. I don't think you have to install anything, but if you do let me know and I'll help.
+The backend isn't as heavy code-wise as the frontend, as it's only really responsible for taking stuff from the frontend and saving it to the database, or pulling from the database and giving it to the frontend. Set up your dependencies with: 
+```
+npm install
+```
 
 ### Typical flow of execution
 So there are 3 parts to this app: database, backend (aka server), and frontend. You have to run all 3 of these things in this order:
