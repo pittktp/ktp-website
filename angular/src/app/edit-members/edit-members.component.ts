@@ -21,7 +21,7 @@ export class EditMembersComponent implements OnInit {
 
   private memberClicked: Member;
   private userId: string;
-  private userRole: string;
+  private userRole: string = '';
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
 
@@ -31,16 +31,13 @@ export class EditMembersComponent implements OnInit {
       this.memberService.getMemberById(this.userId).subscribe(res => {
         var member = res as Member;
         this.userRole = member.role;
-      })
-    } else {
-      this.userRole = '';
+        if(this.userRole != 'admin') {
+          alert('You do not have permission to access this page');
+          console.log(this.userRole)
+          this.router.navigate(['home']);
+        }
+      });
     }
-
-    if(this.userRole != 'admin') {
-      alert('You do not have permission to access this page');
-      this.router.navigate(['home']);
-    }
-
   }
 
   ngOnInit() {
