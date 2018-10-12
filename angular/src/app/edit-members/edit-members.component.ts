@@ -33,11 +33,11 @@ export class EditMembersComponent implements OnInit {
         this.userRole = member.role;
         if(this.userRole != 'admin') {
           alert('You do not have permission to access this page');
-          console.log(this.userRole)
           this.router.navigate(['home']);
         }
       });
     }
+    
   }
 
   ngOnInit() {
