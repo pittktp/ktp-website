@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../shared/auth/auth.service';
 import { MemberService } from '../shared/api/member.service';
-import { SharedService } from '../shared.service';
+import { SharedService } from '../shared/shared.service';
 import { Member } from '../shared/models/member.model';
 import { ToastrService } from 'ngx-toastr';
 
@@ -37,7 +37,7 @@ export class EditMembersComponent implements OnInit {
         }
       });
     }
-    
+
   }
 
   ngOnInit() {

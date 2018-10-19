@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { SharedService } from '../shared.service';
+import { AuthService } from '../shared/auth/auth.service';
+import { SharedService } from '../shared/shared.service';
 import { Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { MemberService } from '../shared/api/member.service';
 import { Member } from '../shared/models/member.model';
-import { AuthGuard } from '../auth.guard';
+import { AuthGuard } from '../shared/auth/auth.guard';
 
 
 declare var $: any;
@@ -110,12 +110,10 @@ export class NavComponent implements OnInit {
 
   onNotHere(member: Member) {
     this.membersNotHere.push(member);
-
-    console.log(this.membersNotHere);
   }
 
   onHomeClicked() {
-    this.router.navigate(['home'])
+    this.router.navigate(['home']);
   }
 
   onLogout() {

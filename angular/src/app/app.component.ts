@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HomeComponent } from './home/home.component';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './shared/auth/auth.service';
 import { Member } from './shared/models/member.model';
 import { MemberService } from './shared/api/member.service';
 

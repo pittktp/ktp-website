@@ -7,7 +7,7 @@ import { RequestsService } from '../shared/api/requests.service';
 import { LoginComponent } from '../login/login.component';
 import { Member } from '../shared/models/member.model';
 import { Request } from '../shared/models/request.model';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../shared/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 
 import '../../assets/js/new-age.min.js';

@@ -4,15 +4,15 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as jwt_decode from "jwt-decode";
 
-import { MemberService } from './shared/api/member.service';
-import { Member } from './shared/models/member.model';
+import { MemberService } from '../api/member.service';
+import { Member } from '../models/member.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private memberService: MemberService) { }
+  constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<boolean> {
     return this.http.post<{token: string}>('http://localhost:3000/api/auth', {email: email, password: password})
