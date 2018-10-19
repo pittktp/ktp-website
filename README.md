@@ -59,7 +59,7 @@ ng serve
 Go to localhost:4200 in your browser and you're able to see the webpage. However, since we don't have the backend or database setup yet, you won't be able to do things like login which require the server.
 
 ### MongoDB (database)
-First, install a command line tool called Homebrew which makes installing MongoDB super easy:
+This is easy on a Mac using Homebrew which makes installing MongoDB super easy. If it's not installed, install it with:
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
