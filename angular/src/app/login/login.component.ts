@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         var currentUserId = this.auth.getCurrentUserId();
         this.memberService.getMemberById(currentUserId).subscribe((res) => {
           var member = res as Member;
-          this.sharedService.emitChange({"name": member.name, "role": member.role});
+          this.sharedService.emitChange({"name": member.name, "role": member.role, "id": member.studentId});
           this.router.navigate(['home']);
           this.toastr.show('Hello ' + member.name + "!");
         });
