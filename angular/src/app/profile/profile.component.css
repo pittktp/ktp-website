@@ -1,3 +1,16 @@
 .container {
-  margin-top: 20vh;
+  margin-top: 15vh;
+}
+
+body {
+  padding-top: 90px;
+}
+
+.profile-content {
+  border-color: #ccc;
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+  background-color: #fff;
+  color: #00415d;
 }

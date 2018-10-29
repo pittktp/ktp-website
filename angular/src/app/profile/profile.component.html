@@ -1,5 +1,38 @@
-<header>
+<header style="background-color:rgba(0, 0, 0, 0.5);">
   <div class="container">
-    User ID is: {{id}}
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="profile-content">
+          <div class="row profile-header">
+            <div class="col-md-2" style="background-color:yellow;">
+              Image goes here
+            </div>
+            <div class="col-md-5" style="background-color:green;">
+              <div class="row" style="text-align:center;">
+                <h3>{{profile.name}}</h3>
+              </div>
+              <div class="row">
+                <div class="col-md-5 col-md-offset-1" style="background-color:blue;">
+                  Email: {{profile.email}}
+                </div>
+                <div class="col-md-3 col-md-offset-1" style="background-color:beige;">
+                  Pledge Class
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 col-md-offset-2" style="background-color:orange;">
+              <button *ngIf="this.auth.getCurrentUserId() == this.profile._id" type="button" class="btn btn-info btn-sm">Settings</button>
+            </div>
+          </div>
+          <hr style="color:black;"/>
+          <div class="row">
+            <div class="col-lg-12" style="background-color:red;">
+              <p>Profile Info Stuff Down Here</p>
+              <p>ID: {{profile._id}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
