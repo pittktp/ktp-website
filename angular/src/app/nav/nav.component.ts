@@ -21,6 +21,7 @@ export class NavComponent implements OnInit {
   private membersNotHere: Array<object> = [];
   private user = '';
   private userRole = '';
+  private userId = -1;
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
@@ -29,18 +30,16 @@ export class NavComponent implements OnInit {
         var member = res as Member;
         this.user = member.name;
         this.userRole = member.role;
+        this.userId = +member.studentId;
       });
-    }
-    else {
-      this.user = '';
-      this.userRole = '';
     }
 
     this.sharedService.changeEmitted$.subscribe(
       change => {
-        console.log(change.name + ' ' + change.role);
+        console.log(change.name + ' ' + change.role + ' ' + change.id);
         this.user = change.name;
         this.userRole = change.role;
+        this.userId = change.id;
       }
     );
   }
@@ -62,11 +61,15 @@ export class NavComponent implements OnInit {
   }
 
   onLoginClicked() {
-    this.router.navigate(['login'])
+    this.router.navigate(['login']);
+  }
+
+  onProfileClicked() {
+    this.router.navigate(['profile', this.userId]);
   }
 
   onPointsClicked() {
-    this.router.navigate(['points'])
+    this.router.navigate(['points']);
   }
 
   onEditMembersClicked() {
@@ -122,6 +125,8 @@ export class NavComponent implements OnInit {
     if(confirm("Confirm logout?")) {
       this.auth.logout();
       this.user = '';
+      this.userRole = '';
+      this.userId = -1;
       this.router.navigate(['home']);
       this.toastr.success('Successfully logged out');
     }
