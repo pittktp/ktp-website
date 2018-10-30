@@ -1,32 +1,38 @@
 <header style="background-color:rgba(0, 0, 0, 0.5);">
   <div class="container">
     <div class="row">
-      <div class="col-lg-12">
+      <div class="col-lg-8 col-lg-offset-2">
         <div class="profile-content">
           <div class="row profile-header">
-            <div class="col-md-2" style="background-color:yellow;">
-              Image goes here
+            <div class="col-md-2">
+              <div *ngIf="this.profile.picture != ''; else noPic" class="profile-pic">
+                <img src=`{{profile.picture}}` alt=`{{profile.name}}`/>
+              </div>
+              <ng-template #noPic style="margin: 0 auto">
+                <div class="profile-no-pic">
+                  <span>{{this.profile.name.split(" ")[0].charAt(0)}}{{this.profile.name.split(" ")[1].charAt(0)}}</span>
+                </div>
+              </ng-template>
             </div>
-            <div class="col-md-5" style="background-color:green;">
+            <div class="col-md-5 col-md-offset-1 profile-detail">
               <div class="row" style="text-align:center;">
                 <h3>{{profile.name}}</h3>
               </div>
               <div class="row">
-                <div class="col-md-5 col-md-offset-1" style="background-color:blue;">
+                <div class="col-md-7">
                   Email: {{profile.email}}
                 </div>
-                <div class="col-md-3 col-md-offset-1" style="background-color:beige;">
-                  Pledge Class
+                <div class="col-md-5">
+                  {{profile.rushClass}} Class
                 </div>
               </div>
             </div>
-            <div class="col-md-2 col-md-offset-2" style="background-color:orange;">
+            <div class="col-md-2 col-md-offset-1 profile-btns">
               <button *ngIf="this.auth.getCurrentUserId() == this.profile._id" type="button" class="btn btn-info btn-sm">Settings</button>
             </div>
           </div>
-          <hr style="color:black;"/>
-          <div class="row">
-            <div class="col-lg-12" style="background-color:red;">
+          <div class="row profile-info">
+            <div class="col-lg-12">
               <p>Profile Info Stuff Down Here</p>
               <p>ID: {{profile._id}}</p>
             </div>

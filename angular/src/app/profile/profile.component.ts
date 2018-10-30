@@ -21,28 +21,32 @@ declare var $: any;
 export class ProfileComponent implements OnInit, OnDestroy {
 
   id: number
-  private sub: any
   profile: Member
+  private sub: any
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {}
+  constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
+    if(!this.auth.loggedIn()) {
+      this.router.navigate(['home']);
+    }
+  }
 
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');
 
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.params.forEach(params => {
       this.id = +params['id'];
-    })
 
-    // TODO: Change to its own API call for simplicity
-    this.memberService.getMembers().subscribe((data: Array<object>) => {
-      var mems = data as Member[];
-      for(var i = 0; i < mems.length; i++) {
-        if(mems[i].studentId == this.id) {
-          this.profile = mems[i];
-          break;
+      // TODO: Change to its own API call for simplicity
+      this.memberService.getMembers().subscribe((data: Array<object>) => {
+        var mems = data as Member[];
+        for(var i = 0; i < mems.length; i++) {
+          if(mems[i].studentId == this.id) {
+            this.profile = mems[i];
+            break;
+          }
         }
-      }
-    })
+      });
+    });
   }
   
   loadScript(src) {

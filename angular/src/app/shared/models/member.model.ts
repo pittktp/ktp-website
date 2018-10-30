@@ -9,6 +9,8 @@ export class Member {
   studentId: number;
   role: string;
   absences: number;
+  rushClass: string;
+  picture: string;
 
   constructor() { }
 
