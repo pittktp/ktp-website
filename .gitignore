@@ -1,2 +1,4 @@
 *.pem
+
+# macOS Files
 .DS_Store
