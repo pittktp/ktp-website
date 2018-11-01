@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { SharedService } from '../shared.service';
+import { AuthService } from '../shared/auth/auth.service';
+import { SharedService } from '../shared/shared.service';
 import { MemberService } from '../shared/api/member.service';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';

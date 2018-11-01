@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../shared/auth/auth.service';
 import { MemberService } from '../shared/api/member.service';
-import { SharedService } from '../shared.service';
+import { SharedService } from '../shared/shared.service';
 import { Member } from '../shared/models/member.model';
 import { ToastrService } from 'ngx-toastr';
 
@@ -21,12 +21,21 @@ export class EditMembersComponent implements OnInit {
 
   private memberClicked: Member;
   private userId: string;
+  private userRole: string = '';
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
 
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.userId = currentUserId;
+      this.memberService.getMemberById(this.userId).subscribe(res => {
+        var member = res as Member;
+        this.userRole = member.role;
+        if(this.userRole != 'admin') {
+          alert('You do not have permission to access this page');
+          this.router.navigate(['home']);
+        }
+      });
     }
 
   }

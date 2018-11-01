@@ -12,9 +12,9 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { PointsComponent } from './points/points.component';
 import { NavComponent } from './nav/nav.component';
-import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
-import { AppRoutingModule } from './/app-routing.module';
+import { AuthService } from './shared/auth/auth.service';
+import { AuthGuard } from './shared/auth/auth.guard';
+import { AppRoutingModule } from './shared/routing/app-routing.module';
 import { EditMembersComponent } from './edit-members/edit-members.component';
 
 
