@@ -23,7 +23,7 @@ export class EditMembersComponent implements OnInit {
   private userId: string;
   private userRole: string = '';
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
 
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();

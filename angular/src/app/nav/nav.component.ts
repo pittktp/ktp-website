@@ -19,10 +19,10 @@ declare var $: any;
 export class NavComponent implements OnInit {
 
   private membersNotHere: Array<object> = [];
-  private user = '';
-  private userRole = '';
+  public user = '';
+  public userRole = '';
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.memberService.getMemberById(currentUserId).subscribe((res) => {

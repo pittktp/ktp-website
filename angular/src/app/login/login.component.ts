@@ -21,7 +21,7 @@ declare var $: any;
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private sharedService: SharedService, private memberService: MemberService) { }
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private sharedService: SharedService, public memberService: MemberService) { }
 
   error: string;
   showIncorrectLogin = false;
