@@ -24,8 +24,8 @@
     </div>
   </div>
 
-  <!-- Profile Page Content -->
-  <div class="container">
+  <!-- Secured Profile Page Content -->
+  <div class="container" *ngIf="this.auth.loggedIn() == true; else unsecured">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2">
         <div class="profile-content">
@@ -57,14 +57,98 @@
               <button *ngIf="this.auth.getCurrentUserId() == this.profile._id" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#profileSettingsModal">Settings</button>
             </div>
           </div>
+          <br>
+          <div class="progress-bars">
+            <div class="row">
+              <span class="col-md-3 col-md-offset-1">Service Hours: </span>
+              <div id="serviceBar">
+                <div id="service" [ngStyle]="{'width': this.hoursPercent + '%'}"></div>
+              </div>
+              <span class="progress-value">{{profile.serviceHours}}/10</span>
+            </div>
+            <div class="row">
+              <span class="col-md-3 col-md-offset-1">Brotherhood Points: </span>
+              <div id="pointsBar">
+                <div id="points" [ngStyle]="{'width': this.pointsPercent + '%'}"></div>
+              </div>
+              <span class="progress-value">{{profile.points}}/5</span>
+            </div>
+          </div>
           <div class="row profile-info">
-            <div class="col-lg-12">
-              <p>Profile Info Stuff Down Here</p>
-              <p>ID: {{profile._id}}</p>
+            <div class="row">
+              <div class="col-lg-12 tab">
+                <div id="descBtn" class="tab-btn active" type="button" (click)="openTab('description')">Description</div>
+                <div id="acadBtn" class="tab-btn" type="button" (click)="openTab('academics')">Academics</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 tab-content" id="description">
+                Description Box Area
+              </div>
+              <div class="col-lg-12 tab-content" id="academics">
+                Major and Expected Grad Year
+                Courses Taken At Pitt
+                Current Credits
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Unsecured Profile Page -->
+  <ng-template #unsecured>
+    <div class="container">
+      <div class="row">
+          <div class="col-lg-8 col-lg-offset-2">
+            <div class="profile-content">
+              <div class="row profile-header">
+                <div class="col-md-2">
+                  <div *ngIf="this.profile.picture != ''; else noPic" class="profile-pic">
+                    <img src=`{{profile.picture}}` alt=`{{profile.name}}`/>
+                  </div>
+                  <ng-template #noPic style="margin: 0 auto">
+                    <div class="profile-no-pic">
+                      <span>{{this.profile.name.split(" ")[0].charAt(0)}}{{this.profile.name.split(" ")[1].charAt(0)}}</span>
+                    </div>
+                  </ng-template>
+                </div>
+                <div class="col-md-5 col-md-offset-1 profile-detail">
+                  <div class="row" style="text-align:center;">
+                    <h3>{{profile.name}}</h3>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-7">
+                      Email: {{profile.email}}
+                    </div>
+                    <div class="col-md-5">
+                      {{profile.rushClass}} Class
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row profile-info">
+                <div class="row">
+                  <div class="col-lg-12 tab">
+                    <div id="descBtn" class="tab-btn active" type="button" (click)="openTab('description')">Description</div>
+                    <div id="acadBtn" class="tab-btn" type="button" (click)="openTab('academics')">Academics</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 tab-content" id="description">
+                    Description Box Area
+                  </div>
+                  <div class="col-lg-12 tab-content" id="academics">
+                    Major and Expected Grad Year
+                    Courses Taken At Pitt
+                    Current Credits
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </ng-template>
 </header>

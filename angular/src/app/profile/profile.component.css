@@ -45,3 +45,53 @@ body {
 .profile-detail {
   margin-top: 15px;
 }
+
+#serviceBar, #pointsBar {
+  display: inline-block;
+  width: 50%;
+  background-color: grey;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+#service, #points {
+  height: 15px;
+  color: white;
+  border-radius: 20px;
+}
+
+#service {
+  background-color: rgb(33, 192, 2);
+}
+
+#points {
+  background-color: rgb(19, 180, 255);
+}
+
+.progress-value {
+  margin-left: 15px;
+}
+
+.tab-btn {
+  background-color: rgb(231, 231, 231);
+  display: inline-block;
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.tab-btn:hover {
+  background-color: grey;
+}
+
+.active {
+  background-color: rgb(80, 80, 80);
+  color: white;
+}
+
+.tab-content {
+  display: none;
+}
+
+.unsecured {
+  background-color: pink;
+}

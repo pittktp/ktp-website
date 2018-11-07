@@ -12,6 +12,7 @@ var { Member } = require('./models/member');
 
 var memberController = require('./controllers/memberController.js');
 var requestsController = require('./controllers/requestsController.js');
+var uploadController = require('./controllers/uploadController.js');
 
 var app = express();
 app.use(bodyParser.json());
@@ -23,6 +24,7 @@ app.listen(3000, () => console.log('Server started on port 3000'));
 
 app.use('/api/members', memberController);
 app.use('/api/requests', requestsController);
+app.use('/api/upload', uploadController);
 
 
 // auth endpoint
