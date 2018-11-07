@@ -21,7 +21,7 @@ export class NavComponent implements OnInit {
   private membersNotHere: Array<object> = [];
   private user = '';
   private userRole = '';
-  private userId = -1;
+  private userId = '';
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
@@ -30,7 +30,7 @@ export class NavComponent implements OnInit {
         var member = res as Member;
         this.user = member.name;
         this.userRole = member.role;
-        this.userId = +member.studentId;
+        this.userId = member.email.split('@')[0];
       });
     }
 
@@ -126,7 +126,7 @@ export class NavComponent implements OnInit {
       this.auth.logout();
       this.user = '';
       this.userRole = '';
-      this.userId = -1;
+      this.userId = '';
       this.router.navigate(['home']);
       this.toastr.success('Successfully logged out');
     }

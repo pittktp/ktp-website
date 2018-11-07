@@ -41,11 +41,18 @@ router.post('/', (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: hash,
-      studentId: req.body.studentId,
       points: req.body.points,
       serviceHours: req.body.serviceHours,
       role: req.body.role,
-      absences: req.body.absences
+      absences: req.body.absences,
+      rushClass: req.body.ruchClass,
+      picture: req.body.picture,
+      courses: req.body.courses,
+      linkedIn: req.body.linkedIn,
+      github: req.body.github,
+      gradSemester: req.body.gradSemester,
+      major: req.body.major,
+      description: req.body.description
     });
 
     member.save((err, doc) =>{
@@ -69,11 +76,18 @@ router.put('/:id', (req, res) => {
   var member = {
     name: req.body.name,
     email: req.body.email,
-    studentId: req.body.studentId,
     points: req.body.points,
     serviceHours: req.body.serviceHours,
     role: req.body.role,
-    absences: req.body.absences
+    absences: req.body.absences,
+    rushClass: req.body.ruchClass,
+    picture: req.body.picture,
+    courses: req.body.courses,
+    linkedIn: req.body.linkedIn,
+    github: req.body.github,
+    gradSemester: req.body.gradSemester,
+    major: req.body.major,
+    description: req.body.description
   };
 
   Member.findByIdAndUpdate(req.params.id, { $set: member }, { new: true }, (err, doc) => {

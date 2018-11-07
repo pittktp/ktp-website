@@ -1,31 +1,40 @@
 <header style="background-color:rgba(0, 0, 0, 0.5);">
   <!-- Profile Settings Modal -->
-  <div class="modal fade" id="profileSettingsModal" role="dialog">
+  <div class="modal fade" id="profileSettingsModal" role="dialog">  
     <div class="modal-dialog">
       <div class="modal-content">
-        <form (ngSubmit)="onChangePictureSubmit(changePicForm)" #changePicForm="ngForm" autocomplete="off">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 style="color:black;" class="modal-title">Change Profile Picture</h4>
-          </div>
-          <div class="modal-body">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 style="color:black;" class="modal-title">Settings</h4>
+        </div>
+        <div class="modal-body" style="overflow-y: auto;">
+          <form (ngSubmit)="onChangePicture(changePicForm)" #changePicForm="ngForm" autocomplete="off">
             <div class="input-field">
               <label style="color:black;" for="profilePic">Picture to Upload: </label>
               <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" required>
             </div>
             <br />
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid">Submit</button>
-          </div>
-        </form>
+            <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid">Upload</button>
+          </form>
+          <br />
+          <form (ngSubmit)="onChangeDescription(changeDescForm)" #changeDescForm="ngForm" autocomplete="off">
+            <div class="input-field">
+              <label style="color:black;" for="desc">Change Description: </label>
+              <textarea style="text-align:left;" [(ngModel)]="changeDescForm.desc" name="description" #name="ngModel" class="form-control" id="description" rows="5" cols="10" value="{{this.profile.description}}"required></textarea>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-default" [disabled]="!changeDescForm.valid">Submit</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Secured Profile Page Content -->
-  <div class="container" *ngIf="this.auth.loggedIn() == true; else unsecured">
+  <div class="container" *ngIf="this.auth.loggedIn(); else unsecured">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2">
         <div class="profile-content">
@@ -77,18 +86,38 @@
           <div class="row profile-info">
             <div class="row">
               <div class="col-lg-12 tab">
-                <div id="descBtn" class="tab-btn active" type="button" (click)="openTab('description')">Description</div>
-                <div id="acadBtn" class="tab-btn" type="button" (click)="openTab('academics')">Academics</div>
+                <div id="descBtn" class="tab-btn" type="button" (click)="openTab('description', 'descBtn')">Description</div>
+                <div id="acadBtn" class="tab-btn" type="button" (click)="openTab('academics', 'acadBtn')">Academics</div>
               </div>
             </div>
             <div class="row">
-              <div class="col-lg-12 tab-content" id="description">
-                Description Box Area
+              <div class="col-lg-11 tab-content" id="description" *ngIf="this.currentTabContent == 'description'">
+                <br />
+                <div class="row">
+                  <div class="col-lg-10 col-lg-offset-1">
+                    {{this.profile.description}}
+                  </div>
+                </div>
               </div>
-              <div class="col-lg-12 tab-content" id="academics">
-                Major and Expected Grad Year
-                Courses Taken At Pitt
-                Current Credits
+              <div class="col-lg-11 tab-content" id="academics" *ngIf="this.currentTabContent == 'academics'">
+                <br />
+                <div class="row">
+                  <div class="col-lg-5">
+                    <span>Major: {{this.profile.major}}</span>
+                  </div>
+                  <div class="col-lg-5 col-lg-offset-2">
+                    <span>Grad Semester: {{this.profile.gradSemester}}</span>
+                  </div>
+                </div>
+                <br />
+                <div class="row">
+                  <div class="col-lg-12" style="text-align: center;">
+                    <div *ngFor="let category of this.courseCategories">
+                      <button class="accordion" (click)="selectCourseCategory(category)">{{category}}</button>
+                      <div class="panel" *ngIf="this.panelType == category" [innerHtml]="panelHtml"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -131,15 +160,15 @@
               <div class="row profile-info">
                 <div class="row">
                   <div class="col-lg-12 tab">
-                    <div id="descBtn" class="tab-btn active" type="button" (click)="openTab('description')">Description</div>
-                    <div id="acadBtn" class="tab-btn" type="button" (click)="openTab('academics')">Academics</div>
+                    <div id="descBtn" class="tab-btn" type="button" (click)="openTab('description', 'descBtn')">Description</div>
+                    <div id="acadBtn" class="tab-btn" type="button" (click)="openTab('academics', 'acadBtn')">Academics</div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-12 tab-content" id="description">
+                  <div class="col-lg-12 tab-content" id="description" *ngIf="this.currentTabContent == 'description'">
                     Description Box Area
                   </div>
-                  <div class="col-lg-12 tab-content" id="academics">
+                  <div class="col-lg-12 tab-content" id="academics" *ngIf="this.currentTabContent == 'academics'">
                     Major and Expected Grad Year
                     Courses Taken At Pitt
                     Current Credits

@@ -22,10 +22,15 @@ declare var $: any;
 })
 export class ProfileComponent implements OnInit {
 
-  id: number
+  id: string
   profile: Member
   hoursPercent: number;
   pointsPercent: number;
+  currentTabContent: string;
+  currentTab: string;
+  courseCategories: Array<String> = [];
+  panelHtml: string = '';
+  panelType: string = '';
   private sub: any
 
   constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestService: RequestsService, private uploadService: UploadsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) { }
@@ -34,13 +39,13 @@ export class ProfileComponent implements OnInit {
     this.loadScript('../assets/js/new-age.js');
 
     this.route.params.forEach(params => {
-      this.id = +params['id'];
+      this.id = params['id'];
 
       // TODO: Change to its own API call for simplicity
       this.memberService.getMembers().subscribe((data: Array<object>) => {
         var mems = data as Member[];
         for(var i = 0; i < mems.length; i++) {
-          if(mems[i].studentId == this.id) {
+          if(mems[i].email.split('@')[0] == this.id) {
             this.profile = mems[i];
             break;
           }
@@ -57,8 +62,19 @@ export class ProfileComponent implements OnInit {
           this.pointsPercent = (this.profile.points/5)*100;
         }
 
-        // Display Description Tab by Default
-        document.getElementById("description").style.display = "block";
+        // Set Up Default Tabbing
+        this.currentTabContent = 'description';
+        this.currentTab = 'descBtn';
+        document.getElementById(this.currentTab).style.backgroundColor = 'rgb(231, 231, 231)';
+        document.getElementById(this.currentTab).style.color = '#00415d';
+
+        // Set Up Courses Taken for Accordion
+        for(var i = 0; i < this.profile.courses.length; i++) {
+          var courseCategory = this.profile.courses[i].split(" ")[0];
+          if(!this.courseCategories.includes(courseCategory)) {
+            this.courseCategories.push(courseCategory);
+          }
+        }
       });
     });
     
@@ -71,43 +87,53 @@ export class ProfileComponent implements OnInit {
     script.src = src;
   }
 
-  openTab(id: string) {
-    var i, tabContents, contentIndex, academicsTab, descriptionTab;
+  openTab(contentId: string, tabId: string) {
+    this.currentTabContent = contentId;
+    this.currentTab = tabId;
+    if(tabId === 'acadBtn') {
+      document.getElementById(this.currentTab).style.backgroundColor = 'rgb(231, 231, 231)';
+      document.getElementById(this.currentTab).style.color = '#00415d';
 
-    // hide all tabs except current target
-    tabContents = document.getElementsByClassName("tab-content");
-    for(i = 0; i < tabContents.length; i++) {
-      tabContents[i].style.display = "none";
-      if(tabContents[i] == document.getElementById(id)) {
-        contentIndex = i;
-      }
+      document.getElementById('descBtn').style.backgroundColor = 'rgb(80, 80, 80)';
+      document.getElementById('descBtn').style.color = 'white';
     }
-    tabContents[contentIndex].style.display = "block";
+    if(tabId === 'descBtn') {
+      document.getElementById(this.currentTab).style.backgroundColor = 'rgb(231, 231, 231)';
+      document.getElementById(this.currentTab).style.color = '#00415d';
 
-    academicsTab = document.getElementById("acadBtn");
-    descriptionTab = document.getElementById("descBtn");
-
-    if(id == "academics") {
-      // Mark Academics Tab as Active
-      academicsTab.style.backgroundColor = 'rgb(80, 80, 80)';
-      academicsTab.style.color = 'white';
-
-      // Mark Description Tab as Inactive
-      descriptionTab.style.backgroundColor = 'rgb(231, 231, 231)';
-      descriptionTab.style.color = '#00415d';
+      document.getElementById('acadBtn').style.backgroundColor = 'rgb(80, 80, 80)';
+      document.getElementById('acadBtn').style.color = 'white';
+    }
+  }
+  
+  selectCourseCategory(category: string) {
+    if(this.panelHtml == '') {
+      // Opens panel on first click
+      for(var i = 0; i < this.profile.courses.length; i++) {
+        var courseCategory = this.profile.courses[i].split(" ")[0];
+        if(courseCategory === category) {
+          this.panelHtml += `<p>${this.profile.courses[i]}</p>`;
+        }
+      }
+      this.panelType = category;
+    } else if(this.panelType != category) {
+      // Closes open panel and opens newly clicked panel
+      this.panelHtml = '';
+      for(var i = 0; i < this.profile.courses.length; i++) {
+        var courseCategory = this.profile.courses[i].split(" ")[0];
+        if(courseCategory === category) {
+          this.panelHtml += `<p>${this.profile.courses[i]}</p>`;
+        }
+      }
+      this.panelType = category;
     } else {
-      // Mark Description Tab as Active
-      descriptionTab.style.backgroundColor = 'rgb(80, 80, 80)';
-      descriptionTab.style.color = 'white';
-
-      // Mark Academics Tab as Inactive
-      academicsTab.style.backgroundColor = 'rgb(231, 231, 231)';
-      academicsTab.style.color = '#00415d';
+      // Closes open panel, clears vars
+      this.panelHtml = '';
+      this.panelType = '';
     }
   }
 
-  
-  onChangePictureSubmit(form: NgForm) {
+  onChangePicture(form: NgForm) {
     var upload = new Upload();
     upload.filename = form.value.picture.split("\\").pop();
     upload.submittedById = this.auth.getCurrentUserId();
@@ -118,5 +144,9 @@ export class ProfileComponent implements OnInit {
     //   $("#profileSettingsModal").modal("hide");
     //   this.toastr.success('Profile Picture has been updated');
     // });
+  }
+
+  onChangeDescription(form: NgForm) {
+
   }
 }
