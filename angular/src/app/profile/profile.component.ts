@@ -5,10 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { MemberService } from '../shared/api/member.service';
 import { RequestsService } from '../shared/api/requests.service';
-import { UploadsService } from '../shared/api/upload.service';
 import { SharedService } from '../shared.service';
 import { Member } from '../shared/models/member.model';
-import { Upload } from '../shared/models/upload.model';
 import { ToastrService } from 'ngx-toastr';
 
 import '../../assets/js/new-age.min.js';
@@ -27,13 +25,12 @@ export class ProfileComponent implements OnInit {
   hoursPercent: number;
   pointsPercent: number;
   currentTabContent: string;
-  currentTab: string;
   courseCategories: Array<String> = [];
   panelHtml: string = '';
   panelType: string = '';
   private sub: any
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestService: RequestsService, private uploadService: UploadsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) { }
+  constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');
@@ -64,9 +61,8 @@ export class ProfileComponent implements OnInit {
 
         // Set Up Default Tabbing
         this.currentTabContent = 'description';
-        this.currentTab = 'descBtn';
-        document.getElementById(this.currentTab).style.backgroundColor = 'rgb(231, 231, 231)';
-        document.getElementById(this.currentTab).style.color = '#00415d';
+        document.getElementById('descBtn').style.backgroundColor = 'rgb(231, 231, 231)';
+        document.getElementById('descBtn').style.color = '#00415d';
 
         // Set Up Courses Taken for Accordion
         for(var i = 0; i < this.profile.courses.length; i++) {
@@ -89,21 +85,18 @@ export class ProfileComponent implements OnInit {
 
   openTab(contentId: string, tabId: string) {
     this.currentTabContent = contentId;
-    this.currentTab = tabId;
-    if(tabId === 'acadBtn') {
-      document.getElementById(this.currentTab).style.backgroundColor = 'rgb(231, 231, 231)';
-      document.getElementById(this.currentTab).style.color = '#00415d';
+    var tabs = document.getElementsByClassName("tab-btn") as HTMLCollectionOf<HTMLElement>;
+    var targetTab = document.getElementById(tabId);
 
-      document.getElementById('descBtn').style.backgroundColor = 'rgb(80, 80, 80)';
-      document.getElementById('descBtn').style.color = 'white';
+    // Reset colors
+    for(var i = 0; i < tabs.length; i++) {
+      tabs[i].style.backgroundColor = 'rgb(80, 80, 80)';
+      tabs[i].style.color = 'white';
     }
-    if(tabId === 'descBtn') {
-      document.getElementById(this.currentTab).style.backgroundColor = 'rgb(231, 231, 231)';
-      document.getElementById(this.currentTab).style.color = '#00415d';
 
-      document.getElementById('acadBtn').style.backgroundColor = 'rgb(80, 80, 80)';
-      document.getElementById('acadBtn').style.color = 'white';
-    }
+    // Set targetted tab colors
+    targetTab.style.backgroundColor = 'rgb(231, 231, 231)';
+    targetTab.style.color = '#00415d';
   }
   
   selectCourseCategory(category: string) {
@@ -134,16 +127,7 @@ export class ProfileComponent implements OnInit {
   }
 
   onChangePicture(form: NgForm) {
-    var upload = new Upload();
-    upload.filename = form.value.picture.split("\\").pop();
-    upload.submittedById = this.auth.getCurrentUserId();
-    // Save picture in assets/img/profiles folder
-
-    // Store filename in DB
-    // this.requestService.postPictureRequest(request).subscribe(res => {
-    //   $("#profileSettingsModal").modal("hide");
-    //   this.toastr.success('Profile Picture has been updated');
-    // });
+    
   }
 
   onChangeDescription(form: NgForm) {
