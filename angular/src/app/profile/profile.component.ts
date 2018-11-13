@@ -28,6 +28,8 @@ export class ProfileComponent implements OnInit {
   courseCategories: Array<String> = [];
   panelHtml: string = '';
   panelType: string = '';
+  targetFile: File = null;
+  courseList: Array<String> = [];
   private sub: any
 
   constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) { }
@@ -126,11 +128,83 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  handleFileUpload(files: FileList) {
+    this.targetFile = files.item(0);
+  }
+
   onChangePicture(form: NgForm) {
-    
+    this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
+      console.log('Post Sucessful!');
+    }, error => {
+      console.error(error);
+    });
   }
 
   onChangeDescription(form: NgForm) {
+    var desc = form.value.desc;
+    
+    this.memberService.putDescription(this.auth.getCurrentUserId(), desc).subscribe(res => {
+      console.log('Put Successful!');
+    }, error => {
+      console.error(error);
+    });
+  }
 
+  onChangeMajor(form: NgForm) {
+    var major = form.value.major;
+
+    this.memberService.putMajor(this.auth.getCurrentUserId(), major).subscribe(res => {
+      console.log('Put Successful!');
+    }, error => {
+      console.error(error);
+    });
+  }
+
+  onChangeGraduation(form: NgForm) {
+    var gradSemester = form.value.gradSemester;
+
+    this.memberService.putGradSemester(this.auth.getCurrentUserId(), gradSemester).subscribe(res => {
+      console.log('Put Successful!');
+    }, error => {
+      console.error(error);
+    });
+  }
+
+  onAddCourse(form: NgForm) {
+    var course = form.value.addCourse;
+
+    // Check that course isnt already in courselist
+
+    this.memberService.putCourse(this.auth.getCurrentUserId(), course).subscribe(res => {
+      console.log('Put Successful!');
+    }, error => {
+      console.error(error);
+    });
+  }
+
+  onRemoveCourse(form: NgForm) {
+    // Get course
+    var course = form.value.removeCourse;
+    // Get User Course List
+    this.memberService.getMemberById(this.auth.getCurrentUserId()).subscribe(data => {
+      var member = data as Member;
+      this.courseList = member.courses;
+    });
+    // Traverse list until course is found
+    for(var i = 0; i < this.courseList.length; i++) {
+      if(this.courseList[i] === course) {
+        this.courseList.splice(i, 1);
+        break;
+      } else if(i == this.courseList.length-1) {
+        // Error: Requested Course is not in member course list
+        console.error('Member has not taken course: ', course);
+      }
+    }
+    // Remove course from the list, update in DB
+    this.memberService.deleteCourse(this.auth.getCurrentUserId(), course).subscribe(res => {
+      console.log('Delete Successful!');
+    }, error => {
+      console.error(error);
+    });
   }
 }

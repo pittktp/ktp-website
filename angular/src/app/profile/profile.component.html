@@ -11,7 +11,7 @@
           <form (ngSubmit)="onChangePicture(changePicForm)" #changePicForm="ngForm" autocomplete="off">
             <div class="input-field">
               <label style="color:black;" for="profilePic">Picture to Upload: </label>
-              <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" required>
+              <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" required>
             </div>
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid">Upload</button>
@@ -119,20 +119,18 @@
             </div>
           </div>
           <br>
-          <div class="progress-bars">
+          <div class="progress-bars col-lg-12">
             <div class="row">
-              <span class="col-md-3 col-md-offset-1">Hours: </span>
-              <div id="serviceBar">
+              <div id="serviceBar" class="progress-bar">
                 <div id="service" [ngStyle]="{'width': this.hoursPercent + '%'}"></div>
               </div>
-              <span class="progress-value">{{profile.serviceHours}}/10</span>
+              <span class="col-lg-1 progress-value">{{profile.serviceHours}}/10</span>
             </div>
             <div class="row">
-              <span class="col-md-3 col-md-offset-1">Points: </span>
-              <div id="pointsBar">
+              <div id="pointsBar" class="progress-bar">
                 <div id="points" [ngStyle]="{'width': this.pointsPercent + '%'}"></div>
               </div>
-              <span class="progress-value">{{profile.points}}/5</span>
+              <span class="col-lg-1 progress-value">{{profile.points}}/5</span>
             </div>
           </div>
           <div class="row profile-info">

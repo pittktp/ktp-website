@@ -17,6 +17,9 @@
   .container {
     margin-top: 15vh;
   }
+  #serviceBar, #pointsBar {
+    width: 50%;
+  }
 }
 
 
@@ -42,7 +45,10 @@
     margin-top: 10px;
     text-align: center;
   }
-}
+  #serviceBar, #pointsBar {
+    width: 40%;
+  }
+ }
 
 body {
   padding-top: 90px;
@@ -77,7 +83,6 @@ body {
 }
 #serviceBar, #pointsBar {
   display: inline-block;
-  width: 50%;
   background-color: grey;
   overflow: hidden;
   border-radius: 20px;
@@ -129,4 +134,11 @@ body {
   display: block;
   overflow: hidden;
   width: 50%;
+}
+.progress-bar {
+  padding-left: 0;
+}
+.progress-bars {
+  margin: 0 auto;
+  text-align: center;
 }

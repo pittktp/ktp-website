@@ -12,19 +12,19 @@ var { Member } = require('./models/member');
 
 var memberController = require('./controllers/memberController.js');
 var requestsController = require('./controllers/requestsController.js');
-var uploadController = require('./controllers/uploadController.js');
 
 var app = express();
 app.use(bodyParser.json());
 app.use(cors({ origin: 'http://localhost:4200' }));
 //app.use(cors({ origin: 'http://52.6.239.231:4200' }));
 
+app.use(express.static(__dirname + '/public'));
+
 app.listen(3000, () => console.log('Server started on port 3000'));
 
 
 app.use('/api/members', memberController);
 app.use('/api/requests', requestsController);
-app.use('/api/upload', uploadController);
 
 
 // auth endpoint
