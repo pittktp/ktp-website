@@ -15,8 +15,12 @@ var requestsController = require('./controllers/requestsController.js');
 
 var app = express();
 app.use(bodyParser.json());
-app.use(cors({ origin: 'http://localhost:4200' }));
-//app.use(cors({ origin: 'http://52.6.239.231:4200' }));
+
+// Test - use when running this locally
+//app.use(cors({ origin: 'http://localhost:4200' }));
+
+// Production - use when running in production in AWS
+app.use(cors({ origin: 'https://pitt-kappathetapi.com' }));
 
 app.listen(3000, () => console.log('Server started on port 3000'));
 

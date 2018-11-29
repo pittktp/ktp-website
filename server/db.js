@@ -2,7 +2,13 @@
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/KtpDB', { useNewUrlParser: true }, (err) => {
+// Production database in AWS
+//const url = "mongodb://34.207.132.171:27017/KtpDB";
+
+// Test local database
+const url = "mongodb://localhost:27017/KtpDB";
+
+mongoose.connect(url, { useNewUrlParser: true }, (err) => {
   if(!err)
     console.log('MongoDB connection successful');
   else
