@@ -65,7 +65,8 @@ router.put('/:id', (req, res) => {
     submittedBy: req.body.submittedBy,
     submittedById: req.body.submittedById,
     submittedDate: req.body.submittedDate,
-    approved: req.body.approved
+    approved: req.body.approved,
+    excuseDate: req.body.excuseDate
   };
 
   Request.findByIdAndUpdate(req.params.id, { $set: request }, { new: true }, (err, doc) => {

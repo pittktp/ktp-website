@@ -8,6 +8,7 @@ export class Request {
   submittedById: string; // user's Id
   submittedDate: string;
   approved: number;
+  excuseDate: string;
 
   constructor() { }
 

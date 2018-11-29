@@ -7,7 +7,8 @@ var Request = mongoose.model('Request', {
   submittedBy: { type: String },
   submittedById: { type: String },
   submittedDate: { type: String },
-  approved: { type: Number }
+  approved: { type: Number },
+  excuseDate: {type: String}
 });
 
 module.exports = { Request };
