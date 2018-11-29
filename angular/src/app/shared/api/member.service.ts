@@ -45,18 +45,6 @@ export class MemberService {
     return this.httpClient.post(`${this.API_URL}/${id}/image`, formData);
   }
 
-  putDescription(id: string, desc: string) {
-    return this.httpClient.put(`${this.API_URL}/${id}/desc`, desc);
-  }
-
-  putMajor(id: string, major: string) {
-    return this.httpClient.put(`${this.API_URL}/${id}/major`, major);
-  }
-
-  putGradSemester(id: string, gradSemester: string) {
-    return this.httpClient.put(`${this.API_URL}/${id}/gradSemester`, gradSemester);
-  }
-
   putCourse(id: string, course: string) {
     return this.httpClient.put(`${this.API_URL}/${id}/course`, course);
   }

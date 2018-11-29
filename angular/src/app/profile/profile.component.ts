@@ -21,7 +21,7 @@ declare var $: any;
 export class ProfileComponent implements OnInit {
 
   id: string
-  profile: Member
+  profile: Member;
   hoursPercent: number;
   pointsPercent: number;
   currentTabContent: string;
@@ -75,7 +75,6 @@ export class ProfileComponent implements OnInit {
         }
       });
     });
-    
   }
   
   loadScript(src) {
@@ -141,33 +140,36 @@ export class ProfileComponent implements OnInit {
   }
 
   onChangeDescription(form: NgForm) {
-    var desc = form.value.desc;
-    
-    this.memberService.putDescription(this.auth.getCurrentUserId(), desc).subscribe(res => {
+    var member = this.profile;
+    member.description = form.value.description;
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       console.log('Put Successful!');
     }, error => {
       console.error(error);
     });
+    this.showSnackbar("Description Updated!");
   }
 
   onChangeMajor(form: NgForm) {
-    var major = form.value.major;
-
-    this.memberService.putMajor(this.auth.getCurrentUserId(), major).subscribe(res => {
+    var member = this.profile;
+    member.major = form.value.major;
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       console.log('Put Successful!');
     }, error => {
       console.error(error);
     });
+    this.showSnackbar("Major Updated!");
   }
 
   onChangeGraduation(form: NgForm) {
-    var gradSemester = form.value.gradSemester;
-
-    this.memberService.putGradSemester(this.auth.getCurrentUserId(), gradSemester).subscribe(res => {
+    var member = this.profile;
+    member.gradSemester = form.value.gradSemester;
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       console.log('Put Successful!');
     }, error => {
       console.error(error);
     });
+    this.showSnackbar("Graduation Semester Updated!");
   }
 
   onAddCourse(form: NgForm) {
@@ -175,36 +177,24 @@ export class ProfileComponent implements OnInit {
 
     // Check that course isnt already in courselist
 
-    this.memberService.putCourse(this.auth.getCurrentUserId(), course).subscribe(res => {
-      console.log('Put Successful!');
-    }, error => {
-      console.error(error);
-    });
+    // add course
   }
 
   onRemoveCourse(form: NgForm) {
     // Get course
     var course = form.value.removeCourse;
-    // Get User Course List
-    this.memberService.getMemberById(this.auth.getCurrentUserId()).subscribe(data => {
-      var member = data as Member;
-      this.courseList = member.courses;
-    });
-    // Traverse list until course is found
-    for(var i = 0; i < this.courseList.length; i++) {
-      if(this.courseList[i] === course) {
-        this.courseList.splice(i, 1);
-        break;
-      } else if(i == this.courseList.length-1) {
-        // Error: Requested Course is not in member course list
-        console.error('Member has not taken course: ', course);
-      }
-    }
+    
+    // Ensure course is in course list
+
     // Remove course from the list, update in DB
-    this.memberService.deleteCourse(this.auth.getCurrentUserId(), course).subscribe(res => {
-      console.log('Delete Successful!');
-    }, error => {
-      console.error(error);
-    });
+  }
+
+  showSnackbar(msg: string) {
+    var elem = document.getElementById("snackbar");
+    elem.className = "show";
+    elem.innerText = msg;
+    setTimeout(() => {
+      elem.className = elem.className.replace("show", "");
+    }, 2000);
   }
 }

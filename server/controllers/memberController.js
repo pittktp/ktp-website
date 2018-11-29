@@ -83,7 +83,7 @@ router.put('/:id', (req, res) => {
     serviceHours: req.body.serviceHours,
     role: req.body.role,
     absences: req.body.absences,
-    rushClass: req.body.ruchClass,
+    rushClass: req.body.rushClass,
     picture: req.body.picture,
     courses: req.body.courses,
     linkedIn: req.body.linkedIn,
@@ -142,42 +142,6 @@ router.post('/:id/image', (req, res) => {
         });
       }
     });
-  });
-});
-
-// PUT update Member description --> localhost:3000/api/members/*id*/desc
-router.put('/:id/desc', (req, res) => {
-  if(!ObjectId.isValid(req.params.id)) {
-    return res.status(404).send('No record with given id: ' + req.params.id);
-  }
-
-  Member.findByIdAndUpdate(req.params.id, {description: req.body.desc}, function(err, raw) {
-    if(err) { console.error('Failed to update desc with following error: ', err); }
-    console.log(raw);
-  });
-});
-
-// PUT update Member major --> localhost:3000/api/members/*id*/major
-router.put('/:id/major', (req, res) => {
-  if(!ObjectId.isValid(req.params.id)) {
-    return res.status(404).send('No record with given id: ' + req.params.id);
-  }
-
-  Member.findByIdAndUpdate(req.params.id, {major: req.body.major}, function(err, raw) {
-    if(err) { console.error('Failed to update major with following error: ', err); }
-    console.log(raw);
-  });
-});
-
-// PUT update member gradSemester --> localhost:3000/api/members/*id*/gradSemester
-router.put('/:id/gradSemester', (req, res) => {
-  if(!ObjectId.isValid(req.params.id)) {
-    return res.status(404).send('No record with given id: ' + req.params.id);
-  }
-
-  Member.findByIdAndUpdate(req.params.id, {gradSemester: req.body.gradSemester}, function(err, raw) {
-    if(err) { console.error('Failed to update gradSemester with following error: ', errr); }
-    console.log(raw);
   });
 });
 
