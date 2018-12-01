@@ -8,7 +8,6 @@ import { MemberService } from '../shared/api/member.service';
 import { Member } from '../shared/models/member.model';
 import { AuthGuard } from '../shared/auth/auth.guard';
 
-
 declare var $: any;
 
 @Component({
@@ -45,8 +44,7 @@ export class NavComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   // Gets and sorts members based on first name
   getMembers() {
@@ -87,7 +85,7 @@ export class NavComponent implements OnInit {
   }
 
   onAttendanceSubmit() {
-    if(confirm("Finish taking attendance?")) {
+    if(confirm("Finished taking attendance?")) {
       for(var i = 0; i < this.membersNotHere.length; i++) {
         var currentMember = this.membersNotHere[i] as Member;
         var abs = currentMember.absences;
@@ -100,11 +98,12 @@ export class NavComponent implements OnInit {
       this.membersNotHere = [];
       $("#attendanceModal").modal("hide");
     }
+    this.toastr.success('Attendance Recorded');
   }
 
   onAttendanceClosed() {
     this.membersNotHere = [];
-    this.toastr.error('Take attendance canceled');
+    this.toastr.error('Attendance Not Recorded');
     $("#attendanceModal").modal("hide");
   }
 
@@ -117,11 +116,11 @@ export class NavComponent implements OnInit {
   }
 
   onLogout() {
-    if(confirm("Confirm logout?")) {
+    if(confirm("Confirm Logout?")) {
       this.auth.logout();
       this.user = '';
       this.router.navigate(['home']);
-      this.toastr.success('Successfully logged out');
+      this.toastr.success('Successfully Logged Out');
     }
   }
 

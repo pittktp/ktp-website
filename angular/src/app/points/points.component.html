@@ -104,12 +104,12 @@
             <table class="table table-bordered black-text">
               <thead>
                 <tr>
-                  <th>Submitted by</th>
-                  <th>Submitted on</th>
-                  <th>Type</th>
-                  <th>Value</th>
-                  <th>Description</th>
-                  <th>Accept/Deny</th>
+                  <th>Submitted by:</th>
+                  <th>Submitted on:</th>
+                  <th>Type:</th>
+                  <th>Value:</th>
+                  <th>Description:</th>
+                  <th>Request Action:</th>
                 </tr>
               </thead>
               <tbody>
@@ -139,14 +139,14 @@
   <div class="container">
     <div class="col-xs-12">
       <div class="row">
-        <div class="col-xs-5">
-          <h2>Status for Fall 2018 members</h2>
-        </div>
-        <div class="col-xs-7 text-right">
+        <div class="col-xs-20 text-center">
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#excuseSubmitModal">Submit Excused Absence</button>
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#serviceHoursSubmitModal">Log Service Hours</button>
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#pointsSubmitModal">Log Points</button>
             <button *ngIf="userRole == 'admin'" type="button" class="btn btn-primary btn-sm" (click)="onReviewRequestsOpened()" data-toggle="modal" data-target="#reviewRequestsModal">Review Requests</button>
+        </div>
+        <div class="col-xs-5">
+          <h2>Status for Fall 2018 Members</h2>
         </div>
       </div>
       <div class="row">

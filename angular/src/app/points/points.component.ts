@@ -98,12 +98,13 @@ onExcuseRequestSubmit(form: NgForm) {
   var request = new Request();
   request.type = "Excused Absence";
   request.value = -1;
-  request.description = form.value.reason;
+  request.description = form.value.date + ' - ' + form.value.reason;
   request.submittedById = this.userId;
   request.submittedBy = this.user;
   request.submittedDate = this.getCurrentDateTime();
   request.approved = 0;
   request.excuseDate = form.value.date;
+
   this.requestsService.postRequest(request).subscribe((res) => {
     $("#excuseSubmitModal").modal("hide");
     this.getRequests();
