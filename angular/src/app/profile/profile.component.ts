@@ -140,15 +140,12 @@ export class ProfileComponent implements OnInit {
       // Update in DB
       this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
         console.log('Post Sucessful!');
+        this.showMsg("Profile Image Updated!");
+        setTimeout(() => {window.location.reload();}, 2500);
       }, error => {
         console.error(error);
+        this.showError("Failed to Update Image!");
       });
-
-      // Display Snackbar
-      this.showMsg("Profile Image Updated!");
-
-      // Reload Page to Display Image After 5 seconds
-      setTimeout(() => {window.location.reload();}, 2500);
     }
   }
 
@@ -157,10 +154,11 @@ export class ProfileComponent implements OnInit {
     member.description = form.value.description;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       console.log('Put Successful!');
+      this.showMsg("Description Updated!");
     }, error => {
       console.error(error);
+      this.showError("Failed to Update Description!");
     });
-    this.showMsg("Description Updated!");
   }
 
   onChangeMajor(form: NgForm) {
@@ -168,10 +166,11 @@ export class ProfileComponent implements OnInit {
     member.major = form.value.major;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       console.log('Put Successful!');
+      this.showMsg("Major Updated!");
     }, error => {
       console.error(error);
+      this.showError("Failed to Update Major!");
     });
-    this.showMsg("Major Updated!");
   }
 
   onChangeGraduation(form: NgForm) {
@@ -179,10 +178,47 @@ export class ProfileComponent implements OnInit {
     member.gradSemester = form.value.gradSemester;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       console.log('Put Successful!');
+      this.showMsg("Grad Semester Updated!");
     }, error => {
       console.error(error);
+      this.showError("Failed to Update Grad Semester!");
     });
-    this.showMsg("Graduation Semester Updated!");
+  }
+
+  onChangeRushClass(form: NgForm) {
+    var member = this.profile;
+    member.rushClass = form.value.rushClass;
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      console.log('Put Successful!');
+      this.showMsg("Rush Class Updated!");
+    }, error => {
+      console.error(error);
+      this.showError("Failed to Update Rush Class!");
+    });
+  }
+
+  onChangeLinkedIn(form: NgForm) {
+    var member = this.profile;
+    member.linkedIn = form.value.linkedIn;
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      console.log('Put Successful!');
+      this.showMsg("LinkedIn Link Updated!");
+    }, error => {
+      console.error(error);
+      this.showError("Failed to Update LinkedIn Link!");
+    });
+  }
+
+  onChangeGithub(form: NgForm) {
+    var member = this.profile;
+    member.github = form.value.github;
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      console.log('Put Successful!');
+      this.showMsg("Github Link Updated!");
+    }, error => {
+      console.log(error);
+      this.showError("Failed to Update Github Link!");
+    });
   }
 
   onAddCourse(form: NgForm) {
@@ -207,14 +243,12 @@ export class ProfileComponent implements OnInit {
     member.courses.push(course);
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       console.log('Put Successful!');
+      this.showMsg("Course Added!");
+      window.location.reload();
     }, error => {
       console.error(error);
+      this.showError("Failed to Add Course!");
     });
-    // Display Snackbar
-    this.showMsg("Course Added!");
-
-    // Refresh Page
-    window.location.reload();
   }
 
   onRemoveCourse(form: NgForm) {
@@ -233,15 +267,12 @@ export class ProfileComponent implements OnInit {
     member.courses.splice(member.courses.indexOf(course), 1);
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       console.log('Put Successful!');
+      this.showMsg("Course Removed!");
+      window.location.reload();
     }, error => {
       console.error(error);
-    })
-
-    // Display Success Snackbar
-    this.showMsg("Course Removed!");
-
-    // Refresh Page
-    window.location.reload();
+      this.showError("Failed to Remove Course!");
+    });
   }
 
   showMsg(msg: string) {

@@ -38,12 +38,36 @@
           <form (ngSubmit)="onChangeGraduation(changeGradForm)" #changeGradForm="ngForm" autocomplete="off">
             <div class="input-field">
               <label style="color:black;" for="gradSemester">Change Graduation Semester: </label>
-              <input style="text-align:left;" [(ngModel)]="changeGradForm.gradSemester" name="gradSemester" #name="ngModel" class="form-control" id="gradSemester" value="{{this.profile.gradSemester}}"required>
+              <input style="text-align:left;" [(ngModel)]="changeGradForm.gradSemester" name="gradSemester" #name="ngModel" class="form-control" id="gradSemester" value="{{this.profile.gradSemester}}" required>
             </div>
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changeGradForm.valid">Update</button>
           </form>
         </div>
+        <form (ngSubmit)="onChangeRushClass(changeRushClass)" #changeRushClassForm="ngForm" autocomplete="off">
+          <div class="input-field">
+            <label style="color:black;" for="rushClass">Change Rush Class: </label>
+            <input style="text-align:left;" [(ngModel)]="changeRushClassForm.rushClass" name="rushClass" #name="ngModel" class="form-control" id="rushClass" value="{{this.profile.rushClass}}" required>
+          </div>
+          <br />
+          <button type="submit" class="btn btn-default" [disabled]="!changeRushClassForm.valid">Update</button>
+        </form>
+        <form (ngSubmit)="onChangeLinkedIn(changeLinkedIn)" #changeLinkedInForm="ngForm" autocomplete="off">
+          <div class="input-field">
+            <label style="color:black;" for="linkedIn">Change LinkedIn Link: </label>
+            <input style="text-align:left;" [(ngModel)]="changeLinkedInForm.linkedIn" name="linkedIn" #name="ngModel" class="form-control" id="linkedIn" value="{{this.profile.linkedIn}}" required>
+          </div>
+          <br />
+          <button type="submit" class="btn btn-default" [disabled]="!changeLinkedInForm.valid">Update</button>
+        </form>
+        <form (ngSubmit)="onChangeGithub(changeGithub)" #changeGithubForm="ngForm" autocomplete="off">
+          <div class="input-field">
+            <label style="color:black;" for="github">Change Github Link: </label>
+            <input style="text-align:left;" [(ngModel)]="changeGithubForm.github" name="github" #name="ngModel" class="form-control" id="github" value="{{this.profile.github}}" required>
+          </div>
+          <br />
+          <button type="submit" class="btn btn-default" [disabled]="!changeGithubForm.valid">Update</button>
+        </form>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
