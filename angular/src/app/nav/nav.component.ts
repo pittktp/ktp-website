@@ -19,8 +19,8 @@ declare var $: any;
 export class NavComponent implements OnInit {
 
   private membersNotHere: Array<object> = [];
-  private user = '';
-  private userRole = '';
+  public user = '';
+  public userRole = '';
   private userId = '';
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
