@@ -113,12 +113,10 @@ export class NavComponent implements OnInit {
 
   onNotHere(member: Member) {
     this.membersNotHere.push(member);
-
-    console.log(this.membersNotHere);
   }
 
   onHomeClicked() {
-    this.router.navigate(['home'])
+    this.router.navigate(['home']);
   }
 
   onLogout() {

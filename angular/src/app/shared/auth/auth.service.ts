@@ -12,7 +12,7 @@ import { Member } from '../models/member.model';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private memberService: MemberService) { }
+  constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<boolean> {
     return this.http.post<{token: string}>('http://localhost:3000/api/auth', {email: email, password: password})
