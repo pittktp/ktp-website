@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { SharedService } from '../shared.service';
+import { AuthService } from '../shared/auth/auth.service';
+import { SharedService } from '../shared/shared.service';
 import { Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { MemberService } from '../shared/api/member.service';
 import { Member } from '../shared/models/member.model';
-import { AuthGuard } from '../auth.guard';
+import { AuthGuard } from '../shared/auth/auth.guard';
 
 
 declare var $: any;
@@ -21,9 +21,9 @@ export class NavComponent implements OnInit {
   private membersNotHere: Array<object> = [];
   public user = '';
   public userRole = '';
-  private userId = '';
+  public userId = '';
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.memberService.getMemberById(currentUserId).subscribe((res) => {

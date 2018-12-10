@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../shared/auth/auth.service';
 import { MemberService } from '../shared/api/member.service';
 import { RequestsService } from '../shared/api/requests.service';
-import { SharedService } from '../shared.service';
+import { SharedService } from '../shared/shared.service';
 import { Member } from '../shared/models/member.model';
 import { ToastrService } from 'ngx-toastr';
 
@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit {
   courseList: Array<String> = [];
   private sub: any
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) { }
+  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');

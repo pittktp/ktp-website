@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as jwt_decode from "jwt-decode";
 
-import { MemberService } from './shared/api/member.service';
-import { Member } from './shared/models/member.model';
+import { MemberService } from '../api/member.service';
+import { Member } from '../models/member.model';
 
 @Injectable({
   providedIn: 'root'

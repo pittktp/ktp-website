@@ -8,7 +8,7 @@ import { PointsComponent } from '../../points/points.component';
 import { EditMembersComponent } from '../../edit-members/edit-members.component';
 import { ProfileComponent } from '../../profile/profile.component';
 import { NavComponent } from '../../nav/nav.component';
-import { AuthGuard } from '../../auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 
 const routes: Routes = [
