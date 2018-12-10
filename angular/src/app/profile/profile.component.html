@@ -85,9 +85,6 @@
     </div>
   </div>
 
-  <!-- Snackbar Template -->
-  <div id="snackbar">Default Snackbar Test</div>
-
   <!-- Secured Profile Page Content -->
   <div class="container" *ngIf="this.auth.loggedIn(); else unsecured">
     <div class="row">
@@ -96,7 +93,7 @@
           <div class="row profile-header">
             <div class="col-md-2">
               <div *ngIf="this.profile.picture != ''; else noPic" class="profile-pic">
-                <img src=`{{profile.picture}}` alt=`{{profile.name}}`/>
+                <img src="http://localhost:3000/img/{{profile.picture}}" alt="{{profile.name}}" title="{{profile.name}}"/>
               </div>
               <ng-template #noPic style="margin: 0 auto">
                 <div class="profile-no-pic">
@@ -118,7 +115,7 @@
               </div>
             </div>
             <div class="col-md-2 col-md-offset-1 profile-btns">
-              <button *ngIf="this.auth.getCurrentUserId() == this.profile._id" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#profileSettingsModal">Settings</button>
+              <button *ngIf="this.auth.getCurrentUserId() == this.profile._id" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#profileSettingsModal">Settings</button>
             </div>
           </div>
           <br>
@@ -152,13 +149,15 @@
                 <br />
                 <div class="row">
                   <div class="col-lg-10 col-lg-offset-1">
-                    {{this.profile.description}}
+                      <span *ngFor="let line of this.profile.description.split('\n')">
+                        {{line}}
+                      </span>
                   </div>
                 </div>
               </div>
               <div class="col-lg-11 tab-content" id="academics" *ngIf="this.currentTabContent == 'academics'">
                 <br />
-                <div class="row">
+                <div class="row acad-content">
                   <div class="col-lg-5">
                     <span>Major: {{this.profile.major}}</span>
                   </div>
@@ -169,17 +168,19 @@
                 <br />
                 <div class="row" style="margin-top: 15px;">
                   <div class="col-lg-6">
-                    <button type="button" class="btn btn-info btn-sm ktp-btn" data-toggle="modal" data-target="#editCoursesModal">Edit Courses</button>
-                    <div *ngFor="let category of this.courseCategories">
+                    <div class="row">
+                      <button type="button" class="col-lg-offset-4 btn btn-info btn-sm ktp-btn" data-toggle="modal" data-target="#editCoursesModal">Edit Courses</button>
+                    </div>
+                    <div *ngFor="let category of this.courseCategories" class="panel panel-default">
                       <button class="accordion" (click)="selectCourseCategory(category)">{{category}} <i class="fa fa-caret-down" style="float:right;"></i></button>
-                      <div class="panel" *ngIf="this.panelType == category" [innerHtml]="panelHtml"></div>
+                      <div class="panel-body" *ngIf="this.panelType == category" [innerHtml]="panelHtml"></div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="col-lg-11 tab-content" id="contact" *ngIf="this.currentTabContent == 'contact'">
                 <br />
-                <div class="row">
+                <div class="row contact-content">
                   <div class="col-lg-12">
                     <a href="{{profile.linkedIn}}" style="margin-right: 10px;"><img src="../../assets/img/linkedIn.png" /></a>
                     <a href="{{profile.github}}"><img src="../../assets/img/github.png" /></a>
@@ -202,7 +203,7 @@
               <div class="row profile-header">
                 <div class="col-md-2">
                   <div *ngIf="this.profile.picture != ''; else noPic" class="profile-pic">
-                    <img src=`{{profile.picture}}` alt=`{{profile.name}}`/>
+                    <img src="http://localhost:3000/img/{{profile.picture}}" alt=`{{profile.name}}`/>
                   </div>
                   <ng-template #noPic style="margin: 0 auto">
                     <div class="profile-no-pic">

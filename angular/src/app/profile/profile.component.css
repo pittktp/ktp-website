@@ -32,6 +32,7 @@
   }
   .profile-pic {
     margin: 0 auto;
+    text-align: center;
   }
   .progress-bars {
     margin-left: 15px;
@@ -46,7 +47,17 @@
     text-align: center;
   }
   #serviceBar, #pointsBar {
-    width: 40%;
+    width: 80%;
+    margin-left: 30px;
+  }
+  .tab-content {
+    padding-left: 0;
+  }
+  .acad-content, .contact-content {
+    padding-left: 18px;
+  }
+  .ktp-btn {
+    margin-left: 18px;
   }
  }
 
@@ -63,7 +74,7 @@ body {
   overflow: hidden;
 }
 .profile-info {
-  margin-top: 5vh;
+  margin-top: 8vh;
   margin-left: 10px;
   padding-bottom: 10px;
 }
@@ -80,6 +91,11 @@ body {
 .profile-pic {
   border-radius: 50%;
   margin-top: 15px;
+}
+.profile-pic img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
 }
 #serviceBar, #pointsBar {
   display: inline-block;
@@ -128,14 +144,8 @@ body {
 .active, .accordion:hover {
   background-color: #ccc;
 }
-.panel {
-  padding: 0 18px;
-  background-color: white;
-  display: block;
-  overflow: hidden;
-}
 .progress-bar {
-  padding-left: 0;
+  padding: 0;
 }
 .progress-bars {
   margin: 0 auto;
@@ -149,20 +159,20 @@ body {
   visibility: hidden;
   min-width: 250px;
   margin-left: -125px;
-  background-color: #000;
-  color: #fff;
+  background-color: #fff;
+  color: #00415d;
   text-align: center;
   border-radius: 2px;
-  padding: 16px;
+  padding: 8px;
   position: fixed;
   z-index: 1;
   left: 50%;
-  bottom: 50%;
+  bottom: 30px;
 }
 #snackbar.show {
   visibility: visible;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 5s;
-  animation: fadein 0.5s, fadeout 0.5s 5s;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 @-webkit-keyframes fadein {
   from {bottom: 0; opacity: 0;}

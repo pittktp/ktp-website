@@ -132,11 +132,20 @@ export class ProfileComponent implements OnInit {
   }
 
   onChangePicture(form: NgForm) {
+    // TODO: Ensure image is proper file type and is a square shape
+
+    // Update in DB
     this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
       console.log('Post Sucessful!');
     }, error => {
       console.error(error);
     });
+
+    // Display Snackbar
+    this.showMsg("Profile Image Updated!");
+
+    // Reload Page to Display Image After 5 seconds
+    setTimeout(() => {window.location.reload();}, 2500);
   }
 
   onChangeDescription(form: NgForm) {
@@ -147,7 +156,7 @@ export class ProfileComponent implements OnInit {
     }, error => {
       console.error(error);
     });
-    this.showSnackbar("Description Updated!");
+    this.showMsg("Description Updated!");
   }
 
   onChangeMajor(form: NgForm) {
@@ -158,7 +167,7 @@ export class ProfileComponent implements OnInit {
     }, error => {
       console.error(error);
     });
-    this.showSnackbar("Major Updated!");
+    this.showMsg("Major Updated!");
   }
 
   onChangeGraduation(form: NgForm) {
@@ -169,32 +178,73 @@ export class ProfileComponent implements OnInit {
     }, error => {
       console.error(error);
     });
-    this.showSnackbar("Graduation Semester Updated!");
+    this.showMsg("Graduation Semester Updated!");
   }
 
   onAddCourse(form: NgForm) {
     var course = form.value.addCourse;
+    var member = this.profile;
 
     // Check that course isnt already in courselist
+    if(member.courses.indexOf(course) != -1) {
+      // Display snackbar error
+      this.showError("Course Already Exists!");
+      return;
+    }
 
-    // add course
+    // Ensure course follows proper format
+    if(!course.match(/^[A-Z]* \d{4}$/)) {
+      // Display snackbar error
+      this.showError("Invalid Course Format!");
+      return;
+    }
+
+    // Add course and update in DB
+    member.courses.push(course);
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      console.log('Put Successful!');
+    }, error => {
+      console.error(error);
+    });
+    // Display Snackbar
+    this.showMsg("Course Added!");
+
+    // Refresh Page
+    window.location.reload();
   }
 
   onRemoveCourse(form: NgForm) {
     // Get course
     var course = form.value.removeCourse;
-    
-    // Ensure course is in course list
+    var member = this.profile;
+
+    // Throw error if invalid course
+    if(member.courses.indexOf(course) == -1) {
+      // Display snackbar error
+      this.showError("Invalid Course!");
+      return;
+    }
 
     // Remove course from the list, update in DB
+    member.courses.splice(member.courses.indexOf(course), 1);
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      console.log('Put Successful!');
+    }, error => {
+      console.error(error);
+    })
+
+    // Display Success Snackbar
+    this.showMsg("Course Removed!");
+
+    // Refresh Page
+    window.location.reload();
   }
 
-  showSnackbar(msg: string) {
-    var elem = document.getElementById("snackbar");
-    elem.className = "show";
-    elem.innerText = msg;
-    setTimeout(() => {
-      elem.className = elem.className.replace("show", "");
-    }, 2000);
+  showMsg(msg: string) {
+    this.toastr.success(msg);
+  }
+
+  showError(msg: string) {
+    this.toastr.error(msg);
   }
 }

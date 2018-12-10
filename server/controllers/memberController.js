@@ -115,7 +115,7 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-// POST upload Member profile image --> localhost:3000/api/members/*id*/set-image
+// POST upload Member profile image --> localhost:3000/api/member/*id*/image
 // Must be a POST request since files must be sent via POST
 router.post('/:id/image', (req, res) => {
   if(!ObjectId.isValid(req.params.id)) {
@@ -129,18 +129,37 @@ router.post('/:id/image', (req, res) => {
   });
 
   form.on('end', function(fields, file) {
+    var id = ""
     var tempPath = this.openedFiles[0].path;
-    var fileName = this.openedFiles[0].name;
-    var newPath = '../public/img/';
-
-    fs.copy(tempPath, newPath + fileName, function(err) {
+    var fileExt = this.openedFiles[0].name.split('.')[1];
+    Member.findById(req.params.id, function(err, member) {
       if(err) { console.error('File failed to copy with following error: ', err); }
-      else {
-        Member.findByIdAndUpdate(req.params.id, {picture: fileName}, function(err, raw) {
-          if(err) { console.error('Failed to update mmeber picture with following error: ', err); }
-          console.log(raw);
-        });
-      }
+      id = member.email.split('@')[0];
+      var newPath = `../server/public/img/${id}.${fileExt}`;
+      var fileName = id + '.' + fileExt;
+
+      fs.copyFile(tempPath, newPath, function(err) {
+        if(err) { console.error('File failed to copy with following error: ', err); }
+        else {
+          Member.findByIdAndUpdate(req.params.id, {picture: fileName}, function(err, raw) {
+            if(err) { console.error('Failed to update mmeber picture with following error: ', err); }
+            console.log(raw);
+          });
+        }
+      });
+    });
+  });
+});
+
+router.get('/:id/image', (req, res) => {
+  if(!ObjectId.isValid(req.params.id)) {
+    return res.status(404).send('No record with given id: ' + req.params.id);
+  }
+
+  Member.findById(req.params.id, function(err, member) {
+    if(err) { console.error('Failed to find member with following error: ', err); }
+    res.render('ProfileImg.pug', {
+      imgSrc: '../../../img/' + member.picture
     });
   });
 });

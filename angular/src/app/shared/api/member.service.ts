@@ -44,13 +44,4 @@ export class MemberService {
     
     return this.httpClient.post(`${this.API_URL}/${id}/image`, formData);
   }
-
-  putCourse(id: string, course: string) {
-    return this.httpClient.put(`${this.API_URL}/${id}/course`, course);
-  }
-
-  deleteCourse(id: string, course: string) {
-    return this.httpClient.put(`${this.API_URL}/${id}/course`, course);
-  }
-
 }
