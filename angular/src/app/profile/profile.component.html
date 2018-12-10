@@ -11,7 +11,7 @@
           <form (ngSubmit)="onChangePicture(changePicForm)" #changePicForm="ngForm" autocomplete="off">
             <div class="input-field">
               <label style="color:black;" for="profilePic">Picture to Upload: </label>
-              <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" required>
+              <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" accept="image/*" required>
             </div>
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid">Upload</button>

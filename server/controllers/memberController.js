@@ -135,6 +135,7 @@ router.post('/:id/image', (req, res) => {
     Member.findById(req.params.id, function(err, member) {
       if(err) { console.error('File failed to copy with following error: ', err); }
       id = member.email.split('@')[0];
+      var oldPic = member.picture;
       var newPath = `../server/public/img/${id}.${fileExt}`;
       var fileName = id + '.' + fileExt;
 
@@ -147,6 +148,13 @@ router.post('/:id/image', (req, res) => {
           });
         }
       });
+
+      // Remove old picture if user had one
+      if(oldPic != null || oldPic != "") {
+        fs.unlink(`../server/public/img/${oldPic}`, (err) => {
+          if(err) { console.error('Failed to remove old image with error: ', err); }
+        });
+      }
     });
   });
 });

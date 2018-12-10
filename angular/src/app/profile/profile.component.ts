@@ -133,19 +133,23 @@ export class ProfileComponent implements OnInit {
 
   onChangePicture(form: NgForm) {
     // TODO: Ensure image is proper file type and is a square shape
+    console.log(this.targetFile.type); 
+    if(this.targetFile.type != "image/jpeg" && this.targetFile.type != "image/png" && this.targetFile.type != "image/gif") {
+      this.showError("Invalid Image Type");
+    } else {
+      // Update in DB
+      this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
+        console.log('Post Sucessful!');
+      }, error => {
+        console.error(error);
+      });
 
-    // Update in DB
-    this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
-      console.log('Post Sucessful!');
-    }, error => {
-      console.error(error);
-    });
+      // Display Snackbar
+      this.showMsg("Profile Image Updated!");
 
-    // Display Snackbar
-    this.showMsg("Profile Image Updated!");
-
-    // Reload Page to Display Image After 5 seconds
-    setTimeout(() => {window.location.reload();}, 2500);
+      // Reload Page to Display Image After 5 seconds
+      setTimeout(() => {window.location.reload();}, 2500);
+    }
   }
 
   onChangeDescription(form: NgForm) {
