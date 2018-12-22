@@ -1,0 +1,25 @@
+<div class="background">
+  <div class="page-body">
+
+    <div class="header">
+      <div class="card">&#8212; Members &#8212;</div>
+    </div>
+
+    <div class="grid">
+      <div *ngFor="let member of members" class="card">
+        <img class="card-img-top card-img-circle" src="../../assets/img/cath.jpg">
+        <div class="card-body">
+          <h3 class="card-title">{{member.name}}</h3>
+          <h5 class="card-subtitle">Member Major</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+        </div>
+        <div class="card-body">
+          <a href="#" class="card-link">See More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
