@@ -17,6 +17,6 @@ RUN mkdir /etc/letsencrypt
 COPY fullchain.pem /etc/letsencrypt
 COPY privkey.pem /etc/letsencrypt
 COPY --from=builder /angular_app/dist/* /usr/share/nginx/html/
-EXPOSE 81
+EXPOSE 80
 EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
