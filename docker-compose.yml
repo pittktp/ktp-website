@@ -1,0 +1,21 @@
+version: '3.0' # specify docker-compose version
+
+# Define the services/ containers to be run
+services:
+  angular: # name of the first service
+    build: angular # specify the directory of the Dockerfile
+    ports:
+    - "80:80" # specify port mapping
+    - "443:443"
+
+  database: # name of the third service
+    image: mongo # specify image to build container from
+    ports:
+    - "27017:27017" # specify port forwarding
+
+  server: # name of the second service
+    build: server # specify the directory of the Dockerfile
+    ports:
+    - "3000:3000" #specify ports mapping
+    links:
+    - database:27017 # link this service to the database service
