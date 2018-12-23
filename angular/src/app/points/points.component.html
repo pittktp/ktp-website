@@ -7,16 +7,16 @@
         <form (ngSubmit)="onPointRequestSubmit(pointsForm)" #pointsForm="ngForm" autocomplete="off">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 style="color:black;"class="modal-title">Log Points</h4>
+            <h4 style="color:black;" class="modal-title">Log Points</h4>
           </div>
           <div class="modal-body">
             <div class="input-field">
-              <label style="color:black" for="points">Points earned</label>
+              <label style="color:black;" for="points">Points earned</label>
               <input style="text-align:left;" [(ngModel)]="pointsForm.points" name="points" #name="ngModel" type="number" class="form-control" id="points" placeholder="Enter number of brotherhood points" autocomplete="off" required>
             </div>
             <br />
             <div class="input-field">
-              <label style="color:black" for="description">Description</label>
+              <label style="color:black;" for="description">Description</label>
               <input style="text-align:left;" [(ngModel)]="pointsForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these points?" autocomplete="off" required>
             </div>
             <br />

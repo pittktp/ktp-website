@@ -64,7 +64,7 @@ export class PointsComponent implements OnInit {
 
   getMembers() {
     this.memberService.getMembers().subscribe((data: Array<object>) => {
-      var mems = data as Member[]
+      var mems = data as Member[];
       mems.sort(function(a, b) {
         var textA = a.name.toUpperCase();
         var textB = b.name.toUpperCase();

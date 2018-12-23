@@ -4,11 +4,18 @@ var Member = mongoose.model('Member', {
   name: { type: String },
   email: { type: String},
   password: { type: String },
-  studentId: { type: String },
   points: { type: Number },
   serviceHours: { type: Number },
   role: { type: String },
-  absences: { type: Number }
+  absences: { type: Number },
+  rushClass: { type: String },
+  picture: { type: String },
+  courses: { type: Array },
+  linkedIn: { type: String },
+  github: { type: String },
+  gradSemester: { type: String },
+  major: { type: String },
+  description: { type: String }
 });
 
 module.exports = { Member };

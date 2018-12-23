@@ -16,6 +16,7 @@ import { AuthService } from './shared/auth/auth.service';
 import { AuthGuard } from './shared/auth/auth.guard';
 import { AppRoutingModule } from './shared/routing/app-routing.module';
 import { EditMembersComponent } from './edit-members/edit-members.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 export function tokenGetter() {
@@ -29,7 +30,8 @@ export function tokenGetter() {
     HomeComponent,
     PointsComponent,
     NavComponent,
-    EditMembersComponent
+    EditMembersComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
