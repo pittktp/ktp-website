@@ -41,7 +41,7 @@ export class MemberService {
   postFile(id: string, targetFile: File) {
     var formData: FormData = new FormData();
     formData.append('image', targetFile, targetFile.name);
-    
+
     return this.httpClient.post(`${this.API_URL}/${id}/image`, formData);
   }
 }
