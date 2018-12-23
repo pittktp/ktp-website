@@ -101,6 +101,14 @@ export class LoginComponent implements OnInit {
       newMember.points = 0;
       newMember.serviceHours = 0;
       newMember.absences = 0;
+      newMember.rushClass = "";
+      newMember.picture = "";
+      newMember.courses = [];
+      newMember.linkedIn = "";
+      newMember.github = "";
+      newMember.gradSemester = "";
+      newMember.major = "";
+      newMember.description = "";
 
       if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";
       else if(form.value.registerCode == "6edwxvuh06") newMember.role = "admin";
