@@ -6,6 +6,8 @@ import { LoginComponent } from '../../login/login.component';
 import { HomeComponent } from '../../home/home.component';
 import { PointsComponent } from '../../points/points.component';
 import { EditMembersComponent } from '../../edit-members/edit-members.component';
+import { ProfileComponent } from '../../profile/profile.component';
+import { NavComponent } from '../../nav/nav.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { MembersComponent } from '../../members/members.component';
 
@@ -16,6 +18,7 @@ const routes: Routes = [
   { path: 'edit-members', component: EditMembersComponent,  },
   { path: 'members', component: MembersComponent,  },
   { path: 'login', component: LoginComponent},
+  { path: 'profile/:id', component: ProfileComponent },
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ];

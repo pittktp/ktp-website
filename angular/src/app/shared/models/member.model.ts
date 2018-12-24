@@ -6,9 +6,16 @@ export class Member {
   password: string;
   points: number;
   serviceHours: number;
-  studentId: number;
   role: string;
   absences: number;
+  rushClass: string;
+  picture: string;
+  courses: Array<string>;
+  linkedIn: string;
+  github: string;
+  gradSemester: string;
+  major: string;
+  description: string;
 
   constructor() { }
 

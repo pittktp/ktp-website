@@ -9,12 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
+    "formidable": "^1.2.1",
+    "fs": "0.0.1-security",
     "jsonwebtoken": "^8.3.0",
-    "mongoose": "^5.2.10"
+    "mongoose": "^5.2.10",
+    "pug": "^2.0.3",
+    "util": "^0.11.1"
   }
 }

@@ -21,7 +21,7 @@ declare var $: any;
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private sharedService: SharedService, private memberService: MemberService) { }
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private sharedService: SharedService, public memberService: MemberService) { }
 
   error: string;
   showIncorrectLogin = false;
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         var currentUserId = this.auth.getCurrentUserId();
         this.memberService.getMemberById(currentUserId).subscribe((res) => {
           var member = res as Member;
-          this.sharedService.emitChange({"name": member.name, "role": member.role});
+          this.sharedService.emitChange({"name": member.name, "role": member.role, "id": member.email.split('@')[0]});
           this.router.navigate(['home']);
           this.toastr.show('Hello ' + member.name + "!");
         });
@@ -100,8 +100,15 @@ export class LoginComponent implements OnInit {
       newMember.password = form.value.registerPassword;
       newMember.points = 0;
       newMember.serviceHours = 0;
-      newMember.studentId = form.value.registerStudentId;
       newMember.absences = 0;
+      newMember.rushClass = "";
+      newMember.picture = "";
+      newMember.courses = [];
+      newMember.linkedIn = "";
+      newMember.github = "";
+      newMember.gradSemester = "";
+      newMember.major = "";
+      newMember.description = "";
 
       if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";
       else if(form.value.registerCode == "6edwxvuh06") newMember.role = "admin";
@@ -116,7 +123,7 @@ export class LoginComponent implements OnInit {
               var currentUserId = this.auth.getCurrentUserId();
               this.memberService.getMemberById(currentUserId).subscribe((res) => {
                 var member = res as Member;
-                this.sharedService.emitChange({"name": member.name, "role": member.role});
+                this.sharedService.emitChange({"name": member.name, "role": member.role, "id": member.email.split('@')[0]});
                 this.memberService.user = member.name;
                 this.memberService.userRole = member.role;
                 this.router.navigate(['home']);

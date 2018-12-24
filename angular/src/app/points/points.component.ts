@@ -26,7 +26,7 @@ export class PointsComponent implements OnInit {
   userRole: string;
   requestForm: Request = new Request();
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestsService: RequestsService, private router: Router) {
+  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, private router: Router) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.userId = currentUserId;
@@ -64,7 +64,7 @@ export class PointsComponent implements OnInit {
 
   getMembers() {
     this.memberService.getMembers().subscribe((data: Array<object>) => {
-      var mems = data as Member[]
+      var mems = data as Member[];
       mems.sort(function(a, b) {
         var textA = a.name.toUpperCase();
         var textB = b.name.toUpperCase();

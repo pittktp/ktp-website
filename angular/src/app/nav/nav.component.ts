@@ -19,28 +19,27 @@ declare var $: any;
 export class NavComponent implements OnInit {
 
   private membersNotHere: Array<object> = [];
-  private user = '';
-  private userRole = '';
+  public user = '';
+  public userRole = '';
+  public userId = '';
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
         this.userRole = member.role;
+        this.userId = member.email.split('@')[0];
       });
-    }
-    else {
-      this.user = '';
-      this.userRole = '';
     }
 
     this.sharedService.changeEmitted$.subscribe(
       change => {
-        console.log(change.name + ' ' + change.role);
+        console.log(change.name + ' ' + change.role + ' ' + change.id);
         this.user = change.name;
         this.userRole = change.role;
+        this.userId = change.id;
       }
     );
   }
@@ -62,11 +61,15 @@ export class NavComponent implements OnInit {
   }
 
   onLoginClicked() {
-    this.router.navigate(['login'])
+    this.router.navigate(['login']);
+  }
+
+  onProfileClicked() {
+    this.router.navigate(['profile', this.userId]);
   }
 
   onPointsClicked() {
-    this.router.navigate(['points'])
+    this.router.navigate(['points']);
   }
 
   onEditMembersClicked() {
@@ -120,6 +123,8 @@ export class NavComponent implements OnInit {
     if(confirm("Confirm logout?")) {
       this.auth.logout();
       this.user = '';
+      this.userRole = '';
+      this.userId = '';
       this.router.navigate(['home']);
       this.toastr.success('Successfully logged out');
     }

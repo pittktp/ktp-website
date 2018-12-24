@@ -23,7 +23,7 @@ export class EditMembersComponent implements OnInit {
   private userId: string;
   private userRole: string = '';
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
 
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
@@ -36,8 +36,7 @@ export class EditMembersComponent implements OnInit {
           this.router.navigate(['home']);
         }
       });
-    }
-
+    }  
   }
 
   ngOnInit() {
@@ -54,7 +53,7 @@ export class EditMembersComponent implements OnInit {
 
   getMembers() {
     this.memberService.getMembers().subscribe((data: Array<object>) => {
-      var mems = data as Member[]
+      var mems = data as Member[];
       mems.sort(function(a, b) {
         var textA = a.name.toUpperCase();
         var textB = b.name.toUpperCase();
@@ -67,7 +66,6 @@ export class EditMembersComponent implements OnInit {
   onMemberClicked(member: Member) {
     this.memberClicked = member;
 
-    $('#studentId').val(this.memberClicked.studentId);
     $('#points').val(this.memberClicked.points);
     $('#serviceHours').val(this.memberClicked.serviceHours);
     $('#absences').val(this.memberClicked.absences);
@@ -98,7 +96,6 @@ export class EditMembersComponent implements OnInit {
     updatedMember.email = this.memberClicked.email;
 
     updatedMember.name = $('#name').val();
-    updatedMember.studentId = $('#studentId').val();
     updatedMember.points = $('#points').val();
     updatedMember.serviceHours = $('#serviceHours').val();
     updatedMember.absences = $('#absences').val();

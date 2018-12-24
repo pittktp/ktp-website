@@ -1,6 +1,14 @@
+# Certificates
 *.pem
-.DS_Store
+
+# NodeJS
 */node_modules/
 node_modules/
+
+# IDE Files
 */.idea/
 .idea
+*.iml
+
+# macOS Files
+.DS_Store
