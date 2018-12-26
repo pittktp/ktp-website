@@ -50,8 +50,16 @@
 .card-img-circle {
   width: 100px;
   height: 100px;
+  line-height: 100px;
   margin: 12px auto 4px;
   border-radius: 50%;
+}
+
+.initials {
+  background: #CCC;
+  color: #777;
+  font-size: 3em;
+  text-transform: uppercase;
 }
 
 .card-title {
@@ -69,6 +77,6 @@
 .card-body p {
   text-align: left;
   font-size: 1em;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
 }

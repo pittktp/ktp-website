@@ -7,19 +7,26 @@
 
     <div class="grid">
       <div *ngFor="let member of members" class="card">
-        <img class="card-img-top card-img-circle" src="../../assets/img/cath.jpg">
+
+        <ng-container *ngIf="member.picture != ''; then img; else noImg"></ng-container>
+        <ng-template #img>
+          <img class="card-img-top card-img-circle" src="http://localhost:3000/img/{{member.picture}}">
+        </ng-template>
+        <ng-template #noImg>
+          <div class="card-img-top card-img-circle initials">{{initialsFrom(member.name)}}</div>
+        </ng-template>
+
         <div class="card-body">
           <h3 class="card-title">{{member.name}}</h3>
-          <h5 class="card-subtitle">Member Major</h5>
+          <h5 class="card-subtitle">{{member.major}}</h5>
         </div>
         <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+          <p class="card-text">{{member.description}}</p>
         </div>
         <div class="card-body">
-          <a href="#" class="card-link">See More</a>
+          <a routerLink="/profile/{{member._id}}" class="card-link">See More</a>
         </div>
       </div>
     </div>
   </div>
 </div>
-

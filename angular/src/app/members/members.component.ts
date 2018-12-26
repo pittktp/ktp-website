@@ -9,6 +9,9 @@ import {MemberService} from '../shared/api/member.service';
 })
 export class MembersComponent implements OnInit {
 
+  private readonly majorPlaceholder = 'Undeclared';
+  private readonly descriptionPlaceholder = 'This person doesn\'t have a bio, but it\'s safe to assume they love technology.';
+
   protected members: Member[] = [];
 
   constructor(private memberService: MemberService) {}
@@ -28,7 +31,21 @@ export class MembersComponent implements OnInit {
   getMembers() {
     this.memberService.getMembers().subscribe((data: Array<object>) => {
       this.members = data as Member[];
+      this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
     });
   }
 
+  fillWithPlaceholderData(member: Member): Member {
+    const filledMember = {...member};
+
+    filledMember.description = (member.description === '') ? this.descriptionPlaceholder : member.description;
+    filledMember.major = (member.major === '') ? this.majorPlaceholder : member.major;
+    filledMember._id = member.email.split('@')[0];
+    return filledMember;
+  }
+
+  initialsFrom(fullName: string): string {
+    const names = fullName.split(' ');
+    return names[0][0] + names[names.length - 1][0];
+  }
 }

@@ -32,7 +32,7 @@ export function tokenGetter() {
     PointsComponent,
     NavComponent,
     EditMembersComponent,
-    MembersComponent
+    MembersComponent,
     ProfileComponent
   ],
   imports: [
