@@ -13,7 +13,7 @@ export class RequestsService {
   //API_URL = 'http://localhost:3000/api/requests/';
 
   // Production - use this url when running in production on AWS
-  API_URL = 'http://server:3000/api/requests/';
+  API_URL = 'https://server:3000/api/requests/';
 
   requests: Request[];
 
