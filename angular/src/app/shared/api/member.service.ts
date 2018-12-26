@@ -12,7 +12,8 @@ export class MemberService {
   //API_URL = 'http://localhost:3000/api/members/';
 
   // Production - use this url when running in production on AWS
-  API_URL = 'https://server:3000/api/members/';
+  //API_URL = 'https://ec2-54-157-59-182.compute-1.amazonaws.com:3000/api/members/';
+  API_URL = 'https://pitt-kappathetapi.com:80/api/members/';
 
   members: Member[];
   user = '';
