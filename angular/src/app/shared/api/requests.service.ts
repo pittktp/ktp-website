@@ -24,28 +24,28 @@ export class RequestsService {
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set("authorization", token);
 
-    return this.httpClient.get(`${this.API_URL}`);
+    return this.httpClient.get(`${this.API_URL}`, { headers: headers });
   }
 
   postRequest(request: Request) {
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set("authorization", token);
 
-    return this.httpClient.post<Request>(`${this.API_URL}`, request);
+    return this.httpClient.post<Request>(`${this.API_URL}`, request, { headers: headers });
   }
 
   putRequest(id: string, modifiedRequest: Request) {
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set("authorization", token);
 
-    return this.httpClient.put<Request>(`${this.API_URL}` + id, modifiedRequest);
+    return this.httpClient.put<Request>(`${this.API_URL}` + id, modifiedRequest, { headers: headers });
   }
 
   deleteRequest(id: string) {
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set("authorization", token);
 
-    return this.httpClient.delete(`${this.API_URL}` + id);
+    return this.httpClient.delete(`${this.API_URL}` + id, { headers: headers });
   }
 
 }
