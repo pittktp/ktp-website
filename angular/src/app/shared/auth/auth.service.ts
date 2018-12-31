@@ -12,9 +12,9 @@ import { Member } from '../models/member.model';
 })
 export class AuthService {
 
-  API_URL = 'http://localhost:3000/api/auth';
+  //API_URL = 'http://localhost:3000/api/auth';
   //API_URL = 'http://ec2-54-157-59-182.compute-1.amazonaws.com:3000/api/auth/';
-  //API_URL = 'https://pitt-kappathetapi.com:80/api/auth/';
+  API_URL = 'https://pitt-kappathetapi.com/api/auth/';
 
   constructor(private http: HttpClient) { }
 
