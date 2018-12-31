@@ -12,13 +12,14 @@ import { Member } from '../models/member.model';
 })
 export class AuthService {
 
-  //API_URL = 'https://localhost:3000/api/auth';
-  API_URL = 'https://pitt-kappathetapi.com:80/api/auth/';
+  API_URL = 'http://localhost:3000/api/auth';
+  //API_URL = 'http://ec2-54-157-59-182.compute-1.amazonaws.com:3000/api/auth/';
+  //API_URL = 'https://pitt-kappathetapi.com:80/api/auth/';
 
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post<{token: string}>(API_URL, {email: email, password: password})
+    return this.http.post<{token: string}>(this.API_URL, {email: email, password: password})
       .pipe(
         map(result => {
           localStorage.setItem('access_token', result.token);

@@ -20,7 +20,6 @@ app.use(bodyParser.json());
 //app.use(cors({ origin: 'http://localhost:4200' }));
 
 // Production - use when running in production in AWS
-//app.use(cors({ origin: 'https://pitt-kappathetapi.com' }));
 app.use(cors({ origin: 'https://pitt-kappathetapi.com' }));
 
 app.listen(3000, () => console.log('Server started on port 3000'));
@@ -33,6 +32,8 @@ app.use('/api/requests', requestsController);
 // auth endpoint
 app.post('/api/auth', function(req, res) {
   const body = req.body;
+
+  console.log(req.headers);
 
   var query = { 'email' : body.email };
   Member.findOne(query, function(err, item) {

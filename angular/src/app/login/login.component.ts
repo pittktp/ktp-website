@@ -5,6 +5,7 @@ import { MemberService } from '../shared/api/member.service';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
+import { HttpResponse } from  '@angular/common/http';
 
 import { Member } from '../shared/models/member.model';
 import { ToastrService } from 'ngx-toastr';
@@ -89,53 +90,48 @@ export class LoginComponent implements OnInit {
 
   onRegisterSubmit(form: NgForm) {
 
-    this.memberService.getMembers().subscribe((data: Array<object>) => {
-      var members = data as Member[];
-      var exists = members.find(x => x.email === form.value.registerEmail);
+    var newMember: Member = new Member();
 
-      var newMember: Member = new Member();
+    newMember.name = form.value.registerName;
+    newMember.email = form.value.registerEmail;
+    newMember.password = form.value.registerPassword;
+    newMember.points = 0;
+    newMember.serviceHours = 0;
+    newMember.studentId = form.value.registerStudentId;
+    newMember.absences = 0;
 
-      newMember.name = form.value.registerName;
-      newMember.email = form.value.registerEmail;
-      newMember.password = form.value.registerPassword;
-      newMember.points = 0;
-      newMember.serviceHours = 0;
-      newMember.studentId = form.value.registerStudentId;
-      newMember.absences = 0;
+    if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";
+    else if(form.value.registerCode == "6edwxvuh06") newMember.role = "admin";
 
-      if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";
-      else if(form.value.registerCode == "6edwxvuh06") newMember.role = "admin";
+      this.emailInUse = false;
+      this.memberService.postMember(newMember).subscribe((res) => {
 
-      if(exists == null) {
-        this.emailInUse = false;
-        this.memberService.postMember(newMember).subscribe((res) => {
-          this.auth.login(newMember.email, newMember.password)
-            .pipe(first())
-            .subscribe((result) => {
-              this.showIncorrectLogin = false;
-              var currentUserId = this.auth.getCurrentUserId();
-              this.memberService.getMemberById(currentUserId).subscribe((res) => {
-                var member = res as Member;
-                this.sharedService.emitChange({"name": member.name, "role": member.role});
-                this.memberService.user = member.name;
-                this.memberService.userRole = member.role;
-                this.router.navigate(['home']);
-                this.toastr.show('Welcome to the site ' + member.name + "!");
-              });
-            },
-              (err) => {
-                this.showIncorrectLogin = true;
-                $('#password').val("");
-                this.error = 'Could not authenticate';
-              }
-            );
-        });
-        this.router.navigate(['home']);
+        this.auth.login(newMember.email, newMember.password)
+          .pipe(first())
+          .subscribe((result) => {
+            this.showIncorrectLogin = false;
+            var currentUserId = this.auth.getCurrentUserId();
+            this.memberService.getMemberById(currentUserId).subscribe((res) => {
+              var member = res as Member;
+              this.sharedService.emitChange({"name": member.name, "role": member.role});
+              this.memberService.user = member.name;
+              this.memberService.userRole = member.role;
+              this.router.navigate(['home']);
+              this.toastr.show('Welcome to the site ' + member.name + "!");
+            });
+          },
+            (err) => {
+              this.showIncorrectLogin = true;
+              $('#password').val("");
+              this.error = 'Could not authenticate';
+            }
+          );
+      },
+      (err) => {
+        if(err.status == 409)
+          this.emailInUse = true;
       }
-      else {
-        this.emailInUse = true;
-      }
-    });
+    );
 
   }
 

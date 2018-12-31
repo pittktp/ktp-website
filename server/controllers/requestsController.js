@@ -5,7 +5,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var { Request } = require('../models/request');
 
 // GET all PointRequests --> localhost:3000/points
-router.get('/', (req, res) => {
+router.get('/', require('../auth/auth.js'), (req, res) => {
 
   Request.find((err, docs) => {
     if(!err) {
@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 });
 
 // GET PointRequest by ID --> localhost:3000/points/*id-number*
-router.get('/:id', (req, res) => {
+router.get('/:id', require('../auth/auth.js'), (req, res) => {
 
   // Not a valid ID
   if(!ObjectId.isValid(req.params.id))
@@ -32,7 +32,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST create new PointRequest --> localhost:3000/points/
-router.post('/', (req, res) => {
+router.post('/', require('../auth/auth.js'), (req, res) => {
 
   var request = new Request({
     type: req.body.type,
@@ -54,7 +54,7 @@ router.post('/', (req, res) => {
 });
 
 // PUT update PointRequest --> localhost:3000/points/*id-number*
-router.put('/:id', (req, res) => {
+router.put('/:id', require('../auth/auth.js'), (req, res) => {
 
   if(!ObjectId.isValid(req.params.id))
     return res.status(404).send('No record with given id: ' + req.params.id);
@@ -77,7 +77,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE PointRequest --> localhost:3000/points/*id-number*
-router.delete('/:id', (req, res) => {
+router.delete('/:id', require('../auth/auth.js'), (req, res) => {
 
   if(!ObjectId.isValid(req.params.id))
     return res.status(400).send('No record with given id: ' + req.params.id);

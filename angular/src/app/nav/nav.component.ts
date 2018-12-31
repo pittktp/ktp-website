@@ -38,7 +38,6 @@ export class NavComponent implements OnInit {
 
     this.sharedService.changeEmitted$.subscribe(
       change => {
-        console.log(change.name + ' ' + change.role);
         this.user = change.name;
         this.userRole = change.role;
       }

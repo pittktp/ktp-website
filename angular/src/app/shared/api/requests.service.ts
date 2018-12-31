@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from  '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from  '@angular/common/http';
 
 import { Request } from '../models/request.model';
 
@@ -21,18 +21,30 @@ export class RequestsService {
   constructor(private httpClient: HttpClient) { }
 
   getRequests() {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
     return this.httpClient.get(`${this.API_URL}`);
   }
 
   postRequest(request: Request) {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
     return this.httpClient.post<Request>(`${this.API_URL}`, request);
   }
 
   putRequest(id: string, modifiedRequest: Request) {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
     return this.httpClient.put<Request>(`${this.API_URL}` + id, modifiedRequest);
   }
 
   deleteRequest(id: string) {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
     return this.httpClient.delete(`${this.API_URL}` + id);
   }
 

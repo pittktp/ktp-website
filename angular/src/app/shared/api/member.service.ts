@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from  '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from  '@angular/common/http';
 
 import { Member } from '../models/member.model';
 
@@ -23,23 +23,38 @@ export class MemberService {
   constructor(private httpClient: HttpClient) { }
 
   getMembers() {
-    return this.httpClient.get(`${this.API_URL}`);
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
+    return this.httpClient.get(`${this.API_URL}`, { headers: headers });
   }
 
   postMember(member: Member) {
+    // const token = localStorage.getItem('access_token');
+    // const headers = new HttpHeaders().set("Authorization", "Bearer " + token);
+
     return this.httpClient.post<Member>(`${this.API_URL}`, member);
   }
 
   getMemberById(id: string) {
-    return this.httpClient.get(`${this.API_URL}` + id);
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
+    return this.httpClient.get(`${this.API_URL}` + id, { headers: headers });
   }
 
   putMember(id: string, member: Member) {
-    return this.httpClient.put<Member>(`${this.API_URL}` + id, member);
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
+    return this.httpClient.put<Member>(`${this.API_URL}` + id, member, { headers: headers });
   }
 
   deleteMember(id: string) {
-    return this.httpClient.delete(`${this.API_URL}` + id);
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
+    return this.httpClient.delete(`${this.API_URL}` + id, { headers: headers });
   }
 
 }
