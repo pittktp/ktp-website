@@ -33,8 +33,6 @@ app.use('/api/requests', requestsController);
 app.post('/api/auth', function(req, res) {
   const body = req.body;
 
-  console.log(req.headers);
-
   var query = { 'email' : body.email };
   Member.findOne(query, function(err, item) {
     if(!item) return res.sendStatus(401);
