@@ -6,7 +6,6 @@ module.exports = function(req, res, next) {
      */
     if(req.hasOwnProperty('headers') && req.headers.hasOwnProperty('authorization')) {
         const token = req.headers['authorization'].replace('Bearer ', '');
-        console.log(token);
         jwt.verify(token, 'ktp-secret', function(err, decoded) {
           if(err) {
             return res.status(401);

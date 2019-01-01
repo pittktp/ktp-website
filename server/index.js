@@ -17,10 +17,10 @@ var app = express();
 app.use(bodyParser.json());
 
 // Test - use when running this locally
-//app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: 'http://localhost:4200' }));
 
 // Production - use when running in production in AWS
-app.use(cors({ origin: 'https://pitt-kappathetapi.com' }));
+//app.use(cors({ origin: 'https://pitt-kappathetapi.com' }));
 
 app.listen(3000, () => console.log('Server started on port 3000'));
 
