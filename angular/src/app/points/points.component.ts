@@ -40,11 +40,22 @@ export class PointsComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.auth.loggedIn()) {
+      var currentUserId = this.auth.getCurrentUserId();
+      this.userId = currentUserId;
+      this.memberService.getMemberById(currentUserId).subscribe((res) => {
+        var member = res as Member;
+        this.user = member.name;
+        this.userRole = member.role;
+        if(member.role == 'admin') { this.getRequests(); }
+      });
+    }
     this.loadScript('../assets/js/new-age.js');
     this.getMembers();
     if(this.userRole == 'admin') {
       this.getRequests();
-    } 
+    }
+    alert(this.user);
   }
 
   loadScript(src) {
