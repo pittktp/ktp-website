@@ -55,7 +55,6 @@ export class PointsComponent implements OnInit {
     if(this.userRole == 'admin') {
       this.getRequests();
     }
-    alert(this.user);
   }
 
   loadScript(src) {
