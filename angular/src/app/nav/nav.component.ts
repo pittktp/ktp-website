@@ -49,14 +49,12 @@ export class NavComponent implements OnInit {
       change => {
         this.user = change.name;
         this.userRole = change.role;
-        $('.navbar-collapse ul li a').click(function() {
-          $('.navbar-toggle:visible').click();
-        });
+        this.onDrop();
       }
     );
 
     //$(".dropdown-menu").dropdown();
-    $('.navbar-collapse ul li a').click(function() {
+    $('.dropdown-collapse li a').click(function() {
       $('.navbar-toggle:visible').click();
     });
   }
@@ -69,6 +67,10 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit() {
+    //$(".dropdown-menu").dropdown();
+    $('.navbar-collapse ul li a').click(function() {
+      $('.navbar-toggle:visible').click();
+    });
   }
 
   // Gets and sorts members based on first name
@@ -81,6 +83,12 @@ export class NavComponent implements OnInit {
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       });
       this.memberService.members = mems;
+    });
+  }
+
+  onDrop() {
+    $('.navbar-collapse ul li a').click(function() {
+      $('.navbar-toggle:visible').click();
     });
   }
 

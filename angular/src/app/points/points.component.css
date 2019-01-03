@@ -3,6 +3,10 @@
   height: 100vh;
 }
 
+#overflow {
+  overflow-x: scroll;
+}
+
 .modal-backdrop.fade
 {
   opacity: 0.5;

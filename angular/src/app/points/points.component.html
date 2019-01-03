@@ -68,38 +68,40 @@
           <h4 style="color:black;"class="modal-title">Review Requests</h4>
         </div>
         <div class="modal-body">
-          <h3 class="black-text" *ngIf="!requestsService.requests || requestsService.requests.length < 1; else showTable">No remaining requests</h3>
-          <ng-template #showTable>
-            <table class="table table-bordered black-text">
-              <thead>
-                <tr>
-                  <th>Submitted by</th>
-                  <th>Submitted on</th>
-                  <th>Type</th>
-                  <th>Value</th>
-                  <th>Description</th>
-                  <th>Accept/Deny</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let request of requestsService.requests">
-                  <td *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.submittedDate }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.type }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.value }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.description }}</td>
-                  <td *ngIf="request.approved == 0">
-                    <button type="button" id="acceptPoints" class="btn btn-default" (click)="onAcceptRequest(request)">Accept</button>
-                    <button type="button" id="denyPoints" class="btn btn-default" (click)="onDenyRequest(request)">Deny</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </ng-template>
+          <div id="overflow">
+            <h3 class="black-text" *ngIf="!requestsService.requests || requestsService.requests.length < 1; else showTable">No remaining requests</h3>
+            <ng-template #showTable>
+              <table class="table table-bordered black-text">
+                <thead>
+                  <tr>
+                    <th>Submitted by</th>
+                    <th>Submitted on</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                    <th>Accept/Deny</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let request of requestsService.requests">
+                    <td *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
+                    <td *ngIf="request.approved == 0">{{ request.submittedDate }}</td>
+                    <td *ngIf="request.approved == 0">{{ request.type }}</td>
+                    <td *ngIf="request.approved == 0">{{ request.value }}</td>
+                    <td *ngIf="request.approved == 0">{{ request.description }}</td>
+                    <td *ngIf="request.approved == 0">
+                      <button type="button" id="acceptPoints" class="btn btn-default" (click)="onAcceptRequest(request)">Accept</button>
+                      <button type="button" id="denyPoints" class="btn btn-default" (click)="onDenyRequest(request)">Deny</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
+      </div>
       </div>
     </div>
   </div>
