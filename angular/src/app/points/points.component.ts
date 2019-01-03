@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -9,6 +9,7 @@ import { Member } from '../shared/models/member.model';
 import { Request } from '../shared/models/request.model';
 import { AuthService } from '../shared/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { DropdownService } from '../shared/dropdown.service';
 
 import '../../assets/js/new-age.min.js';
 
@@ -26,7 +27,7 @@ export class PointsComponent implements OnInit {
   userRole: string;
   requestForm: Request = new Request();
 
-  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, private router: Router) {
+  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, public dropdownService: DropdownService, private router: Router) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.userId = currentUserId;
@@ -37,6 +38,8 @@ export class PointsComponent implements OnInit {
         if(member.role == 'admin') { this.getRequests(); }
       });
     }
+
+    //this.dropdownService.emitChange({drop: "drop"});
   }
 
   ngOnInit() {
@@ -122,8 +125,8 @@ export class PointsComponent implements OnInit {
 
   getCurrentDateTime() {
     var currentdate = new Date();
-    var datetime = currentdate.getMonth() + "/"
-                    + (currentdate.getDate()+1)  + "/"
+    var datetime = (currentdate.getMonth()+1) + "/"
+                    + currentdate.getDate()  + "/"
                     + currentdate.getFullYear() + " "
                     + currentdate.getHours() + ":"
                     + currentdate.getMinutes() + ":"

@@ -1,5 +1,6 @@
 .container {
   margin-top: 15vh;
+  height: 100vh;
 }
 
 .modal-backdrop.fade

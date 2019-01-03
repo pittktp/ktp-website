@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { AuthService } from '../shared/auth/auth.service';
 import { SharedService } from '../shared/shared.service';
+import { DropdownService } from '../shared/dropdown.service';
 import { Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
@@ -22,7 +23,7 @@ export class NavComponent implements OnInit {
   public user = '';
   public userRole = '';
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService, private dropdownService: DropdownService) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
@@ -36,12 +37,35 @@ export class NavComponent implements OnInit {
       this.userRole = '';
     }
 
+    // this.dropdownService.changeEmitted$.subscribe(
+    //   drop => {
+    //     $('.navbar-collapse ul li a').click(function() {
+    //       $('.navbar-toggle:visible').click();
+    //     });
+    //   }
+    // );
+
     this.sharedService.changeEmitted$.subscribe(
       change => {
         this.user = change.name;
         this.userRole = change.role;
+        $('.navbar-collapse ul li a').click(function() {
+          $('.navbar-toggle:visible').click();
+        });
       }
     );
+
+    //$(".dropdown-menu").dropdown();
+    $('.navbar-collapse ul li a').click(function() {
+      $('.navbar-toggle:visible').click();
+    });
+  }
+
+  loadScript(src) {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    document.getElementsByTagName("body")[0].appendChild(script);
+    script.src = src;
   }
 
   ngOnInit() {
@@ -60,15 +84,24 @@ export class NavComponent implements OnInit {
     });
   }
 
+  onDropdown() {
+    $('.navbar ul li a').click(function() {
+      $('.navbar-toggle:invisible').click();
+    });
+  }
+
   onLoginClicked() {
+    this.onDropdown();
     this.router.navigate(['login'])
   }
 
   onPointsClicked() {
+    this.onDropdown();
     this.router.navigate(['points'])
   }
 
   onEditMembersClicked() {
+    this.onDropdown();
     this.router.navigate(['edit-members']);
   }
 
