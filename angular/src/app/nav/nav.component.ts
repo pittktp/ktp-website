@@ -22,6 +22,7 @@ export class NavComponent implements OnInit {
   private membersNotHere: Array<object> = [];
   public user = '';
   public userRole = '';
+  private expand = false;
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService, private dropdownService: DropdownService) {
     if(this.auth.loggedIn()) {
@@ -37,14 +38,6 @@ export class NavComponent implements OnInit {
       this.userRole = '';
     }
 
-    // this.dropdownService.changeEmitted$.subscribe(
-    //   drop => {
-    //     $('.navbar-collapse ul li a').click(function() {
-    //       $('.navbar-toggle:visible').click();
-    //     });
-    //   }
-    // );
-
     this.sharedService.changeEmitted$.subscribe(
       change => {
         this.user = change.name;
@@ -53,10 +46,6 @@ export class NavComponent implements OnInit {
       }
     );
 
-    //$(".dropdown-menu").dropdown();
-    $('.dropdown-collapse li a').click(function() {
-      $('.navbar-toggle:visible').click();
-    });
   }
 
   loadScript(src) {
@@ -67,10 +56,6 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit() {
-    //$(".dropdown-menu").dropdown();
-    $('.navbar-collapse ul li a').click(function() {
-      $('.navbar-toggle:visible').click();
-    });
   }
 
   // Gets and sorts members based on first name
@@ -87,29 +72,27 @@ export class NavComponent implements OnInit {
   }
 
   onDrop() {
-    $('.navbar-collapse ul li a').click(function() {
-      $('.navbar-toggle:visible').click();
-    });
+    $('.dropdown').toggleClass('open');
   }
 
   onDropdown() {
-    $('.navbar ul li a').click(function() {
-      $('.navbar-toggle:invisible').click();
+    $('.navbar-collapse ul li a:not(.dropdown-toggle)').click(function() {
+        $('.navbar-toggle').toggle();
     });
   }
 
   onLoginClicked() {
-    this.onDropdown();
+    this.onDrop();
     this.router.navigate(['login'])
   }
 
   onPointsClicked() {
-    this.onDropdown();
+    //this.onDropdown();
     this.router.navigate(['points'])
   }
 
   onEditMembersClicked() {
-    this.onDropdown();
+    //this.onDropdown();
     this.router.navigate(['edit-members']);
   }
 
