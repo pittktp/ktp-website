@@ -30,9 +30,6 @@ export class MemberService {
   }
 
   postMember(member: Member) {
-    // const token = localStorage.getItem('access_token');
-    // const headers = new HttpHeaders().set("Authorization", "Bearer " + token);
-
     return this.httpClient.post<Member>(`${this.API_URL}`, member);
   }
 

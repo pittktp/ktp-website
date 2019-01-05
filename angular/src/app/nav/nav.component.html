@@ -18,8 +18,8 @@
         <li *ngIf="user == ''">
           <a class="pointer" (click)="onLoginClicked()">Login/Register</a>
         </li>
-        <li *ngIf="user != ''" id="fuck" class="nav-item dropdown divider">
-          <a (click)="onDrop()" class="nav-link dropdown-toggle" href="javascript:;" id="navbardrop">{{ user }}<i class="fa fa-caret-down"></i></a>
+        <li *ngIf="user != ''" class="nav-item dropdown divider">
+          <a (click)="onDropdown()" class="nav-link dropdown-toggle" href="javascript:;" id="navbardrop">{{ user }}<i class="fa fa-caret-down"></i></a>
           <ul id="guy" class="dropdown-menu">
             <li><a class="pointer dropdown-item" (click)="onPointsClicked()">View/Log Points</a></li>
             <li *ngIf="userRole == 'admin'"><a class="pointer dropdown-item" (click)="onEditMembersClicked()">Edit Members</a></li>

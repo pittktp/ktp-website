@@ -22,7 +22,7 @@ export class NavComponent implements OnInit {
   private membersNotHere: Array<object> = [];
   public user = '';
   public userRole = '';
-  private expand = false;
+  private expanded = false;
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService, private dropdownService: DropdownService) {
     if(this.auth.loggedIn()) {
@@ -42,7 +42,6 @@ export class NavComponent implements OnInit {
       change => {
         this.user = change.name;
         this.userRole = change.role;
-        this.onDrop();
       }
     );
 
@@ -56,6 +55,7 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.expanded = $(".collapse").is(":visible");
   }
 
   // Gets and sorts members based on first name
@@ -71,32 +71,35 @@ export class NavComponent implements OnInit {
     });
   }
 
-  onDrop() {
+  onDropdown() {
     $('.dropdown').toggleClass('open');
   }
 
-  onDropdown() {
-    $('.navbar-collapse ul li a:not(.dropdown-toggle)').click(function() {
-        $('.navbar-toggle').toggle();
-    });
+  onDropup() {
+    if(!this.expanded) {
+      $('.dropdown-menu').removeClass('open');
+    }
+    else {
+      $('.dropdown').removeClass('open');
+    }
   }
 
   onLoginClicked() {
-    this.onDrop();
     this.router.navigate(['login'])
   }
 
   onPointsClicked() {
-    //this.onDropdown();
+    this.onDropup();
     this.router.navigate(['points'])
   }
 
   onEditMembersClicked() {
-    //this.onDropdown();
+    this.onDropup();
     this.router.navigate(['edit-members']);
   }
 
   onAttendanceClicked() {
+    this.onDropup();
     if(!this.auth.isTokenExpired()) {
       this.getMembers();
       $("#attendanceModal").modal("show");
