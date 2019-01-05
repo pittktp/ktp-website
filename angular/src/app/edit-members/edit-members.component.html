@@ -16,7 +16,6 @@
               <th>Brotherhood Points</th>
               <th>Service Hours</th>
               <th>Unexcused Absences</th>
-              <th>Pitt ID</th>
               <th>Role</th>
             </tr>
           </thead>
@@ -27,7 +26,6 @@
               <td>{{ member.points }}</td>
               <td>{{ member.serviceHours }}</td>
               <td>{{ member.absences }}</td>
-              <td>{{ member.studentId }}</td>
               <td>{{ member.role }}</td>
             </tr>
           </tbody>
@@ -49,11 +47,6 @@
             <div class="input-field">
               <label style="color:black" for="name">Name</label>
               <input style="text-align:left;" [(ngModel)]="memberEditForm.name" name="name" #name="ngModel" type="text" class="form-control" id="name" autocomplete="off">
-            </div>
-            <br />
-            <div class="input-field">
-              <label style="color:black" for="studentId">Student ID</label>
-              <input style="text-align:left;" [(ngModel)]="memberEditForm.studentId" name="studentId" #name="ngModel" type="text" class="form-control" id="studentId" autocomplete="off">
             </div>
             <br />
             <div class="input-field">

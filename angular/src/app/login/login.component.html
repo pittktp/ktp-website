@@ -53,9 +53,6 @@
                     <div *ngIf="passwordsMatch == false" style="color: red">Passwords don't match</div>
                   </div>
                   <div class="form-group">
-                    <input type="number" [(ngModel)]="registerForm.registerStudentId" name="registerStudentId" id="registerStudentId" tabindex="5" class="form-control" placeholder="Student ID" required>
-                  </div>
-                  <div class="form-group">
                     <input type="text" [(ngModel)]="registerForm.registerCode" (ngModelChange)="onCodeKey()" name="registerCode" id="registerCode" tabindex="6" class="form-control" placeholder="Code" required>
                     <div *ngIf="validCode == false" style="color: red">Not a valid code</div>
                   </div>

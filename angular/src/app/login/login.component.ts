@@ -97,7 +97,6 @@ export class LoginComponent implements OnInit {
     newMember.password = form.value.registerPassword;
     newMember.points = 0;
     newMember.serviceHours = 0;
-    newMember.studentId = form.value.registerStudentId;
     newMember.absences = 0;
 
     if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";

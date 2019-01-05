@@ -67,7 +67,6 @@ export class EditMembersComponent implements OnInit {
   onMemberClicked(member: Member) {
     this.memberClicked = member;
 
-    $('#studentId').val(this.memberClicked.studentId);
     $('#points').val(this.memberClicked.points);
     $('#serviceHours').val(this.memberClicked.serviceHours);
     $('#absences').val(this.memberClicked.absences);
@@ -98,7 +97,6 @@ export class EditMembersComponent implements OnInit {
     updatedMember.email = this.memberClicked.email;
 
     updatedMember.name = $('#name').val();
-    updatedMember.studentId = $('#studentId').val();
     updatedMember.points = $('#points').val();
     updatedMember.serviceHours = $('#serviceHours').val();
     updatedMember.absences = $('#absences').val();

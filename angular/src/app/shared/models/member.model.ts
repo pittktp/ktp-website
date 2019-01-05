@@ -6,7 +6,6 @@ export class Member {
   password: string;
   points: number;
   serviceHours: number;
-  studentId: number;
   role: string;
   absences: number;
 

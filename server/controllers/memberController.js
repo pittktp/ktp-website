@@ -49,7 +49,6 @@ router.post('/', (req, res) => {
           name: req.body.name,
           email: req.body.email,
           password: hash,
-          studentId: req.body.studentId,
           points: req.body.points,
           serviceHours: req.body.serviceHours,
           role: req.body.role,
@@ -79,7 +78,6 @@ router.put('/:id', require('../auth/auth.js'), (req, res) => {
   var member = {
     name: req.body.name,
     email: req.body.email,
-    studentId: req.body.studentId,
     points: req.body.points,
     serviceHours: req.body.serviceHours,
     role: req.body.role,
