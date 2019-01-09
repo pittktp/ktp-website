@@ -12,7 +12,10 @@ import { Member } from '../models/member.model';
 })
 export class AuthService {
 
+  // URL of dev backend server
   //API_URL = 'http://localhost:3000/api/auth';
+
+  // URL of production backend server
   API_URL = 'https://pitt-kappathetapi.com/api/auth/';
 
   constructor(private http: HttpClient) { }

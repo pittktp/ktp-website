@@ -12,7 +12,6 @@ export class MemberService {
   //API_URL = 'http://localhost:3000/api/members/';
 
   // Production - use this url when running in production on AWS
-  //API_URL = 'https://ec2-54-157-59-182.compute-1.amazonaws.com:3000/api/members/';
   API_URL = 'https://pitt-kappathetapi.com/api/members/';
 
   members: Member[];
@@ -34,10 +33,11 @@ export class MemberService {
   }
 
   getMemberById(id: string) {
-    const token = localStorage.getItem('access_token');
-    const headers = new HttpHeaders().set("authorization", token);
+    return this.httpClient.get(`${this.API_URL}` + id);
+  }
 
-    return this.httpClient.get(`${this.API_URL}` + id, { headers: headers });
+  updateMemberPassword(email: string, password: string, code: string) {
+    return this.httpClient.put(`${this.API_URL}` + "password", { email: email, password: password, code: code});
   }
 
   putMember(id: string, member: Member) {

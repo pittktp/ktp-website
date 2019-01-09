@@ -29,7 +29,13 @@ export class LoginComponent implements OnInit {
   passwordsMatch = true;
   validEmail = true;
   emailInUse = false;
+  shortPassword = false;
   validCode = true;
+  validEmailForgotPassword = true;
+  passwordsMatchForgotPassword = true;
+  shortPasswordForgotPassword = false;
+  wrongCodeForgotPassword = false;
+  invalidEmailForgotPassword = false;
 
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');
@@ -66,6 +72,11 @@ export class LoginComponent implements OnInit {
 
   // Triggered on each keystroke in input box for confirming user's password
   onPasswordConfirmKey() {
+    if($('#registerPassword').val().length < 6)
+      this.shortPassword = true;
+    else
+      this.shortPassword = false;
+
     if($('#registerPassword').val() != $('#registerConfirmPassword').val())
       this.passwordsMatch = false;
     else
@@ -82,10 +93,7 @@ export class LoginComponent implements OnInit {
   }
 
   onCodeKey() {
-    if($('#registerCode').val() == "g62dz9t4qm" || $('#registerCode').val() == "6edwxvuh06")
-      this.validCode = true;
-    else
-      this.validCode = false;
+    this.validCode = true;
   }
 
   onRegisterSubmit(form: NgForm) {
@@ -98,13 +106,10 @@ export class LoginComponent implements OnInit {
     newMember.points = 0;
     newMember.serviceHours = 0;
     newMember.absences = 0;
+    newMember.code = form.value.registerCode;
 
-    if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";
-    else if(form.value.registerCode == "6edwxvuh06") newMember.role = "admin";
-
-      this.emailInUse = false;
-      this.memberService.postMember(newMember).subscribe((res) => {
-
+    this.emailInUse = false;
+    this.memberService.postMember(newMember).subscribe((res) => {
         this.auth.login(newMember.email, newMember.password)
           .pipe(first())
           .subscribe((result) => {
@@ -129,9 +134,45 @@ export class LoginComponent implements OnInit {
       (err) => {
         if(err.status == 409)
           this.emailInUse = true;
+        if(err.status == 401)
+          this.validCode = false;
       }
     );
 
+  }
+
+  onPasswordConfirmKeyForgotPassword() {
+    if($('#newPassword').val().length < 6)
+      this.shortPasswordForgotPassword = true;
+    else
+      this.shortPasswordForgotPassword = false;
+
+    if($('#newPassword').val() != $('#retypeNewPassword').val())
+      this.passwordsMatchForgotPassword = false;
+    else
+      this.passwordsMatchForgotPassword = true;
+  }
+
+  onEmailKeyForgotPassword() {
+    var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+    if(testEmail.test($('#pittEmail').val()))
+      this.validEmailForgotPassword = true;
+    else
+      this.validEmailForgotPassword = false;
+  }
+
+  onForgotPassword(form: NgForm) {
+    this.memberService.updateMemberPassword(form.value.pittEmail, form.value.newPassword, form.value.code).subscribe((res) => {
+        $("#forgotPasswordModal").modal("hide");
+        this.toastr.success('Successfully changed password! Try logging in again');
+      },
+      (err) => {
+        if(err.status == 401)
+          this.wrongCodeForgotPassword = true;
+        else if(err.status == 404)
+          this.invalidEmailForgotPassword = true;
+      }
+    );
   }
 
 }

@@ -7,6 +7,7 @@ var Member = mongoose.model('Member', {
   points: { type: Number },
   serviceHours: { type: Number },
   role: { type: String },
+  code: { type: String },
   absences: { type: Number }
 });
 

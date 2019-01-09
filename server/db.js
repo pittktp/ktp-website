@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 // Production database in AWS
 const url = "mongodb://database:27017/KtpDB";
 
-// Test local database
+// Dev database
 //const url = "mongodb://localhost:27017/KtpDB";
 
 mongoose.connect(url, { useNewUrlParser: true }, (err) => {
