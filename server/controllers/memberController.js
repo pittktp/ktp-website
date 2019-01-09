@@ -8,7 +8,7 @@ var { Member } = require('../models/member');
 //router.use('/api', require('./auth/auth.js'));
 
 // GET all Members --> localhost:3000/members
-router.get('/', (req, res) => {
+router.get('/', require('../auth/auth.js'), (req, res) => {
 
   Member.find((err, docs) => {
     if(!err) {
@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 });
 
 // GET Member by ID --> localhost:3000/members/*id-number*
-router.get('/:id', (req, res) => {
+router.get('/:id', require('../auth/auth.js'), (req, res) => {
 
     // Not a valid ID
     if(!ObjectId.isValid(req.params.id))
@@ -102,7 +102,7 @@ router.put('/password', (req, res) => {
 });
 
 // PUT update Member --> localhost:3000/members/*id-number*
-router.put('/:id', (req, res) => {
+router.put('/:id', require('../auth/auth.js'), (req, res) => {
 
   if(!ObjectId.isValid(req.params.id))
     return res.status(404).send('No record with given id: ' + req.params.id);
