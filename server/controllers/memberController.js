@@ -21,7 +21,7 @@ router.get('/', require('../auth/auth.js'), (req, res) => {
 });
 
 // GET Member by ID --> localhost:3000/members/*id-number*
-router.get('/:id', require('../auth/auth.js'), (req, res) => {
+router.get('/:id', (req, res) => {
 
     // Not a valid ID
     if(!ObjectId.isValid(req.params.id))
