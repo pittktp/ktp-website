@@ -1,0 +1,82 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+.background {
+  background: url("../../assets/img/bg-pattern.png"), linear-gradient(to left,#28B463,#145BBD) !important;
+  min-height: 100%;
+}
+
+.header {
+  text-align: center;
+  /*color: white;*/
+  /*margin-left: 20px;*/
+  /*padding-left: 15px;*/
+  font-family: Lato, Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  font-size: 1em;
+  color: black;
+  text-transform: uppercase;
+}
+
+.header .card {
+  margin-bottom: 10px;
+  padding: 5px;
+  color: #777;
+  width: 250px;
+  /*width: calc((100% / 250)*250);*/
+}
+
+.page-body {
+  padding: 70px 20px;
+  height: 100%;
+}
+
+.grid {
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+}
+
+.card {
+  background: white;
+  display: inline-block;
+  margin: 10px 20px;
+  max-width: 250px;
+  border-color: transparent;
+  border-radius: 0.5rem;
+}
+
+.card-img-circle {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  margin: 12px auto 4px;
+  border-radius: 50%;
+}
+
+.initials {
+  background: #CCC;
+  color: #777;
+  font-size: 3em;
+  text-transform: uppercase;
+}
+
+.card-title {
+  font-family: Catamaran, Helvetica, Arial, sans-serif;
+}
+
+.card-subtitle {
+  color: #777;
+}
+
+.card-body {
+  text-align: center;
+}
+
+.card-body p {
+  text-align: left;
+  font-size: 1em;
+  padding-left: 10px;
+  padding-right: 10px;
+}
