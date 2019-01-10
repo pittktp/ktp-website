@@ -6,18 +6,12 @@
     </div><!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a class="page-scroll" href="#features" (click)="onHomeClicked()">Rush</a>
-        </li>
-        <li>
-          <a class="page-scroll" href="#mission" (click)="onHomeClicked()">Mission</a>
-        </li>
-        <li class="divide">
-          <a class="page-scroll" href="#contact" (click)="onHomeClicked()">Contact</a>
-        </li>
-        <li *ngIf="user == ''">
-          <a class="pointer" (click)="onLoginClicked()">Login/Register</a>
-        </li>
+        <li><a class="page-scroll" href="#features" (click)="onHomeClicked()">Rush</a></li>
+        <li><a class="page-scroll" href="#mission" (click)="onHomeClicked()">Mission</a></li>
+        <li><a class="page-scroll" href="#contact" (click)="onHomeClicked()">Contact</a></li>
+        <li class="divide"><a class="page-scroll" routerLink="/members">Members</a></li>
+
+        <li *ngIf="user == ''"><a class="pointer" (click)="onLoginClicked()">Login/Register</a></li>
         <li *ngIf="user != ''" class="nav-item dropdown divider">
           <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ user }}<i class="fa fa-caret-down"></i></a>
           <div class="dropdown-menu">
