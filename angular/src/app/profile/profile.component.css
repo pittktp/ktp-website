@@ -23,7 +23,7 @@
 }
 
 
-@media only screen and (max-width: 993px) {
+@media only screen and (max-width: 1200px) {
   .container {
     margin-top: 20vh;
   }

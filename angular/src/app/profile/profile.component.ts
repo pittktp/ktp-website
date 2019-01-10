@@ -22,6 +22,7 @@ export class ProfileComponent implements OnInit {
 
   id: string
   profile: Member;
+  picLetters: string = '';
   hoursPercent: number;
   pointsPercent: number;
   currentTabContent: string;
@@ -32,24 +33,33 @@ export class ProfileComponent implements OnInit {
   courseList: Array<String> = [];
   private sub: any
 
-  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) { }
+  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
+    this.upload();
+  }
 
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');
-
-    this.route.params.forEach(params => {
-      this.id = params['id'];
-
-      // TODO: Change to its own API call for simplicity
+  }
+  
+  upload() {
+    this.route.params.subscribe(params => {
+      this.id = params['id']
       this.memberService.getMembers().subscribe((data: Array<object>) => {
-        var mems = data as Member[];
-        for(var i = 0; i < mems.length; i++) {
-          if(mems[i].email.split('@')[0] == this.id) {
-            this.profile = mems[i];
-            break;
+        var memberList = data as Array<Member>;
+        for(var i = 0; i < memberList.length; i++) {
+          if(memberList[i].email.split('@')[0] == this.id) {
+            this.profile = memberList[i];
           }
         }
-        // Ensure there hours and points percentage doesnt exceed 100%
+        // Ensure no name bugs
+        if(this.profile.name.indexOf(' ') >= 0) { // Has first and last
+          var splitName = this.profile.name.split(" ")
+          this.picLetters = splitName[0].charAt(0) + splitName[1].charAt(0);
+        } else { // Has only first
+          this.picLetters = this.profile.name.charAt(0);
+        }
+
+        // Ensure their hours and points percentage doesnt exceed 100%
         if(this.profile.serviceHours > 10) {
           this.hoursPercent = 100;
         } else {
@@ -60,12 +70,12 @@ export class ProfileComponent implements OnInit {
         } else {
           this.pointsPercent = (this.profile.points/5)*100;
         }
-
+  
         // Set Up Default Tabbing
         this.currentTabContent = 'description';
         document.getElementById('descBtn').style.backgroundColor = 'rgb(231, 231, 231)';
         document.getElementById('descBtn').style.color = '#00415d';
-
+  
         // Set Up Courses Taken for Accordion
         for(var i = 0; i < this.profile.courses.length; i++) {
           var courseCategory = this.profile.courses[i].split(" ")[0];
@@ -73,10 +83,10 @@ export class ProfileComponent implements OnInit {
             this.courseCategories.push(courseCategory);
           }
         }
-      });
-    });
+      })
+    })
   }
-  
+
   loadScript(src) {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -221,58 +231,149 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  onAddCourse(form: NgForm) {
-    var course = form.value.addCourse;
+  onAddCourses(form: NgForm) {
+    var courseList = form.value.addCourse;
+    if(courseList.indexOf(", ") == -1) {
+      // There is only 1 course
+      this.onAddCourse(courseList);
+    } else {
+      // There are multiple courses
+      var courses = courseList.split(", ");
+      var member = this.profile;
+      for(var i = 0; i < courses.length; i++) {
+        // Validate Course
+        var isValid = this.validateAdd(courses[i]);
+
+        if(isValid) {
+          // Add course
+          member.courses.push(courses[i]);
+        } else {
+          for(var j = 0; j < i; j++) {
+            member.courses.pop();
+          }
+          break;
+        }
+      }
+      if(isValid) {
+        this.updateAdd(member);
+      }
+    }
+  }
+
+  onAddCourse(course: string) {
     var member = this.profile;
 
+    // Validate Course
+    var isValid = this.validateAdd(course);
+
+    if(isValid) {
+      // Add course and update in DB
+      member.courses.push(course);
+      this.updateAdd(member);
+    }
+  }
+
+  onRemoveCourses(form: NgForm) {
+    var courseList = form.value.removeCourse;
+    if(courseList.indexOf(", ") == -1) {
+      // There is only 1 course
+      this.onRemoveCourse(courseList);
+    } else {
+      // There are multiple courses
+      var courses = courseList.split(", ");
+      var member = this.profile;
+      for(var i = 0; i < courses.length; i++) {
+        // Validate course
+        var isValid = this.validateRemove(courses[i]);
+
+        if(isValid) {
+          // Remove Course
+          member.courses.splice(member.courses.indexOf(courses[i]), 1);
+        } else {
+          for(var j = 0; j < i; j++) {
+            member.courses.push(courses[j])
+          }
+          console.log(member.courses)
+          break;
+        }
+      }
+      if(isValid) {
+        this.updateRemove(member);
+      }
+    }
+  }
+
+  onRemoveCourse(course: string) {
+    var member = this.profile;
+
+    // Validate Course
+    var isValid = this.validateRemove(course)
+
+    if(isValid) {
+      // Remove course from the list, update in DB
+      member.courses.splice(member.courses.indexOf(course), 1);
+      this.updateRemove(member);
+    }
+  }
+
+  updateAdd(member: Member) {
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      this.showMsg("Added Course(s)!");
+      window.location.reload();
+    }, error => {
+      console.error(error);
+      this.showError("Failed to add Course(s)!");
+    });
+  }
+
+  updateRemove(member: Member) {
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      this.showMsg("Course(s) Removed!");
+      window.location.reload();
+    }, error => {
+      console.error(error);
+      this.showError("Failed to Remove Course(s)!");
+    });
+  }
+
+  // Returns true on successful validation, false otherwise
+  validateAdd(course: string) {
+    var member = this.profile;
     // Check that course isnt already in courselist
     if(member.courses.indexOf(course) != -1) {
       // Display snackbar error
       this.showError("Course Already Exists!");
-      return;
+      return false;
     }
 
     // Ensure course follows proper format
     if(!course.match(/^[A-Z]* \d{4}$/)) {
       // Display snackbar error
       this.showError("Invalid Course Format!");
-      return;
+      return false;
     }
 
-    // Add course and update in DB
-    member.courses.push(course);
-    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
-      this.showMsg("Course Added!");
-      window.location.reload();
-    }, error => {
-      console.error(error);
-      this.showError("Failed to Add Course!");
-    });
+    return true;
   }
 
-  onRemoveCourse(form: NgForm) {
-    // Get course
-    var course = form.value.removeCourse;
+  // Returns true if course doesn't already exist, false otherwise
+  validateRemove(course: string) {
     var member = this.profile;
+
+    // Ensure course follows proper format
+    if(!course.match(/^[A-Z]* \d{4}$/)) {
+      // Display snackbar error
+      this.showError("Invalid Course Format!");
+      return false;
+    }
 
     // Throw error if invalid course
     if(member.courses.indexOf(course) == -1) {
       // Display snackbar error
       this.showError("Invalid Course!");
-      return;
+      return false;
     }
-
-    // Remove course from the list, update in DB
-    member.courses.splice(member.courses.indexOf(course), 1);
-    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
-      this.showMsg("Course Removed!");
-      window.location.reload();
-    }, error => {
-      console.error(error);
-      this.showError("Failed to Remove Course!");
-    });
+    return true;
   }
 
   showMsg(msg: string) {
