@@ -16,6 +16,7 @@ export class Member {
   gradSemester: string;
   major: string;
   description: string;
+  color: Array<string>;
 
   constructor() { }
 

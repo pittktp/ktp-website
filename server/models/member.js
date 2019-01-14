@@ -15,7 +15,8 @@ var Member = mongoose.model('Member', {
   github: { type: String },
   gradSemester: { type: String },
   major: { type: String },
-  description: { type: String }
+  description: { type: String },
+  color: { type: Array }
 });
 
 module.exports = { Member };

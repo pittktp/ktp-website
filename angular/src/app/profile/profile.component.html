@@ -1,4 +1,4 @@
-<header style="background-color:rgba(0, 0, 0, 0.5);">
+<header id="prof-bg" [ngStyle]="{'background-color': 'rgba(0, 0, 0, 0.5)'}">
   <!-- Profile Settings Modal -->
   <div class="modal fade" id="profileSettingsModal" role="dialog">  
     <div class="modal-dialog">
@@ -12,7 +12,7 @@
             <div class="input-field">
               <label style="color:black;" for="profilePic">Picture to Upload: </label>
               <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" accept="image/*" required>
-            </div>
+            </div>  
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid">Upload</button>
           </form>
@@ -24,6 +24,19 @@
             </div>
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changeDescForm.valid">Submit</button>
+          </form>
+          <br />
+          <form (ngSubmit)="onChangeColors(changeColorsForm)" #changeColorsForm="ngForm" autocomplete="off">
+            <div class="input-field">
+              <label style="color:black;" for="color1">Change Color 1: </label>
+              <input style="text-align:left;" [(ngModel)]="changeColorsForm.color1" name="color1" #name="ngModel" class="form-control" id="color1" value="{{this.profile.color[0]}}">
+            </div>
+            <div class="input-field">
+              <label style="color:black;" for="color2">Change Color 2: </label>
+              <input style="text-align:left;" [(ngModel)]="changeColorsForm.color2" name="color2" #name="ngModel" class="form-control" id="color2" value="{{this.profile.color[1]}}">
+            </div>
+            <br />
+            <button type="submit" class="btn btn-default" [disabled]="!changeColorsForm.valid">Change Colors</button>
           </form>
           <br />
           <form (ngSubmit)="onChangeMajor(changeMajorForm)" #changeMajorForm="ngForm" autocomplete="off">

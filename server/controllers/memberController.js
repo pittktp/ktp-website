@@ -55,7 +55,8 @@ router.post('/', (req, res) => {
       github: req.body.github,
       gradSemester: req.body.gradSemester,
       major: req.body.major,
-      description: req.body.description
+      description: req.body.description,
+      color: req.body.color,
     });
 
     member.save((err, doc) =>{
@@ -90,7 +91,8 @@ router.put('/:id', (req, res) => {
     github: req.body.github,
     gradSemester: req.body.gradSemester,
     major: req.body.major,
-    description: req.body.description
+    description: req.body.description,
+    color: req.body.color
   };
 
   Member.findByIdAndUpdate(req.params.id, { $set: member }, { new: true }, (err, doc) => {

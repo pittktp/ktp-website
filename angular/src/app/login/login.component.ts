@@ -109,6 +109,7 @@ export class LoginComponent implements OnInit {
       newMember.gradSemester = "";
       newMember.major = "";
       newMember.description = "";
+      newMember.color= ["#28B463", "#145BBD"];
 
       if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";
       else if(form.value.registerCode == "6edwxvuh06") newMember.role = "admin";

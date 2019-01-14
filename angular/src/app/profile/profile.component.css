@@ -59,8 +59,10 @@
   .ktp-btn {
     margin-left: 18px;
   }
- }
-
+}
+#prof-bg {
+  background: url(../../assets/img/bg-pattern.png), linear-gradient(to left, var(--prof-color1), var(--prof-color2))
+}
 body {
   padding-top: 90px;
 }
@@ -80,7 +82,8 @@ body {
 }
 .profile-no-pic {
   border-radius: 50%;
-  background-color: greenyellow;
+  background-color: #CCC;
+  color: #777;
   width: 100px;
   height: 100px;
   text-align: center;
@@ -109,10 +112,10 @@ body {
   border-radius: 20px;
 }
 #service {
-  background-color: rgb(33, 192, 2);
+  background-color: var(--prof-color1)
 }
 #points {
-  background-color: rgb(19, 180, 255);
+  background-color: var(--prof-color2)
 }
 .tab-btn {
   background-color: rgb(80, 80, 80);

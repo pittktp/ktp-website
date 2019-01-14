@@ -34,14 +34,10 @@ export class ProfileComponent implements OnInit {
   private sub: any
 
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
-    this.upload();
+    
   }
 
   ngOnInit() {
-    this.loadScript('../assets/js/new-age.js');
-  }
-  
-  upload() {
     this.route.params.subscribe(params => {
       this.id = params['id']
       this.memberService.getMembers().subscribe((data: Array<object>) => {
@@ -83,8 +79,19 @@ export class ProfileComponent implements OnInit {
             this.courseCategories.push(courseCategory);
           }
         }
+        
+        var headerElem = document.getElementById('prof-bg');
+        var serviceElem = document.getElementById('service');
+        var pointsElem = document.getElementById('points');
+        if(this.profile.color !== null) {
+          headerElem.style.setProperty('--prof-color1', this.profile.color[0]);
+          headerElem.style.setProperty('--prof-color2', this.profile.color[1]);
+          serviceElem.style.setProperty('--prof-color1', this.profile.color[0]);
+          pointsElem.style.setProperty('--prof-color2', this.profile.color[1]);
+        }
       })
     })
+    this.loadScript('../assets/js/new-age.js');
   }
 
   loadScript(src) {
@@ -169,6 +176,42 @@ export class ProfileComponent implements OnInit {
       console.error(error);
       this.showError("Failed to Update Description!");
     });
+  }
+
+  onChangeColors(form: NgForm) {
+    var member = this.profile;
+    console.log(form.value)
+    var isValid = this.validateColors(form.value.color1, form.value.color2);
+    if(isValid) {
+      member.color = [form.value.color1, form.value.color2];
+    }
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      this.showMsg("Colors Updated");
+      window.location.reload();
+    }, error => {
+      console.error(error);
+      this.showError("Failed to Update Colors!");
+    })
+  }
+
+  validateColors(color1: string, color2: string) {
+    if(color1.indexOf("#") === -1) {
+      this.showError("Color 1 is not a Hexadecimal Value!");
+      return false;
+    }
+    if(color2.indexOf("#") === -1) {
+      this.showError("Color 2 is not a Hexadecimal Value!");
+      return false;
+    }
+    if(color1.length != 7) {
+      this.showError("Color 1 is invalid!")
+      return false;
+    }
+    if(color2.length != 7) {
+      this.showError("Color 2 is invalid!")
+      return false;
+    }
+    return true;
   }
 
   onChangeMajor(form: NgForm) {
