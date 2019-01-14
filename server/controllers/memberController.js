@@ -1,5 +1,5 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const formidable = require('formidable');
 const util = require('util');
 const fs = require('fs');
@@ -39,7 +39,7 @@ router.get('/:id', (req, res) => {
 // POST create new Member --> localhost:3000/api/members/
 router.post('/', (req, res) => {
 
-  bcrypt.hash(req.body.password, 10, function(err, hash) {
+  bcrypt.hash(req.body.password, null, null, function(err, hash) {
     var member = new Member({
       name: req.body.name,
       email: req.body.email,
