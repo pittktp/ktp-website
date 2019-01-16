@@ -118,22 +118,23 @@ export class ProfileComponent implements OnInit {
   }
   
   selectCourseCategory(category: string) {
+    var member = this.profile
     if(this.panelHtml == '') {
       // Opens panel on first click
-      for(var i = 0; i < this.profile.courses.length; i++) {
-        var courseCategory = this.profile.courses[i].split(" ")[0];
+      for(var i = 0; i < member.courses.length; i++) {
+        var courseCategory = member.courses[i].split(" ")[0];
         if(courseCategory === category) {
-          this.panelHtml += `<p>${this.profile.courses[i]}</p>`;
+          this.panelHtml += `<p>${member.courses[i]}</p>`;
         }
       }
       this.panelType = category;
     } else if(this.panelType != category) {
       // Closes open panel and opens newly clicked panel
       this.panelHtml = '';
-      for(var i = 0; i < this.profile.courses.length; i++) {
-        var courseCategory = this.profile.courses[i].split(" ")[0];
+      for(var i = 0; i < member.courses.length; i++) {
+        var courseCategory = member.courses[i].split(" ")[0];
         if(courseCategory === category) {
-          this.panelHtml += `<p>${this.profile.courses[i]}</p>`;
+          this.panelHtml += `<p>${member.courses[i]}</p>`;
         }
       }
       this.panelType = category;
@@ -167,6 +168,8 @@ export class ProfileComponent implements OnInit {
   onChangeDescription(form: NgForm) {
     var member = this.profile;
     member.description = form.value.description;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Description Updated!");
     }, error => {
@@ -177,10 +180,22 @@ export class ProfileComponent implements OnInit {
 
   onChangeColors(form: NgForm) {
     var member = this.profile;
-    var isValid = this.validateColors(form.value.color1, form.value.color2);
-    if(isValid) {
-      member.color = [form.value.color1, form.value.color2];
+    var color1 = form.value.color1;
+    var color2 = form.value.color2;
+
+
+    if(color1 === null || color1 === undefined) {
+      color1 = member.color[0];
     }
+    if(color2 === null || color2 === undefined) {
+      color2 = member.color[1];
+    }
+
+    var isValid = this.validateColors(color1, color2);
+    if(isValid) {
+      member.color = [color1, color2];
+    }
+
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Colors Updated");
       setTimeout(() => {
@@ -193,6 +208,7 @@ export class ProfileComponent implements OnInit {
   }
 
   validateColors(color1: string, color2: string) {
+    // Ensure both colors are base-16
     if(color1.indexOf("#") === -1) {
       this.showError("Color 1 is not a Hexadecimal Value!");
       return false;
@@ -201,6 +217,7 @@ export class ProfileComponent implements OnInit {
       this.showError("Color 2 is not a Hexadecimal Value!");
       return false;
     }
+    // Ensure both colors have 6 hex digits and a digit for #
     if(color1.length != 7) {
       this.showError("Color 1 is invalid!")
       return false;
@@ -215,6 +232,8 @@ export class ProfileComponent implements OnInit {
   onChangeMajor(form: NgForm) {
     var member = this.profile;
     member.major = form.value.major;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Major Updated!");
     }, error => {
@@ -226,6 +245,8 @@ export class ProfileComponent implements OnInit {
   onChangeGraduation(form: NgForm) {
     var member = this.profile;
     member.gradSemester = form.value.gradSemester;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Grad Semester Updated!");
     }, error => {
@@ -237,6 +258,8 @@ export class ProfileComponent implements OnInit {
   onChangeRushClass(form: NgForm) {
     var member = this.profile;
     member.rushClass = form.value.rushClass;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Rush Class Updated!");
     }, error => {
@@ -248,6 +271,8 @@ export class ProfileComponent implements OnInit {
   onChangeLinkedIn(form: NgForm) {
     var member = this.profile;
     member.linkedIn = form.value.linkedIn;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("LinkedIn Link Updated!");
     }, error => {
@@ -259,6 +284,8 @@ export class ProfileComponent implements OnInit {
   onChangeGithub(form: NgForm) {
     var member = this.profile;
     member.github = form.value.github;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Github Link Updated!");
     }, error => {
@@ -290,6 +317,7 @@ export class ProfileComponent implements OnInit {
           break;
         }
       }
+      // Update User if all courses are valid
       if(isValid) {
         this.updateAdd(member);
       }
@@ -298,12 +326,10 @@ export class ProfileComponent implements OnInit {
 
   onAddCourse(course: string) {
     var member = this.profile;
-
     // Validate Course
     var isValid = this.validateAdd(course);
-
+    // Add course and update user if valid
     if(isValid) {
-      // Add course and update in DB
       member.courses.push(course);
       this.updateAdd(member);
     }
@@ -332,6 +358,7 @@ export class ProfileComponent implements OnInit {
           break;
         }
       }
+      // Update User if all Courses are valid
       if(isValid) {
         this.updateRemove(member);
       }
@@ -345,7 +372,7 @@ export class ProfileComponent implements OnInit {
     var isValid = this.validateRemove(course)
 
     if(isValid) {
-      // Remove course from the list, update in DB
+      // Remove course and update user
       member.courses.splice(member.courses.indexOf(course), 1);
       this.updateRemove(member);
     }
@@ -355,7 +382,7 @@ export class ProfileComponent implements OnInit {
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Added Course(s)!");
       setTimeout(() => {
-        window.location.reload();
+        this.router.navigate(['profile', this.id])
       }, 1500);
     }, error => {
       console.error(error);
@@ -367,7 +394,7 @@ export class ProfileComponent implements OnInit {
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Course(s) Removed!");
       setTimeout(() => {
-        window.location.reload();
+        this.router.navigate(['profile', this.id])
       }, 1500);
     }, error => {
       console.error(error);

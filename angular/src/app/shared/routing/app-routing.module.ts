@@ -18,13 +18,13 @@ const routes: Routes = [
   { path: 'edit-members', component: EditMembersComponent,  },
   { path: 'members', component: MembersComponent,  },
   { path: 'login', component: LoginComponent},
-  { path: 'profile/:id', component: ProfileComponent },
+  { path: 'profile/:id', component: ProfileComponent, runGuardsAndResolvers: 'always' },
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
 
