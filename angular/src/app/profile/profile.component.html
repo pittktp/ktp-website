@@ -29,11 +29,11 @@
           <form (ngSubmit)="onChangeColors(changeColorsForm)" #changeColorsForm="ngForm" autocomplete="off">
             <div class="input-field">
               <label style="color:black;" for="color1">Change Color 1: </label>
-              <input style="text-align:left;" [(ngModel)]="changeColorsForm.color1" name="color1" #name="ngModel" class="form-control" id="color1" value="{{this.profile.color[0]}}">
+              <input style="text-align:left;" [(ngModel)]="changeColorsForm.color1" name="color1" #name="ngModel" class="form-control" id="color1" value="{{this.profile.color[0]}}" required>
             </div>
             <div class="input-field">
               <label style="color:black;" for="color2">Change Color 2: </label>
-              <input style="text-align:left;" [(ngModel)]="changeColorsForm.color2" name="color2" #name="ngModel" class="form-control" id="color2" value="{{this.profile.color[1]}}">
+              <input style="text-align:left;" [(ngModel)]="changeColorsForm.color2" name="color2" #name="ngModel" class="form-control" id="color2" value="{{this.profile.color[1]}}" required>
             </div>
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changeColorsForm.valid">Change Colors</button>

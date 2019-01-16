@@ -150,15 +150,13 @@ export class ProfileComponent implements OnInit {
 
   onChangePicture(form: NgForm) {
     // TODO: Ensure image is proper file type and is a square shape
-    console.log(this.targetFile.type); 
     if(this.targetFile.type != "image/jpeg" && this.targetFile.type != "image/png" && this.targetFile.type != "image/gif") {
       this.showError("Invalid Image Type");
     } else {
       // Update in DB
       this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
-        console.log('Post Sucessful!');
         this.showMsg("Profile Image Updated!");
-        setTimeout(() => {window.location.reload();}, 2500);
+        setTimeout(() => {window.location.reload();}, 1500);
       }, error => {
         console.error(error);
         this.showError("Failed to Update Image!");
@@ -170,7 +168,6 @@ export class ProfileComponent implements OnInit {
     var member = this.profile;
     member.description = form.value.description;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Description Updated!");
     }, error => {
       console.error(error);
@@ -180,14 +177,15 @@ export class ProfileComponent implements OnInit {
 
   onChangeColors(form: NgForm) {
     var member = this.profile;
-    console.log(form.value)
     var isValid = this.validateColors(form.value.color1, form.value.color2);
     if(isValid) {
       member.color = [form.value.color1, form.value.color2];
     }
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Colors Updated");
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     }, error => {
       console.error(error);
       this.showError("Failed to Update Colors!");
@@ -218,7 +216,6 @@ export class ProfileComponent implements OnInit {
     var member = this.profile;
     member.major = form.value.major;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Major Updated!");
     }, error => {
       console.error(error);
@@ -230,7 +227,6 @@ export class ProfileComponent implements OnInit {
     var member = this.profile;
     member.gradSemester = form.value.gradSemester;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Grad Semester Updated!");
     }, error => {
       console.error(error);
@@ -242,7 +238,6 @@ export class ProfileComponent implements OnInit {
     var member = this.profile;
     member.rushClass = form.value.rushClass;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Rush Class Updated!");
     }, error => {
       console.error(error);
@@ -254,7 +249,6 @@ export class ProfileComponent implements OnInit {
     var member = this.profile;
     member.linkedIn = form.value.linkedIn;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("LinkedIn Link Updated!");
     }, error => {
       console.error(error);
@@ -266,7 +260,6 @@ export class ProfileComponent implements OnInit {
     var member = this.profile;
     member.github = form.value.github;
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Github Link Updated!");
     }, error => {
       console.log(error);
@@ -336,7 +329,6 @@ export class ProfileComponent implements OnInit {
           for(var j = 0; j < i; j++) {
             member.courses.push(courses[j])
           }
-          console.log(member.courses)
           break;
         }
       }
@@ -362,7 +354,9 @@ export class ProfileComponent implements OnInit {
   updateAdd(member: Member) {
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Added Course(s)!");
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     }, error => {
       console.error(error);
       this.showError("Failed to add Course(s)!");
@@ -372,7 +366,9 @@ export class ProfileComponent implements OnInit {
   updateRemove(member: Member) {
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Course(s) Removed!");
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     }, error => {
       console.error(error);
       this.showError("Failed to Remove Course(s)!");
