@@ -69,7 +69,7 @@
         </div>
         <div class="modal-body">
           <div id="overflow">
-            <h3 class="black-text" *ngIf="!requestsService.requests || requestsService.requests.length < 1; else showTable">No remaining requests</h3>
+            <h3 class="black-text" *ngIf="requestsService.numRequestsAvailable == 0; else showTable">No remaining requests</h3>
             <ng-template #showTable>
               <table class="table table-bordered black-text">
                 <thead>

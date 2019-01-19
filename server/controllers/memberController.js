@@ -1,5 +1,5 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt-nodejs');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
     if(doc)  // Someone else is using this email - return 409 conflict error
       res.status(409).send('Conflict');
     else {  // If not, save new Member
-      bcrypt.hash(req.body.password, 10, function(err, hash) {
+      bcrypt.hash(req.body.password, null, null, function(err, hash) {
         var userRole = "";
         if(req.body.code == "ky1fgkqq61") { userRole = "admin"; }
         else if(req.body.code == "yy3dlxwiz6") { userRole = "member"; }

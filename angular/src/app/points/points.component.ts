@@ -138,6 +138,10 @@ export class PointsComponent implements OnInit {
   getRequests() {
     this.requestsService.getRequests().subscribe((data: Array<object>) => {
       this.requestsService.requests = data as Request[];
+      for(var i = 0; i < this.requestsService.requests.length; i++) {
+        if(this.requestsService.requests[i].approved == 0) this.requestsService.numRequestsAvailable = 1;
+        else this.requestsService.numRequestsAvailable = 0;
+      }
     });
   }
 
@@ -152,7 +156,8 @@ export class PointsComponent implements OnInit {
       this.memberService.putMember(request.submittedById, member).subscribe((res) => {
         if(request.type == "Brotherhood Points") { this.toastr.success('Brotherhood point request accepted for ' + request.submittedBy); }
         else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
-        this.requestsService.deleteRequest(request._id).subscribe((res) => {
+        request.approved = 1;
+        this.requestsService.putRequest(request._id, request).subscribe((res) => {
           this.refreshRequests();
           this.getMembers();
         });
@@ -162,7 +167,8 @@ export class PointsComponent implements OnInit {
 
   // Don't update member's points - just delete point request from DB
   onDenyRequest(request: Request) {
-    this.requestsService.deleteRequest(request._id).subscribe((res) => {
+    request.approved = -1;
+    this.requestsService.putRequest(request._id, request).subscribe((res) => {
       this.refreshRequests();
       if(request.type == "Brotherhood Points")
         this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
