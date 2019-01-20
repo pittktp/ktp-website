@@ -84,7 +84,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let request of requestsService.requests">
-                    <td *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
+                    <td data-toggle="tooltip" data-placement="top" title="Click for history" onmouseover="" style="cursor: pointer;" (click)="onShowHistory(request.submittedById)" *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
                     <td *ngIf="request.approved == 0">{{ request.submittedDate }}</td>
                     <td *ngIf="request.approved == 0">{{ request.type }}</td>
                     <td *ngIf="request.approved == 0">{{ request.value }}</td>
@@ -100,6 +100,45 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="historyModal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 style="color:black;"class="modal-title">History of approved requests for {{ currentHistoryMember }}</h4>
+        </div>
+        <div class="modal-body">
+          <div id="overflow">
+            <h3 class="black-text" *ngIf="!membersRequests || membersRequests.length < 1; else showHistory">No history yet</h3>
+            <ng-template #showHistory>
+              <table class="table table-bordered black-text">
+                <thead>
+                  <tr>
+                    <th>Submitted on</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let request of membersRequests">
+                    <td>{{ request.submittedDate }}</td>
+                    <td>{{ request.type }}</td>
+                    <td>{{ request.value }}</td>
+                    <td>{{ request.description }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+          </div>
+        <div class="modal-footer">
+          <button (click)="onHistoryClosed()" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
       </div>

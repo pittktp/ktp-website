@@ -60,7 +60,7 @@ router.put('/:id', require('../auth/auth.js'), (req, res) => {
     return res.status(404).send('No record with given id: ' + req.params.id);
 
   var request = {
-    value: req.body.points,
+    value: req.body.value,
     description: req.body.description,
     submittedBy: req.body.submittedBy,
     submittedById: req.body.submittedById,

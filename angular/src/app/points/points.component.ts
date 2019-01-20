@@ -26,6 +26,8 @@ export class PointsComponent implements OnInit {
   user: string;
   userRole: string;
   requestForm: Request = new Request();
+  membersRequests: Array<object> = [];
+  currentHistoryMember: string;
 
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, public dropdownService: DropdownService, private router: Router) {
     if(this.auth.loggedIn()) {
@@ -167,14 +169,28 @@ export class PointsComponent implements OnInit {
 
   // Don't update member's points - just delete point request from DB
   onDenyRequest(request: Request) {
-    request.approved = -1;
-    this.requestsService.putRequest(request._id, request).subscribe((res) => {
+    this.requestsService.deleteRequest(request._id).subscribe((res) => {
       this.refreshRequests();
       if(request.type == "Brotherhood Points")
         this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
       else
         this.toastr.error('Service hour request denied for ' + request.submittedBy);
     });
+  }
+
+  onShowHistory(id) {
+    this.getRequests();
+    $("#historyModal").modal("show");
+    for(var i = 0; i < this.requestsService.requests.length; i++) {
+      if(this.requestsService.requests[i].submittedById == id && this.requestsService.requests[i].approved == 1) {
+        this.currentHistoryMember = this.requestsService.requests[i].submittedBy;
+        this.membersRequests.push(this.requestsService.requests[i]);
+      }
+    }
+  }
+
+  onHistoryClosed() {
+    this.membersRequests = [];
   }
 
 }
