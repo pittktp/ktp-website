@@ -106,11 +106,12 @@
     </div>
   </div>
 
+  <!-- History of user's approved requests modal -->
   <div class="modal fade" id="historyModal" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button (click)="onHistoryClosed()" type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 style="color:black;"class="modal-title">History of approved requests for {{ currentHistoryMember }}</h4>
         </div>
         <div class="modal-body">
