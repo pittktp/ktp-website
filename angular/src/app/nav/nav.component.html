@@ -49,7 +49,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let member of memberService.members">
+            <tr *ngFor="let member of expectedMembers">
               <td *ngIf="!membersNotHere.includes(member)">{{ member.name }}</td>
               <td *ngIf="!membersNotHere.includes(member)">
                 <button type="button" id="notHere" class="btn btn-default" (click)="onNotHere(member)">Not Here</button>

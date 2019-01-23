@@ -2,9 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../shared/auth/auth.service';
 import { SharedService } from '../shared/shared.service';
 import { Router } from '@angular/router';
-
+import { Request } from '../shared/models/request.model';
 import { ToastrService } from 'ngx-toastr';
 import { MemberService } from '../shared/api/member.service';
+import { RequestsService } from '../shared/api/requests.service';
+
 import { Member } from '../shared/models/member.model';
 import { AuthGuard } from '../shared/auth/auth.guard';
 
@@ -20,8 +22,9 @@ export class NavComponent implements OnInit {
   private membersNotHere: Array<object> = [];
   private user = '';
   private userRole = '';
+  private expectedMembers: Member[];
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private requestsService: RequestsService, private memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
@@ -59,6 +62,23 @@ export class NavComponent implements OnInit {
     });
   }
 
+  getCurrentDate() {
+    var today = new Date();
+
+    var dd = today.getDay().toString();
+    if (dd.length < 2 && dd.charAt(0) != '0')
+      dd = '0' + dd;
+
+    var mm = (today.getMonth() + 1).toString();
+    if (mm.length < 2 && dd.charAt(0) != '0')
+      dd = '0' + dd;
+
+    var yyyy = today.getFullYear();
+
+    var strDate = yyyy + '/' + mm + '/' + dd;
+    return strDate.replace(/\//g, '');
+  }
+
   onLoginClicked() {
     this.router.navigate(['login'])
   }
@@ -75,6 +95,22 @@ export class NavComponent implements OnInit {
     if(!this.auth.isTokenExpired()) {
       this.getMembers();
       $("#attendanceModal").modal("show");
+      this.requestsService.getRequests().subscribe((res) => {
+        var requests = res as Request[];
+        var mems = this.memberService.members;
+        this.expectedMembers = mems;
+
+          for (var i = 0; i < requests.length; i++) {
+            for (var j = 0; j < mems.length; j++) {
+              if (this.getCurrentDate() == requests[i].value.toString() && requests[i].type == 'Excused Absence' && requests[i].submittedById == mems[j]._id) {
+
+                /* TODO bug in this line */
+                this.expectedMembers = this.expectedMembers.filter(item => item._id !== requests[i].submittedById);
+                break;
+              }
+            }
+          }
+      });
     }
     else {
       this.auth.logout();
@@ -103,6 +139,7 @@ export class NavComponent implements OnInit {
 
   onAttendanceClosed() {
     this.membersNotHere = [];
+    this.expectedMembers = [];
     this.toastr.error('Attendance Not Recorded');
     $("#attendanceModal").modal("hide");
   }
