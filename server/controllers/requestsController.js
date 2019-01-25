@@ -60,13 +60,12 @@ router.put('/:id', (req, res) => {
     return res.status(404).send('No record with given id: ' + req.params.id);
 
   var request = {
-    value: req.body.points,
+    value: req.body.value,
     description: req.body.description,
     submittedBy: req.body.submittedBy,
     submittedById: req.body.submittedById,
     submittedDate: req.body.submittedDate,
-    approved: req.body.approved,
-    excuseDate: req.body.excuseDate
+    approved: req.body.approved
   };
 
   Request.findByIdAndUpdate(req.params.id, { $set: request }, { new: true }, (err, doc) => {
