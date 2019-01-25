@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const url = "mongodb://database:27017/KtpDB";
 
 // Dev database
-//onst url = "mongodb://localhost:27017/KtpDB";
+//const url = "mongodb://localhost:27017/KtpDB";
 
 mongoose.connect(url, { useNewUrlParser: true }, (err) => {
   if(!err)
