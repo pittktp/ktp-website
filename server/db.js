@@ -3,10 +3,10 @@
 const mongoose = require('mongoose');
 
 // Production database in AWS
-//const url = "mongodb://database:27017/KtpDB";
+const url = "mongodb://database:27017/KtpDB";
 
 // Dev database
-const url = "mongodb://localhost:27017/KtpDB";
+//onst url = "mongodb://localhost:27017/KtpDB";
 
 mongoose.connect(url, { useNewUrlParser: true }, (err) => {
   if(!err)
