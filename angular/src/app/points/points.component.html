@@ -116,7 +116,7 @@
         </div>
         <div class="modal-body">
           <div id="overflow">
-            <h3 class="black-text" *ngIf="numRequestsAvailable < 1; else showHistory">No history yet</h3>
+            <h3 class="black-text" *ngIf="numRequestsAvailable < 2; else showHistory">No history yet</h3>
             <ng-template #showHistory>
               <table class="table table-bordered black-text">
                 <thead>
