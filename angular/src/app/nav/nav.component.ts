@@ -65,13 +65,13 @@ export class NavComponent implements OnInit {
   getCurrentDate() {
     var today = new Date();
 
-    var dd = today.getDay().toString();
+    var dd = today.getDate().toString();
     if (dd.length < 2 && dd.charAt(0) != '0')
       dd = '0' + dd;
 
     var mm = (today.getMonth() + 1).toString();
-    if (mm.length < 2 && dd.charAt(0) != '0')
-      dd = '0' + dd;
+    if (mm.length < 2 && mm.charAt(0) != '0')
+      mm = '0' + mm;
 
     var yyyy = today.getFullYear();
 
@@ -97,19 +97,18 @@ export class NavComponent implements OnInit {
       $("#attendanceModal").modal("show");
       this.requestsService.getRequests().subscribe((res) => {
         var requests = res as Request[];
+        var membersApprovedAbsence: Member[];
         var mems = this.memberService.members;
         this.expectedMembers = mems;
 
-          for (var i = 0; i < requests.length; i++) {
-            for (var j = 0; j < mems.length; j++) {
-              if (this.getCurrentDate() == requests[i].value.toString() && requests[i].type == 'Excused Absence' && requests[i].submittedById == mems[j]._id) {
-
-                /* TODO bug in this line */
-                this.expectedMembers = this.expectedMembers.filter(item => item._id !== requests[i].submittedById);
-                break;
-              }
-            }
+        for (var i = 0; i < requests.length; i++) {
+          if(requests[i].type == "Excused Absence" && requests[i].approved == 1 && this.getCurrentDate() == requests[i].value.toString()) {
+            this.memberService.getMemberById(requests[i].submittedById).subscribe((res) => {
+              var member = res as Member;
+              this.expectedMembers = this.expectedMembers.filter(item => item._id !== member._id);
+            });
           }
+        }
       });
     }
     else {

@@ -11,12 +11,12 @@
           </div>
           <div class="modal-body">
             <div class="input-field">
-              <label style="color:black" for="description">Date of Chapter</label>
-              <input style="text-align:left;" [(ngModel)]="excuseForm.date" name="date" #name="ngModel" type="text" class="form-control" id="date" placeholder="Enter date in format MM/DD/YYYY:" autocomplete="off" required>
+              <label style="color:black" for="date">Date you'll be missing</label>
+              <input type="text" placeholder="Date" class="form-control" [(ngModel)]="excuseForm.date" name="date" #name="ngModel" id="date" bsValue bsDatepicker required>
             </div>
             <br />
             <div class="input-field">
-              <label style="color:black" for="description">Description</label>
+              <label style="color:black" for="reason">Description</label>
               <input style="text-align:left;" [(ngModel)]="excuseForm.reason" name="reason" #name="ngModel" type="text" class="form-control" id="reason" placeholder="Why did you miss this chapter meeting?" autocomplete="off" required>
             </div>
             <br />
@@ -98,7 +98,7 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 style="color:black;"class="modal-title">Review Requests</h4>
         </div>
-        <div class="modal-body">
+        <div style="overflow-x: scroll !important" class="modal-body">
           <h3 class="black-text" *ngIf="requestsService.requests < 1; else showTable">No remaining requests</h3>
           <ng-template #showTable>
             <table class="table table-bordered black-text">
@@ -117,7 +117,8 @@
                   <td *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
                   <td *ngIf="request.approved == 0">{{ request.submittedDate }}</td>
                   <td *ngIf="request.approved == 0">{{ request.type }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.value }}</td>
+                  <td *ngIf="request.approved == 0 && request.type == 'Excused Absence'">{{ request.value.toString().substring(4, 6) }}/{{ request.value.toString().substring(6, 8) }}/{{ request.value.toString().substring(0, 4) }}</td>
+                  <td *ngIf="request.approved == 0 && request.type != 'Excused Absence'">{{ request.value }}</td>
                   <td *ngIf="request.approved == 0">{{ request.description }}</td>
                   <td *ngIf="request.approved == 0">
                     <button type="button" id="acceptPoints" class="btn btn-default" (click)="onAcceptRequest(request)">Accept</button>

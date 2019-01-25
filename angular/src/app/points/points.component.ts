@@ -9,6 +9,7 @@ import { Member } from '../shared/models/member.model';
 import { Request } from '../shared/models/request.model';
 import { AuthService } from '../shared/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { BsDatepickerModule } from 'ngx-bootstrap';
 
 import '../../assets/js/new-age.min.js';
 
@@ -27,6 +28,7 @@ export class PointsComponent implements OnInit {
   requestForm: Request = new Request();
 
   constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestsService: RequestsService, private router: Router) {
+    //this.options = new DatePickerOptions();
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.userId = currentUserId;
@@ -95,9 +97,22 @@ export class PointsComponent implements OnInit {
   }
 
 onExcuseRequestSubmit(form: NgForm) {
+  var dd = (form.value.date.getDate()).toString();
+  if (dd.length < 2 && dd.charAt(0) != '0')
+    dd = '0' + dd;
+
+  var mm = (form.value.date.getMonth() + 1).toString();
+  if (mm.length < 2 && mm.charAt(0) != '0')
+    mm = '0' + mm;
+
+  var yyyy = form.value.date.getFullYear();
+
+  var strDate = yyyy + '/' + mm + '/' + dd;
+  strDate = strDate.replace(/\//g, '');
+
   var request = new Request();
   request.type = "Excused Absence";
-  request.value = parseInt (form.value.date);
+  request.value = parseInt (strDate);
   request.description = form.value.reason;
   request.submittedById = this.userId;
   request.submittedBy = this.user;
@@ -107,7 +122,7 @@ onExcuseRequestSubmit(form: NgForm) {
   this.requestsService.postRequest(request).subscribe((res) => {
     $("#excuseSubmitModal").modal("hide");
     this.getRequests();
-    this.toastr.success('Excuse request submitted');
+    this.toastr.success('Excused absence request submitted');
   });
 }
 
@@ -156,7 +171,8 @@ onExcuseRequestSubmit(form: NgForm) {
       this.memberService.putMember(request.submittedById, member).subscribe((res) => {
         if(request.type == "Brotherhood Points") { this.toastr.success('Brotherhood point request accepted for ' + request.submittedBy); }
         else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
-        this.requestsService.deleteRequest(request._id).subscribe((res) => {
+        request.approved = 1;
+        this.requestsService.putRequest(request._id, request).subscribe((res) => {
           this.refreshRequests();
           this.getMembers();
         });
@@ -170,6 +186,8 @@ onExcuseRequestSubmit(form: NgForm) {
       this.refreshRequests();
       if(request.type == "Brotherhood Points")
         this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
+      else if(request.type == "Excused Absence")
+        this.toastr.error('Excused absence request denied for ' + request.submittedBy);
       else
         this.toastr.error('Service hour request denied for ' + request.submittedBy);
     });

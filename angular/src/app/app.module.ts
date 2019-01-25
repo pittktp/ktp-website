@@ -16,6 +16,7 @@ import { AuthService } from './shared/auth/auth.service';
 import { AuthGuard } from './shared/auth/auth.guard';
 import { AppRoutingModule } from './shared/routing/app-routing.module';
 import { EditMembersComponent } from './edit-members/edit-members.component';
+import { BsDatepickerModule } from 'ngx-bootstrap';
 
 
 export function tokenGetter() {
@@ -35,6 +36,7 @@ export function tokenGetter() {
     CommonModule,
     BrowserModule,
     HttpClientModule,
+    BsDatepickerModule.forRoot(),
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
