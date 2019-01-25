@@ -116,7 +116,7 @@
         </div>
         <div class="modal-body">
           <div id="overflow">
-            <h3 class="black-text" *ngIf="!membersRequests || membersRequests.length < 1; else showHistory">No history yet</h3>
+            <h3 class="black-text" *ngIf="numRequestsAvailable < 1; else showHistory">No history yet</h3>
             <ng-template #showHistory>
               <table class="table table-bordered black-text">
                 <thead>
@@ -151,13 +151,14 @@
   <div class="container">
     <div class="col-xs-12">
       <div class="row">
+        <div class="col-xs-20 text-center">
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#excuseSubmitModal">Submit Excused Absence</button>
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#serviceHoursSubmitModal">Log Service Hours</button>
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#pointsSubmitModal">Log Points</button>
+          <button *ngIf="userRole == 'admin'" type="button" class="btn btn-primary btn-sm" (click)="onReviewRequestsOpened()" data-toggle="modal" data-target="#reviewRequestsModal">Review Requests</button>
+        </div>
         <div class="col-xs-5">
           <h2>Spring 2019 members</h2>
-        </div>
-        <div class="col-xs-7 text-right">
-            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#serviceHoursSubmitModal">Log Service Hours</button>
-            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#pointsSubmitModal">Log Points</button>
-            <button *ngIf="userRole == 'admin'" type="button" class="btn btn-primary btn-sm" (click)="onReviewRequestsOpened()" data-toggle="modal" data-target="#reviewRequestsModal">Review Requests</button>
         </div>
       </div>
       <div class="row">

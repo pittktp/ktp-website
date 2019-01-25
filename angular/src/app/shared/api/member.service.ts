@@ -9,10 +9,10 @@ import { Member } from '../models/member.model';
 export class MemberService {
 
   // Test - use this url when running locally on your own computer
-  //API_URL = 'http://localhost:3000/api/members/';
+  API_URL = 'http://localhost:3000/api/members/';
 
   // Production - use this url when running in production on AWS
-  API_URL = 'https://pitt-kappathetapi.com/api/members/';
+  //API_URL = 'https://pitt-kappathetapi.com/api/members/';
 
   members: Member[];
   user = '';
