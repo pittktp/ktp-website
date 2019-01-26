@@ -32,6 +32,11 @@ export class PointsComponent implements OnInit {
 
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, public dropdownService: DropdownService, private router: Router) {
     if(this.auth.loggedIn()) {
+      // $('#date').datetimepicker({
+      //   useCurrent: true,
+      //   ignoreReadonly: true
+      // });
+
       var currentUserId = this.auth.getCurrentUserId();
       this.userId = currentUserId;
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
