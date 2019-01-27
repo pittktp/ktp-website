@@ -51,7 +51,7 @@ router.post('/', (req, res) => {
 
         var member = new Member({
           name: req.body.name,
-          email: req.body.email,
+          email: req.body.email.toLowerCase(),
           password: hash,
           points: req.body.points,
           serviceHours: req.body.serviceHours,
