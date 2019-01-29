@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
       serviceHours: req.body.serviceHours,
       role: req.body.role,
       absences: req.body.absences,
-      admin: true //TODO debugging -- fix once host branch merges in
+      admin: false //TODO debugging -- fix once host branch merges in
     });
 
     member.save((err, doc) =>{
