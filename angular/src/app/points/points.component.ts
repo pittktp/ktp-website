@@ -172,7 +172,10 @@ export class PointsComponent implements OnInit {
     this.requestsService.getRequests().subscribe((data: Array<object>) => {
       this.requestsService.requests = data as Request[];
       for(var i = 0; i < this.requestsService.requests.length; i++) {
-        if(this.requestsService.requests[i].approved == 0) this.requestsService.numRequestsAvailable = 1;
+        if(this.requestsService.requests[i].approved == 0) {
+           this.requestsService.numRequestsAvailable = 1;
+           break;
+        }
         else this.requestsService.numRequestsAvailable = 0;
       }
     });
@@ -182,12 +185,15 @@ export class PointsComponent implements OnInit {
   onAcceptRequest(request: Request) {
     this.memberService.getMemberById(request.submittedById).subscribe((res) => {
       var member = res as Member;
-      if(request.type == "Brotherhood Points")
+      if(request.type == "Brotherhood Points") {
         member.points = member.points + request.value;
-      else
+      }
+      else if(request.type == "Service Hours") {
         member.serviceHours = member.serviceHours + request.value;
+      }
       this.memberService.putMember(request.submittedById, member).subscribe((res) => {
         if(request.type == "Brotherhood Points") { this.toastr.success('Brotherhood point request accepted for ' + request.submittedBy); }
+        else if(request.type == "Excused Absence") { this.toastr.success('Excused absence request accepted for ' + request.submittedBy); }
         else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
         request.approved = 1;
         this.requestsService.putRequest(request._id, request).subscribe((res) => {
@@ -204,8 +210,10 @@ export class PointsComponent implements OnInit {
       this.refreshRequests();
       if(request.type == "Brotherhood Points")
         this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
-      else
+      else if(request.type == "Service Hours")
         this.toastr.error('Service hour request denied for ' + request.submittedBy);
+      else if(request.type == "Excused Absence")
+        this.toastr.error('Excused absence request denied for ' + request.submittedBy);
     });
   }
 
