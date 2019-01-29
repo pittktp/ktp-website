@@ -9,6 +9,7 @@ export class Member {
   studentId: number;
   role: string;
   absences: number;
+  admin: boolean;
 
   constructor() { }
 

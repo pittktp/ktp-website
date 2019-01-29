@@ -8,7 +8,8 @@ var Member = mongoose.model('Member', {
   points: { type: Number },
   serviceHours: { type: Number },
   role: { type: String },
-  absences: { type: Number }
+  absences: { type: Number },
+  admin: { type: Boolean }
 });
 
 module.exports = { Member };

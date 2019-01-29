@@ -71,10 +71,23 @@
               <input style="text-align:left;" [(ngModel)]="memberEditForm.absences" name="absences" #name="ngModel" type="number" class="form-control" id="absences" autocomplete="off">
             </div>
             <br />
-            <div class="input-field">
-              <label style="color:black" for="role">Role ("member" or "admin")</label>
-              <input style="text-align:left;" [(ngModel)]="memberEditForm.role" name="role" #name="ngModel" type="text" class="form-control" id="role" autocomplete="off">
-            </div>
+
+          <label style="color:black" for="member-role-list">Select User Role:</label>
+          <input style="margin:15px; color:black;" list="member-roles" id="role" name="member-role-list" />
+
+          <datalist id="member-roles">
+              <option value="Brother">
+              <option value="Inactive">
+              <option value="Alumni">
+              <option value="President">
+              <option value="Vice President">
+              <option value="Technology Chair">
+              <option value="Business Chair">
+              <option value="Public Relations Chair">
+              <option value="Outreach Chair">
+              <option value="Recruitment Chair">
+          </datalist>
+
             <br />
           </div>
           <div class="modal-footer">

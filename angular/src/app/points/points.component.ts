@@ -24,7 +24,7 @@ export class PointsComponent implements OnInit {
 
   userId: string;
   user: string;
-  userRole: string;
+  userRole: boolean;
   requestForm: Request = new Request();
 
   constructor(private toastr: ToastrService, private auth: AuthService, private memberService: MemberService, private requestsService: RequestsService, private router: Router) {
@@ -35,7 +35,7 @@ export class PointsComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userRole = member.role;
+        this.userRole = member.admin;
         if(member.role == 'admin') { this.getRequests(); }
       });
     }

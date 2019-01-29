@@ -30,7 +30,7 @@ export class NavComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userRole = member.role;
+        this.userRole = member.admin;
       });
     }
     else {

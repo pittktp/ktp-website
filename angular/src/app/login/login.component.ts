@@ -103,8 +103,14 @@ export class LoginComponent implements OnInit {
       newMember.studentId = form.value.registerStudentId;
       newMember.absences = 0;
 
-      if(form.value.registerCode == "g62dz9t4qm")  newMember.role = "member";
-      else if(form.value.registerCode == "6edwxvuh06") newMember.role = "admin";
+      if(form.value.registerCode == "g62dz9t4qm"){
+          newMember.admin = false;
+          newMember.role = "Brother"
+        }
+      else if(form.value.registerCode == "6edwxvuh06"){
+          newMember.admin = true;
+          newMember.role = "E Board";
+      }
 
       if(exists == null) {
         this.emailInUse = false;

@@ -22,8 +22,8 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ user }}<i class="fa fa-caret-down"></i></a>
           <div class="dropdown-menu">
             <li><a class="pointer dropdown-item" (click)="onPointsClicked()">View/Log Points</a></li>
-            <li *ngIf="userRole == 'admin'"><a class="pointer dropdown-item" (click)="onEditMembersClicked()">Edit Members</a></li>
-            <li *ngIf="userRole == 'admin'"><a class="pointer dropdown-item" (click)="onAttendanceClicked()">Take Attendance</a></li>
+            <li *ngIf="userRole == true"><a class="pointer dropdown-item" (click)="onEditMembersClicked()">Edit Members</a></li>
+            <li *ngIf="userRole == true"><a class="pointer dropdown-item" (click)="onAttendanceClicked()">Take Attendance</a></li>
             <li role="separator" class="divider"></li>
             <li><a class="pointer dropdown-item" (click)="onLogout()">Logout</a></li>
           </div>

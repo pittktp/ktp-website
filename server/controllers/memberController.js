@@ -45,7 +45,8 @@ router.post('/', (req, res) => {
       points: req.body.points,
       serviceHours: req.body.serviceHours,
       role: req.body.role,
-      absences: req.body.absences
+      absences: req.body.absences,
+      admin: true //TODO debugging -- fix once host branch merges in
     });
 
     member.save((err, doc) =>{
@@ -62,6 +63,7 @@ router.post('/', (req, res) => {
 
 // PUT update Member --> localhost:3000/members/*id-number*
 router.put('/:id', (req, res) => {
+//  console.log(req.body)
 
   if(!ObjectId.isValid(req.params.id))
     return res.status(404).send('No record with given id: ' + req.params.id);
@@ -73,7 +75,8 @@ router.put('/:id', (req, res) => {
     points: req.body.points,
     serviceHours: req.body.serviceHours,
     role: req.body.role,
-    absences: req.body.absences
+    absences: req.body.absences,
+    admin: req.body.admin
   };
 
   Member.findByIdAndUpdate(req.params.id, { $set: member }, { new: true }, (err, doc) => {

@@ -31,7 +31,7 @@ export class EditMembersComponent implements OnInit {
       this.memberService.getMemberById(this.userId).subscribe(res => {
         var member = res as Member;
         this.userRole = member.role;
-        if(this.userRole != 'admin') {
+        if(!member.admin) {
           alert('You do not have permission to access this page');
           this.router.navigate(['home']);
         }
@@ -103,6 +103,16 @@ export class EditMembersComponent implements OnInit {
     updatedMember.serviceHours = $('#serviceHours').val();
     updatedMember.absences = $('#absences').val();
     updatedMember.role = $('#role').val();
+
+
+//TODO permission updating not working
+    if(updatedMember.role == "Brother" || updatedMember.role == "Alumni" || updatedMember.role == "Inactive") {
+        alert("not admin");
+        updatedMember.admin = false;
+    } else {
+      alert("admin");
+        updatedMember.admin = true;
+    }
 
     if(confirm("Finish editing member " + updatedMember.name + "?")) {
       this.memberService.putMember(this.memberClicked._id, updatedMember).subscribe((res) => {

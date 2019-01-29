@@ -144,7 +144,7 @@
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#excuseSubmitModal">Submit Excused Absence</button>
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#serviceHoursSubmitModal">Log Service Hours</button>
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#pointsSubmitModal">Log Points</button>
-            <button *ngIf="userRole == 'admin'" type="button" class="btn btn-primary btn-sm" (click)="onReviewRequestsOpened()" data-toggle="modal" data-target="#reviewRequestsModal">Review Requests</button>
+            <button *ngIf="userRole == true" type="button" class="btn btn-primary btn-sm" (click)="onReviewRequestsOpened()" data-toggle="modal" data-target="#reviewRequestsModal">Review Requests</button>
         </div>
         <div class="col-xs-5">
           <h2>Status for Fall 2018 Members</h2>
