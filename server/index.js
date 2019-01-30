@@ -35,6 +35,7 @@ app.use('/api/requests', requestsController);
 // auth endpoint
 app.post('/api/auth', function(req, res) {
   const body = req.body;
+  console.log(body);
 
   var query = { 'email' : body.email };
   Member.findOne(query, function(err, item) {

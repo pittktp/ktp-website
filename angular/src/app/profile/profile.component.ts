@@ -156,6 +156,7 @@ export class ProfileComponent implements OnInit {
     } else {
       // Update in DB
       this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
+        console.log(res);
         this.showMsg("Profile Image Updated!");
         setTimeout(() => {window.location.reload();}, 1500);
       }, error => {

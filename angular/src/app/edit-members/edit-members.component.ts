@@ -92,6 +92,7 @@ export class EditMembersComponent implements OnInit {
   onEditMemberSubmit(form: NgForm) {
 
     var updatedMember: Member = new Member();
+    updatedMember = this.memberClicked;
     updatedMember._id = this.memberClicked._id;
     updatedMember.email = this.memberClicked.email;
 

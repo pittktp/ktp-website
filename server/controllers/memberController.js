@@ -126,16 +126,16 @@ router.post('/:id/image', (req, res) => {
 
   var form = formidable.IncomingForm();
   form.parse(req, function(err, fields, file) {
-    if(err) { console.error('Form failed to parse with following error: ', err); }
+    if(err) { console.error('Form failed to parse with following error: ', JSON.stringify(err)); }
     res.end(util.inspect({fields: fields, file: file}))
   });
 
   form.on('end', function(fields, file) {
-    var id = ""
+    var id = "";
     var tempPath = this.openedFiles[0].path;
     var fileExt = this.openedFiles[0].name.split('.')[1];
     Member.findById(req.params.id, function(err, member) {
-      if(err) { console.error('File failed to copy with following error: ', err); }
+      if(err) { console.error('File failed to copy with following error: ', JSON.stringify(err)); }
       id = member.email.split('@')[0];
       var oldPic = member.picture;
       var newPath = `../server/public/img/${id}.${fileExt}`;
@@ -145,7 +145,7 @@ router.post('/:id/image', (req, res) => {
         if(err) { console.error('File failed to copy with following error: ', err); }
         else {
           Member.findByIdAndUpdate(req.params.id, {picture: fileName}, function(err, raw) {
-            if(err) { console.error('Failed to update mmeber picture with following error: ', err); }
+            if(err) { console.error('Failed to update member picture with following error: ', JSON.stringify(err)); }
             console.log(raw);
           });
         }
@@ -154,11 +154,15 @@ router.post('/:id/image', (req, res) => {
       // Remove old picture if user had one
       if(oldPic != null || oldPic != "") {
         fs.unlink(`../server/public/img/${oldPic}`, (err) => {
-          if(err) { console.error('Failed to remove old image with error: ', err); }
+          if(err) { console.error('Failed to remove old image with error: ', JSON.stringify(err)); }
         });
       }
     });
   });
+
+  form.on('error', (err) => {
+    console.error("Upload Error: ", JSON.stringify(err));
+  })
 });
 
 router.get('/:id/image', (req, res) => {
