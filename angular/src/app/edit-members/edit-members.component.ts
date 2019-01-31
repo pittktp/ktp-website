@@ -101,6 +101,15 @@ export class EditMembersComponent implements OnInit {
     updatedMember.serviceHours = $('#serviceHours').val();
     updatedMember.absences = $('#absences').val();
     updatedMember.role = $('#role').val();
+    updatedMember.rushClass = this.memberClicked.rushClass;
+    updatedMember.picture = this.memberClicked.picture;
+    updatedMember.linkedIn = this.memberClicked.linkedIn;
+    updatedMember.github = this.memberClicked.github;
+    updatedMember.gradSemester = this.memberClicked.gradSemester;
+    updatedMember.major = this.memberClicked.major;
+    updatedMember.description = this.memberClicked.description;
+    updatedMember.courses = this.memberClicked.courses;
+    updatedMember.color = this.memberClicked.color;
 
     if(confirm("Finish editing member " + updatedMember.name + "?")) {
       this.memberService.putMember(this.memberClicked._id, updatedMember).subscribe((res) => {

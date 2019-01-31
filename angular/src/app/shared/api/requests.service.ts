@@ -16,7 +16,7 @@ export class RequestsService {
   API_URL = 'https://pitt-kappathetapi.com/api/requests/';
 
   requests: Request[];
-  numRequestsAvailable: number;
+  numRequestsAvailable = 0;
 
   constructor(private httpClient: HttpClient) { }
 

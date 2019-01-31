@@ -23,6 +23,7 @@ export class NavComponent implements OnInit {
 
   private membersNotHere: Array<object> = [];
   public user = '';
+  public userId = '';
   public userRole = '';
   private expanded = false;
   private expectedMembers: Member[];
@@ -34,17 +35,20 @@ export class NavComponent implements OnInit {
         var member = res as Member;
         this.user = member.name;
         this.userRole = member.role;
+        this.userId = member.email.split('@')[0];
       });
     }
     else {
       this.user = '';
       this.userRole = '';
+      this.userId = '';
     }
 
     this.sharedService.changeEmitted$.subscribe(
       change => {
         this.user = change.name;
         this.userRole = change.role;
+        this.userId = change.id;
       }
     );
 
@@ -87,6 +91,16 @@ export class NavComponent implements OnInit {
     }
   }
 
+  onMembersClicked() {
+    this.onDropup();
+    this.router.navigate(['members']);
+  }
+
+  onProfileClicked() {
+    this.onDropup();
+    this.router.navigate(['profile', this.userId]);
+  }
+
   onLoginClicked() {
     this.router.navigate(['login'])
   }
@@ -102,6 +116,7 @@ export class NavComponent implements OnInit {
   }
 
   onAttendanceClicked() {
+    this.onDropup();
     if(!this.auth.isTokenExpired()) {
       this.getMembers();
       $("#attendanceModal").modal("show");
@@ -180,6 +195,7 @@ export class NavComponent implements OnInit {
     if(confirm("Confirm logout?")) {
       this.auth.logout();
       this.user = '';
+      this.userId = '';
       this.router.navigate(['home']);
       this.toastr.success('Successfully logged out');
     }

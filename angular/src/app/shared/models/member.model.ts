@@ -9,6 +9,15 @@ export class Member {
   role: string;
   code: string;
   absences: number;
+  rushClass: string;
+  picture: string;
+  courses: Array<string>;
+  linkedIn: string;
+  github: string;
+  gradSemester: string;
+  major: string;
+  description: string;
+  color: Array<string>;
 
   constructor() { }
 

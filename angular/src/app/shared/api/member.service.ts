@@ -28,6 +28,10 @@ export class MemberService {
     return this.httpClient.get(`${this.API_URL}`, { headers: headers });
   }
 
+  getBasicMembers() {
+    return this.httpClient.get(`${this.API_URL}` + "basic");
+  }
+
   postMember(member: Member) {
     return this.httpClient.post<Member>(`${this.API_URL}`, member);
   }
@@ -52,6 +56,16 @@ export class MemberService {
     const headers = new HttpHeaders().set("authorization", token);
 
     return this.httpClient.delete(`${this.API_URL}` + id, { headers: headers });
+  }
+
+  postFile(id: string, targetFile: File) {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
+    var formData: FormData = new FormData();
+    formData.append('image', targetFile, targetFile.name);
+
+    return this.httpClient.post(`${this.API_URL}/${id}/image`, formData, { headers: headers });
   }
 
 }

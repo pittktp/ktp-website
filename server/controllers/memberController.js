@@ -9,8 +9,19 @@ var { Member } = require('../models/member');
 
 // GET all Members --> localhost:3000/members
 router.get('/', require('../auth/auth.js'), (req, res) => {
-
   Member.find((err, docs) => {
+    if(!err) {
+      res.send(docs);
+    }
+    else
+      console.log('Error in Retriving Members for auth: ' + JSON.stringify(err, undefined, 2));
+  });
+
+});
+
+// Unprotected route to get stripped down Member with only properties name, description, email, picture, and major
+router.get('/basic', (req, res) => {
+  Member.find({}, '-_id name description email picture major', (err, docs) => {
     if(!err) {
       res.send(docs);
     }
@@ -22,16 +33,17 @@ router.get('/', require('../auth/auth.js'), (req, res) => {
 
 // GET Member by ID --> localhost:3000/members/*id-number*
 router.get('/:id', (req, res) => {
-
     // Not a valid ID
     if(!ObjectId.isValid(req.params.id))
       return res.status(404).send('No record with given id: ' + req.params.id);
 
     Member.findById(req.params.id, (err, doc) => {
-      if(!err)
+      if(!err) {
         return res.send(doc);
-      else
+      }
+      else {
         console.log('Error in Retriving Member: ' + JSON.stringify(err, undefined, 2));
+      }
     });
 
 });
@@ -56,7 +68,16 @@ router.post('/', (req, res) => {
           points: req.body.points,
           serviceHours: req.body.serviceHours,
           role: userRole,
-          absences: req.body.absences
+          absences: req.body.absences,
+          rushClass: req.body.ruchClass,
+          picture: req.body.picture,
+          courses: req.body.courses,
+          linkedIn: req.body.linkedIn,
+          github: req.body.github,
+          gradSemester: req.body.gradSemester,
+          major: req.body.major,
+          description: req.body.description,
+          color: req.body.color
         });
 
         member.save((err, doc) =>{
@@ -114,7 +135,16 @@ router.put('/:id', require('../auth/auth.js'), (req, res) => {
     points: req.body.points,
     serviceHours: req.body.serviceHours,
     role: req.body.role,
-    absences: req.body.absences
+    absences: req.body.absences,
+    rushClass: req.body.rushClass,
+    picture: req.body.picture,
+    courses: req.body.courses,
+    linkedIn: req.body.linkedIn,
+    github: req.body.github,
+    gradSemester: req.body.gradSemester,
+    major: req.body.major,
+    description: req.body.description,
+    color: req.body.color
   };
 
   Member.findByIdAndUpdate(req.params.id, { $set: member }, { new: true }, (err, doc) => {
@@ -136,6 +166,63 @@ router.delete('/:id', require('../auth/auth.js'), (req, res) => {
       res.send(doc);
     else
       console.log('Error in Member DELETE: ' + JSON.stringify(err, undefined, 2));
+  });
+});
+
+// POST upload Member profile image --> localhost:3000/api/member/*id*/image
+// Must be a POST request since files must be sent via POST
+router.post('/:id/image', require('../auth/auth.js'), (req, res) => {
+  if(!ObjectId.isValid(req.params.id)) {
+    return res.status(404).send('No record with given id: ' + req.params.id);
+  }
+
+  var form = formidable.IncomingForm();
+  form.parse(req, function(err, fields, file) {
+    if(err) { console.error('Form failed to parse with following error: ', err); }
+    res.end(util.inspect({fields: fields, file: file}))
+  });
+
+  form.on('end', function(fields, file) {
+    var id = ""
+    var tempPath = this.openedFiles[0].path;
+    var fileExt = this.openedFiles[0].name.split('.')[1];
+    Member.findById(req.params.id, function(err, member) {
+      if(err) { console.error('File failed to copy with following error: ', err); }
+      id = member.email.split('@')[0];
+      var oldPic = member.picture;
+      var newPath = `../server/public/img/${id}.${fileExt}`;
+      var fileName = id + '.' + fileExt;
+
+      fs.copyFile(tempPath, newPath, function(err) {
+        if(err) { console.error('File failed to copy with following error: ', err); }
+        else {
+          Member.findByIdAndUpdate(req.params.id, {picture: fileName}, function(err, raw) {
+            if(err) { console.error('Failed to update mmeber picture with following error: ', err); }
+            console.log(raw);
+          });
+        }
+      });
+
+      // Remove old picture if user had one
+      if(oldPic != null || oldPic != "") {
+        fs.unlink(`../server/public/img/${oldPic}`, (err) => {
+          if(err) { console.error('Failed to remove old image with error: ', err); }
+        });
+      }
+    });
+  });
+});
+
+router.get('/:id/image', require('../auth/auth.js'), (req, res) => {
+  if(!ObjectId.isValid(req.params.id)) {
+    return res.status(404).send('No record with given id: ' + req.params.id);
+  }
+
+  Member.findById(req.params.id, function(err, member) {
+    if(err) { console.error('Failed to find member with following error: ', err); }
+    res.render('ProfileImg.pug', {
+      imgSrc: '../../../img/' + member.picture
+    });
   });
 });
 

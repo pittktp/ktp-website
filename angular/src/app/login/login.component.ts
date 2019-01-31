@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
         var currentUserId = this.auth.getCurrentUserId();
         this.memberService.getMemberById(currentUserId).subscribe((res) => {
           var member = res as Member;
-          this.sharedService.emitChange({"name": member.name, "role": member.role});
+          this.sharedService.emitChange({"name": member.name, "role": member.role, "id": member.email.split('@')[0]});
           this.router.navigate(['home']);
           this.toastr.show('Hello ' + member.name + "!");
         });
@@ -107,6 +107,15 @@ export class LoginComponent implements OnInit {
     newMember.serviceHours = 0;
     newMember.absences = 0;
     newMember.code = form.value.registerCode;
+    newMember.rushClass = "";
+    newMember.picture = "";
+    newMember.courses = [];
+    newMember.linkedIn = "";
+    newMember.github = "";
+    newMember.gradSemester = "";
+    newMember.major = "";
+    newMember.description = "";
+    newMember.color= ["#28B463", "#145BBD"];
 
     this.emailInUse = false;
     this.memberService.postMember(newMember).subscribe((res) => {
@@ -117,7 +126,7 @@ export class LoginComponent implements OnInit {
             var currentUserId = this.auth.getCurrentUserId();
             this.memberService.getMemberById(currentUserId).subscribe((res) => {
               var member = res as Member;
-              this.sharedService.emitChange({"name": member.name, "role": member.role});
+              this.sharedService.emitChange({"name": member.name, "role": member.role, "id": member.email.split('@')[0]});
               this.memberService.user = member.name;
               this.memberService.userRole = member.role;
               this.router.navigate(['home']);
