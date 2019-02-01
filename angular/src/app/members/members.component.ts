@@ -49,6 +49,12 @@ export class MembersComponent implements OnInit {
     this.memberService.getBasicMembers().subscribe((data: Array<object>) => {
       this.members = data as Member[];
       this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
+
+      this.members.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
     });
   }
 
