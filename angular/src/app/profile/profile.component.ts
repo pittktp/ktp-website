@@ -94,6 +94,7 @@ export class ProfileComponent implements OnInit {
      this.loadScript('../assets/js/new-age.js');
   }
 
+  // A hacked up way to load the js script needed for this component
   loadScript(src) {
     var script = document.createElement("script");
     script.type = "text/javascript";

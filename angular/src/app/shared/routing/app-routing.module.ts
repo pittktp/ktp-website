@@ -11,6 +11,9 @@ import { MembersComponent } from '../../members/members.component';
 import { NavComponent } from '../../nav/nav.component';
 import { AuthGuard } from '../auth/auth.guard';
 
+// Class that handles how endpoints should route to their respective components.
+// For example, if https://pitt-kappathetapi.com/points is accessed, it'll show the PointsComponent.
+// The canActivate property is added to each path/component that should be restricted to only logged in users.
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },

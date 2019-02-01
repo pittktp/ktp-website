@@ -17,12 +17,17 @@ declare var $: any;
   templateUrl: './edit-members.component.html',
   styleUrls: ['./edit-members.component.css']
 })
+
+// The component that allows "admins" (anyone on eboard) to directly edit members of the frat.
+// A use case for this would be if someone registers themselves and forgets to include their last name,
+// an admin could edit this information in the database via this component.
 export class EditMembersComponent implements OnInit {
 
   private memberClicked: Member;
   private userId: string;
   private userRole: string = '';
 
+  // Constructor -> checks if user is logged in, if so, then retrieve their member object from the database.
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
 
     if(this.auth.loggedIn()) {
@@ -40,11 +45,13 @@ export class EditMembersComponent implements OnInit {
 
   }
 
+  // Pretty much like a constructor -> this gets a list of all members from DB everytime the component is loaded/refreshed
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');
     this.getMembers();
   }
 
+  // A hacked up way to load the js script needed to perform the scrolling animations
   loadScript(src) {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -52,6 +59,8 @@ export class EditMembersComponent implements OnInit {
     script.src = src;
   }
 
+  // Gets all members from the DB and uses that response to update MemberService's members array property.
+  // This function also alphabetizes this list of members based on name
   getMembers() {
     this.memberService.getMembers().subscribe((data: Array<object>) => {
       var mems = data as Member[]
@@ -64,6 +73,8 @@ export class EditMembersComponent implements OnInit {
     });
   }
 
+  // When a member is clicked, mark them as current member clicked on and populate the
+  // modal with their properties from DB.
   onMemberClicked(member: Member) {
     this.memberClicked = member;
 
@@ -76,6 +87,8 @@ export class EditMembersComponent implements OnInit {
     $("#memberEditSubmitModal").modal("show");
   }
 
+  // Deletes a member from the database then calls getMembers() to get the new list of
+  // members without the deleted member
   onDeleteMember() {
     if(confirm("Delete member " + this.memberClicked.name + "?")) {
       if(this.userId == this.memberClicked._id)
@@ -90,6 +103,8 @@ export class EditMembersComponent implements OnInit {
     }
   }
 
+  // Called when the member is edited. Create a new Member object, get the information from the modal input fields,
+  // and set the other properties to what they were before. Then PUT this new member to the DB and call getMembers() to reflect the change
   onEditMemberSubmit(form: NgForm) {
 
     var updatedMember: Member = new Member();

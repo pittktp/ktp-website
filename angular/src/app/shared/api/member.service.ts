@@ -6,13 +6,15 @@ import { Member } from '../models/member.model';
 @Injectable({
   providedIn: 'root'
 })
+
+// Class that does the actual API call to the backend to GET, POST, PUT, and DELETE Member objects
 export class MemberService {
 
-  // Test - use this url when running locally on your own computer
-  //API_URL = 'http://localhost:3000/api/members/';
+  // Dev - use this url when running locally on your own computer
+  API_URL = 'http://localhost:3000/api/members/';
 
   // Production - use this url when running in production on AWS
-  API_URL = 'https://pitt-kappathetapi.com/api/members/';
+  //API_URL = 'https://pitt-kappathetapi.com/api/members/';
 
   members: Member[];
   user = '';

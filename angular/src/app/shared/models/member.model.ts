@@ -1,3 +1,5 @@
+// Class to represent a Member object
+
 export class Member {
 
   _id: string;

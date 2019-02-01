@@ -7,13 +7,15 @@ import { Request } from '../models/request.model';
 @Injectable({
   providedIn: 'root'
 })
+
+// Class that does the actual API call to the backend to GET, POST, PUT, and DELETE Request objects
 export class RequestsService {
 
-  // Test - use this url when running locally on your own computer
-  //API_URL = 'http://localhost:3000/api/requests/';
+  // Dev - use this url when running locally on your own computer
+  API_URL = 'http://localhost:3000/api/requests/';
 
   // Production - use this url when running in production on AWS
-  API_URL = 'https://pitt-kappathetapi.com/api/requests/';
+  //API_URL = 'https://pitt-kappathetapi.com/api/requests/';
 
   requests: Request[];
   numRequestsAvailable = 0;

@@ -8,6 +8,11 @@ import { AuthService } from '../shared/auth/auth.service';
   templateUrl: './members.component.html',
   styleUrls: ['./members.component.css']
 })
+
+// Component that can be viewed by anyone that lists all members and their name, description, and major.
+// This component accesses a specific backend API endpoint that only returns back a list of members with
+// properties "name", "major", and "description" because we don't want anyone not logged in to access other
+// more sensative member information.
 export class MembersComponent implements OnInit {
 
   private readonly majorPlaceholder = 'Undeclared';
@@ -25,6 +30,7 @@ export class MembersComponent implements OnInit {
     }
   }
 
+  // A hacked up way to load the js script needed for this component
   static loadScript(src) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
@@ -37,6 +43,8 @@ export class MembersComponent implements OnInit {
     this.getMembers();
   }
 
+  // Gets all members from DB using the backend API endpoint that only returns a list of members
+  // with properties "name", "major", and "description"
   getMembers() {
     this.memberService.getBasicMembers().subscribe((data: Array<object>) => {
       this.members = data as Member[];
@@ -44,6 +52,8 @@ export class MembersComponent implements OnInit {
     });
   }
 
+  // Fills each member card with the member's name, major, and description.
+  // If they don't have their major or description set, it'll fill it with placeholder text
   fillWithPlaceholderData(member: Member): Member {
     const filledMember = {...member};
 
@@ -53,6 +63,7 @@ export class MembersComponent implements OnInit {
     return filledMember;
   }
 
+  // Gets the members initials to be used as the member's profile picture
   initialsFrom(fullName: string): string {
     const names = fullName.split(' ');
     return names[0][0] + names[names.length - 1][0];

@@ -1,3 +1,5 @@
+// Represents a member object in our database
+
 const mongoose = require('mongoose');
 
 var Member = mongoose.model('Member', {

@@ -9,7 +9,6 @@ import { Member } from '../shared/models/member.model';
 import { Request } from '../shared/models/request.model';
 import { AuthService } from '../shared/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { DropdownService } from '../shared/dropdown.service';
 import { BsDatepickerModule } from 'ngx-bootstrap';
 
 import '../../assets/js/new-age.min.js';
@@ -21,6 +20,10 @@ declare var $: any;
   templateUrl: './points.component.html',
   styleUrls: ['./points.component.css']
 })
+
+// Component only accessible when logged in. Shows a list of all members and their information.
+// Also gives functionality to submitting brotherhood points, service hours, an excused absence,
+// and allows admins to accept/deny them.
 export class PointsComponent implements OnInit {
 
   userId: string;
@@ -30,7 +33,8 @@ export class PointsComponent implements OnInit {
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
 
-  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, public dropdownService: DropdownService, private router: Router) {
+  // Gets user's info if logged in
+  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, private router: Router) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.userId = currentUserId;
@@ -43,6 +47,7 @@ export class PointsComponent implements OnInit {
     }
   }
 
+  // Gets user's info if logged in
   ngOnInit() {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
@@ -61,6 +66,7 @@ export class PointsComponent implements OnInit {
     }
   }
 
+  // A hacked up way to load the js script needed for this component
   loadScript(src) {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -68,10 +74,12 @@ export class PointsComponent implements OnInit {
     script.src = src;
   }
 
+  // Refreshes members -> simply calls this components getMembers() (why'd I even do this lolol)
   refreshMembers() {
     this.getMembers();
   }
 
+  // Refreshes requests -> simply calls this components getRequests() (why'd I even do this lolol)
   refreshRequests() {
     this.getRequests();
   }
@@ -89,7 +97,7 @@ export class PointsComponent implements OnInit {
     });
   }
 
-  // Triggered when an admin hits "Review Requests" -> gets the up-to-date requests
+  // Triggered when an admin hits "Review Requests" -> ensures the requests shown are up-to-date
   onReviewRequestsOpened() {
     this.refreshRequests();
   }
@@ -162,6 +170,7 @@ export class PointsComponent implements OnInit {
     });
   }
 
+  // Gets the current date and time
   getCurrentDateTime() {
     var currentdate = new Date();
     var datetime = (currentdate.getMonth()+1) + "/"
@@ -174,6 +183,8 @@ export class PointsComponent implements OnInit {
     return datetime;
   }
 
+  // Gets up to date requests from the DB.
+  // Also checks to see if any requests are available (requests that have approved property of 0 means they haven't been approved/denied yet)
   getRequests() {
     this.requestsService.getRequests().subscribe((data: Array<object>) => {
       this.requestsService.requests = data as Request[];
@@ -187,7 +198,8 @@ export class PointsComponent implements OnInit {
     });
   }
 
-  // Update member's points and delete point request from DB
+  // Update member's points or service hours and PUTs the member to the database to be upated.
+  // Since we're keeping approved requests in the database, PUT the request to the DB as well with an approved property of 1.
   onAcceptRequest(request: Request) {
     this.memberService.getMemberById(request.submittedById).subscribe((res) => {
       var member = res as Member;
@@ -210,7 +222,7 @@ export class PointsComponent implements OnInit {
     });
   }
 
-  // Don't update member's points - just delete point request from DB
+  // Don't update member's points or service hours and delete the request from the DB because we don't keep track of denied requests
   onDenyRequest(request: Request) {
     this.requestsService.deleteRequest(request._id).subscribe((res) => {
       this.refreshRequests();
@@ -223,6 +235,7 @@ export class PointsComponent implements OnInit {
     });
   }
 
+  // Shows the history of the member clicked on -> shows the history of all approved requests for this member
   onShowHistory(id) {
     this.getRequests();
     $("#historyModal").modal("show");
@@ -234,6 +247,7 @@ export class PointsComponent implements OnInit {
     }
   }
 
+  // Called when the history modal is closed -> resets membersRequests to empty
   onHistoryClosed() {
     this.membersRequests = [];
   }
