@@ -41,8 +41,6 @@ export class PointsComponent implements OnInit {
         if(member.role == 'admin') { this.getRequests(); }
       });
     }
-
-    //this.dropdownService.emitChange({drop: "drop"});
   }
 
   ngOnInit() {
@@ -78,6 +76,7 @@ export class PointsComponent implements OnInit {
     this.getRequests();
   }
 
+  // Gets all members from the database and updates memberService.members to equal the response
   getMembers() {
     this.memberService.getMembers().subscribe((data: Array<object>) => {
       var mems = data as Member[]
@@ -90,10 +89,13 @@ export class PointsComponent implements OnInit {
     });
   }
 
+  // Triggered when an admin hits "Review Requests" -> gets the up-to-date requests
   onReviewRequestsOpened() {
     this.refreshRequests();
   }
 
+  // Makes a new Request of type Excused Absence and saves it to the database.
+  // Takes an excused absence date of, for example, January 2nd, 2019 and turns it into 20190102 so that it can be saved as a number in the DB
   onExcuseRequestSubmit(form: NgForm) {
     var dd = (form.value.date.getDate()).toString();
     if (dd.length < 2 && dd.charAt(0) != '0')
@@ -106,8 +108,9 @@ export class PointsComponent implements OnInit {
     var yyyy = form.value.date.getFullYear();
 
     var strDate = yyyy + '/' + mm + '/' + dd;
-    strDate = strDate.replace(/\//g, '');
+    strDate = strDate.replace(/\//g, '');  // Turns 2019/01/02 into 20190102 to be stored in the database as a number
 
+    // Create new Request to be saved
     var request = new Request();
     request.type = "Excused Absence";
     request.value = parseInt (strDate);
@@ -117,6 +120,7 @@ export class PointsComponent implements OnInit {
     request.submittedDate = this.getCurrentDateTime();
     request.approved = 0;
 
+    // Save Request to DB
     this.requestsService.postRequest(request).subscribe((res) => {
       $("#excuseSubmitModal").modal("hide");
       this.getRequests();
@@ -124,6 +128,7 @@ export class PointsComponent implements OnInit {
     });
   }
 
+  // Saves the Request of type Brotherhood Points to the DB
   onPointRequestSubmit(form: NgForm) {
     var request = new Request();
     request.type = "Brotherhood Points";
@@ -140,6 +145,7 @@ export class PointsComponent implements OnInit {
     });
   }
 
+  // Saves the Request of type Service Hours to the DB
   onServiceHourRequestSubmit(form: NgForm) {
     var request = new Request();
     request.type = "Service Hours";

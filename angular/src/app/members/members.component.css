@@ -83,3 +83,8 @@
   padding-left: 10px;
   padding-right: 10px;
 }
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}

@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
   private sub: any
 
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
-    
+
   }
 
   ngOnInit() {
@@ -198,6 +198,7 @@ export class ProfileComponent implements OnInit {
     }
 
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      this.showMsg("Reloading...");
       this.showMsg("Colors Updated");
       setTimeout(() => {
         window.location.reload();
@@ -382,9 +383,10 @@ export class ProfileComponent implements OnInit {
   updateAdd(member: Member) {
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Added Course(s)!");
-      setTimeout(() => {
-        this.router.navigate(['profile', this.id])
-      }, 1500);
+      // Updates the current member to reflect the new course(s) added
+      this.memberService.getMemberById(this.profile._id).subscribe((res) => {
+        this.profile = res as Member;
+      });
     }, error => {
       console.error(error);
       this.showError("Failed to add Course(s)!");
@@ -394,9 +396,10 @@ export class ProfileComponent implements OnInit {
   updateRemove(member: Member) {
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Course(s) Removed!");
-      setTimeout(() => {
-        this.router.navigate(['profile', this.id])
-      }, 1500);
+      // Updates the current member to reflect the course(s) deleted
+      this.memberService.getMemberById(this.profile._id).subscribe((res) => {
+        this.profile = res as Member;
+      });
     }, error => {
       console.error(error);
       this.showError("Failed to Remove Course(s)!");
