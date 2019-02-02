@@ -1,21 +1,31 @@
+# A file to be run on AWS that builds the Docker images AND creates containers for Angular, NodeJS server, and MongoDB (which means the site is live).
+#  - It tells the Angular container to bind to the AWS server's port 80 (for http) and port 443 (for https)
+#  - It tells the NodeJS server container to bind to the AWS server's port 3000 AND it creates a link from this container to the MongoDB database container.
+#  - It tells the MongoDB container to bind to the AWS server's port 27017 (so we can use MongoDB Compass GUI to look at our data on a seperate machine)
+#
+# STEPS FOR RUNNING:
+#   1. SSH into AWS server.
+#   2. Git clone the updated code from Github (delete the current outdated folder if it's already on the machine).
+#   3. Navigate to ktp-website folder that was cloned and run "docker-compose build" which builds the Docker images.
+#   4. When it finishes building, run "docker-compose up" which creates the containers which means everything is running and the site is live.
+
 version: '3.0' # specify docker-compose version
 
-# Define the services/ containers to be run
 services:
-  angular: # name of the first service
-    build: angular # specify the directory of the Dockerfile
+  angular: # name that docker-compose calls this container
+    build: angular # the name of the directory that contains the frontend
     ports:
     - "80:80" # specify port mapping
     - "443:443"
 
-  database: # name of the third service
-    image: mongo # specify image to build container from
+  database: # name that docker-compose calls this container
+    image: mongo # downloads the vanilla image of mongo - don't need a Dockerfile for it
     ports:
-    - "27017:27017" # specify port forwarding
+    - "27017:27017" # specify port mapping
 
-  server: # name of the second service
-    build: server # specify the directory of the Dockerfile
+  server: # name that docker-compose calls this container
+    build: server # the name of the directory that contains the backend
     ports:
-    - "3000:3000" #specify ports mapping
+    - "3000:3000" # specify port mapping
     links:
     - database:27017 # link this service to the database service

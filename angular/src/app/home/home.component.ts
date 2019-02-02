@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import * as $ from "jquery";
 
 import '../../assets/js/new-age.min.js';
 
@@ -13,7 +14,8 @@ import '../../assets/js/new-age.min.js';
 // The code for this component (the ts, html, and css was lifted directly from the static website we inherited)
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
   ngOnInit() {
       this.loadScript('../assets/js/new-age.js');

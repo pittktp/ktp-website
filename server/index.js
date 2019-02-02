@@ -5,8 +5,10 @@ const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 const util = require('util')
-
 const { mongoose } = require('./db.js');
+
+/* The class that runs the nodejs backend server - run this file when starting the server */
+
 
 var { Member } = require('./models/member');
 
@@ -24,10 +26,10 @@ app.use(bodyParser.json());
 app.use(cors({ origin: ['https://pitt-kappathetapi.com', 'https://www.pitt-kappathetapi.com'] }));
 
 
-// Port the server is listening for requests on
+// Port that the server is listening for requests on
 app.listen(3000, () => console.log('Server started on port 3000'));
 
-// Tells the server to forward requests to the controllers
+// Tells the server to forward requests to the respective controllers
 app.use('/api/members', memberController);
 app.use('/api/requests', requestsController);
 
@@ -39,15 +41,15 @@ app.post('/api/auth', function(req, res) {
 
   var query = { 'email' : body.email.toLowerCase() };
   Member.findOne(query, function(err, item) {
-    if(!item) return res.sendStatus(401);
+    if(!item) return res.sendStatus(401);  // A member with this email doesn't exist in DB - return 401 UNAUTHORIZED error
 
-    else {
-      bcrypt.compare(body.password, item.password, function(err, match) {
-        if(match) {
+    else {   // Found a member with this email!
+      bcrypt.compare(body.password, item.password, function(err, match) {  // bcrypt hashes the supplied password and compares it to the hash of the member's password in the DB
+        if(match) {  // Hashes of passwords match -> send a JWT token back to the frontend sayin "you all good homie you can talk to me"
           var token = jwt.sign({userID: item._id}, 'ktp-secret', {expiresIn: '3h'});
           res.send({token});
         }
-        else return res.sendStatus(401);
+        else return res.sendStatus(401);  // The passwords don't match for this member -> return 401 UNAUTHORIZED error
       });
     }
 
