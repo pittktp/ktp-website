@@ -1,3 +1,5 @@
+// Represents a member object in our database
+
 const mongoose = require('mongoose');
 
 var Member = mongoose.model('Member', {
@@ -7,6 +9,7 @@ var Member = mongoose.model('Member', {
   points: { type: Number },
   serviceHours: { type: Number },
   role: { type: String },
+  code: { type: String },
   absences: { type: Number },
   rushClass: { type: String },
   picture: { type: String },
@@ -15,7 +18,8 @@ var Member = mongoose.model('Member', {
   github: { type: String },
   gradSemester: { type: String },
   major: { type: String },
-  description: { type: String }
+  description: { type: String },
+  color: { type: Array }
 });
 
 module.exports = { Member };

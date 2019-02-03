@@ -6,6 +6,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDatepickerModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -39,6 +40,7 @@ export function tokenGetter() {
     CommonModule,
     BrowserModule,
     HttpClientModule,
+    BsDatepickerModule.forRoot(),
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({

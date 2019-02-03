@@ -1,8 +1,16 @@
-// The "main method" that connects to our MongoDB database
+// Used to create a connection from our nodejs to our mongo database
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/KtpDB', { useNewUrlParser: true }, (err) => {
+
+// Dev database
+//const url = "mongodb://localhost:27017/KtpDB";
+
+// Production database in AWS
+const url = "mongodb://database:27017/KtpDB";
+
+
+mongoose.connect(url, { useNewUrlParser: true }, (err) => {
   if(!err)
     console.log('MongoDB connection successful');
   else

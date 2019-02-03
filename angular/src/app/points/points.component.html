@@ -1,4 +1,33 @@
-<header>
+
+<!-- Excused Absence Submit Modal -->
+<div class="modal fade" id="excuseSubmitModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="onExcuseRequestSubmit(excuseForm)" #excuseForm="ngForm" autocomplete="off">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 style="color:black;"class="modal-title">Submit Excused Absence</h4>
+        </div>
+        <div class="modal-body">
+          <div class="input-field">
+            <label style="color:black" for="date">Date you'll be missing</label>
+            <input type="text" placeholder="Date" class="form-control" [(ngModel)]="excuseForm.date" readonly="true" name="date" #name="ngModel" id="date" bsValue bsDatepicker required>
+          </div>
+          <br />
+          <div class="input-field">
+            <label style="color:black" for="reason">Description</label>
+            <input style="text-align:left;" [(ngModel)]="excuseForm.reason" name="reason" #name="ngModel" type="text" class="form-control" id="reason" placeholder="Why can't you make this event?" autocomplete="off" required>
+          </div>
+          <br />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!excuseForm.valid">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
   <!-- Points Submit Modal -->
   <div class="modal fade" id="pointsSubmitModal" role="dialog">
@@ -20,6 +49,24 @@
               <input style="text-align:left;" [(ngModel)]="pointsForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these points?" autocomplete="off" required>
             </div>
             <br />
+            <br />
+            <div>
+              <div>
+                <label style="color:black">What constitutes a brotherhood point?</label>
+                <div>- Hanging out with other KTP members</div>
+                <div>- Attending a service event</div>
+                <div>- Attending a KTP event with a local company</div>
+                <div>- Attending a hackathon</div>
+                <div>- Going to a KTP social event</div>
+                <div>- Wearing our letters</div>
+                <div>- Contributing to the website</div>
+                <div>- Attending a career fair</div>
+                <div>- Recommend a friend to rush KTP</div>
+                <div>- Anything that benefits and/or spreads the word about our frat</div>
+                <br />
+                <div>Questions about what counts for a brotherhood point? Contact anyone on eboard and submit a request anyways!</div>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -69,53 +116,98 @@
           <h4 style="color:black;"class="modal-title">Review Requests</h4>
         </div>
         <div class="modal-body">
-          <h3 class="black-text" *ngIf="requestsService.requests.length < 1; else showTable">No remaining requests</h3>
-          <ng-template #showTable>
-            <table class="table table-bordered black-text">
-              <thead>
-                <tr>
-                  <th>Submitted by</th>
-                  <th>Submitted on</th>
-                  <th>Type</th>
-                  <th>Value</th>
-                  <th>Description</th>
-                  <th>Accept/Deny</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let request of requestsService.requests">
-                  <td *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.submittedDate }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.type }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.value }}</td>
-                  <td *ngIf="request.approved == 0">{{ request.description }}</td>
-                  <td *ngIf="request.approved == 0">
-                    <button type="button" id="acceptPoints" class="btn btn-default" (click)="onAcceptRequest(request)">Accept</button>
-                    <button type="button" id="denyPoints" class="btn btn-default" (click)="onDenyRequest(request)">Deny</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </ng-template>
+          <div id="overflow">
+            <h3 class="black-text" *ngIf="requestsService.numRequestsAvailable < 1; else showTable">No remaining requests</h3>
+            <ng-template #showTable>
+              <table class="table table-bordered black-text">
+                <thead>
+                  <tr>
+                    <th>Submitted by</th>
+                    <th>Submitted on</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                    <th>Accept/Deny</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let request of requestsService.requests">
+                    <td data-toggle="tooltip" data-placement="top" title="Click for history" onmouseover="" style="cursor: pointer;" (click)="onShowHistory(request.submittedById)" *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
+                    <td *ngIf="request.approved == 0">{{ request.submittedDate }}</td>
+                    <td *ngIf="request.approved == 0">{{ request.type }}</td>
+                    <td *ngIf="request.approved == 0 && request.type == 'Excused Absence'">{{ request.value.toString().substring(4, 6) }}/{{ request.value.toString().substring(6, 8) }}/{{ request.value.toString().substring(0, 4) }}</td>
+                    <td *ngIf="request.approved == 0 && request.type != 'Excused Absence'">{{ request.value }}</td>
+                    <td *ngIf="request.approved == 0">{{ request.description }}</td>
+                    <td *ngIf="request.approved == 0">
+                      <button type="button" id="acceptPoints" class="btn btn-default" (click)="onAcceptRequest(request)">Accept</button>
+                      <button type="button" id="denyPoints" class="btn btn-default" (click)="onDenyRequest(request)">Deny</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
+      </div>
     </div>
   </div>
 
+  <!-- History of user's approved requests modal -->
+  <div class="modal fade" id="historyModal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button (click)="onHistoryClosed()" type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 style="color:black;"class="modal-title">History of approved requests for {{ currentHistoryMember }}</h4>
+        </div>
+        <div class="modal-body">
+          <div id="overflow">
+            <h3 class="black-text" *ngIf="!membersRequests || membersRequests.length < 1; else showHistory">No history yet</h3>
+            <ng-template #showHistory>
+              <table class="table table-bordered black-text">
+                <thead>
+                  <tr>
+                    <th>Submitted on</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let request of membersRequests">
+                    <td>{{ request.submittedDate }}</td>
+                    <td>{{ request.type }}</td>
+                    <td>{{ request.value }}</td>
+                    <td>{{ request.description }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+          </div>
+        <div class="modal-footer">
+          <button (click)="onHistoryClosed()" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<header>
   <!-- Table to display all members' points -->
   <div class="container">
     <div class="col-xs-12">
       <div class="row">
-        <div class="col-xs-5">
-          <h2>Status for Fall 2018 members</h2>
+        <div class="col-xs-20 text-center">
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#excuseSubmitModal">Submit Excused Absence</button>
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#serviceHoursSubmitModal">Log Service Hours</button>
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#pointsSubmitModal">Log Brotherhood Points</button>
+          <button *ngIf="userRole == 'admin'" type="button" class="btn btn-primary btn-sm" (click)="onReviewRequestsOpened()" data-toggle="modal" data-target="#reviewRequestsModal">Review Requests</button>
         </div>
-        <div class="col-xs-7 text-right">
-            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#serviceHoursSubmitModal">Log Service Hours</button>
-            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#pointsSubmitModal">Log Points</button>
-            <button *ngIf="userRole == 'admin'" type="button" class="btn btn-primary btn-sm" (click)="onReviewRequestsOpened()" data-toggle="modal" data-target="#reviewRequestsModal">Review Requests</button>
+        <div class="col-xs-5">
+          <h2>Spring 2019 members</h2>
         </div>
       </div>
       <div class="row">

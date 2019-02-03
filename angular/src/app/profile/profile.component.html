@@ -1,21 +1,21 @@
-<header style="background-color:rgba(0, 0, 0, 0.5);">
+<header id="prof-bg" [ngStyle]="{'background-color': 'rgba(0, 0, 0, 0.5)'}">
   <!-- Profile Settings Modal -->
-  <div class="modal fade" id="profileSettingsModal" role="dialog">  
+  <div class="modal fade" id="profileSettingsModal" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 style="color:black;" class="modal-title">Settings</h4>
         </div>
-        <div class="modal-body" style="overflow-y: auto; max-height: 300px">
-          <form (ngSubmit)="onChangePicture(changePicForm)" #changePicForm="ngForm" autocomplete="off">
+        <div class="modal-body" style="overflow-y: auto">
+          <!-- <form (ngSubmit)="onChangePicture(changePicForm)" #changePicForm="ngForm" autocomplete="off">
             <div class="input-field">
               <label style="color:black;" for="profilePic">Picture to Upload: </label>
               <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" accept="image/*" required>
             </div>
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid">Upload</button>
-          </form>
+          </form> -->
           <br />
           <form (ngSubmit)="onChangeDescription(changeDescForm)" #changeDescForm="ngForm" autocomplete="off">
             <div class="input-field">
@@ -24,6 +24,19 @@
             </div>
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changeDescForm.valid">Submit</button>
+          </form>
+          <br />
+          <form (ngSubmit)="onChangeColors(changeColorsForm)" #changeColorsForm="ngForm" autocomplete="off">
+            <div class="input-field">
+              <label style="color:black;" for="color1">Change Color 1 (use hex value): </label>
+              <input style="text-align:left;" [(ngModel)]="changeColorsForm.color1" name="color1" #name="ngModel" class="form-control" id="color1" value="{{this.profile.color[0]}}">
+            </div>
+            <div class="input-field">
+              <label style="color:black;" for="color2">Change Color 2 (use hex value): </label>
+              <input style="text-align:left;" [(ngModel)]="changeColorsForm.color2" name="color2" #name="ngModel" class="form-control" id="color2" value="{{this.profile.color[1]}}">
+            </div>
+            <br />
+            <button type="submit" class="btn btn-default" [disabled]="!changeColorsForm.valid">Change Colors</button>
           </form>
           <br />
           <form (ngSubmit)="onChangeMajor(changeMajorForm)" #changeMajorForm="ngForm" autocomplete="off">
@@ -43,31 +56,34 @@
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!changeGradForm.valid">Update</button>
           </form>
+          <br />
+          <form (ngSubmit)="onChangeRushClass(changeRushClassForm)" #changeRushClassForm="ngForm" autocomplete="off">
+            <div class="input-field">
+              <label style="color:black;" for="rushClass">Change Rush Class: </label>
+              <input style="text-align:left;" [(ngModel)]="changeRushClassForm.rushClass" name="rushClass" #name="ngModel" class="form-control" id="rushClass" value="{{this.profile.rushClass}}" required>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-default" [disabled]="!changeRushClassForm.valid">Update</button>
+          </form>
+          <br />
+          <form (ngSubmit)="onChangeLinkedIn(changeLinkedInForm)" #changeLinkedInForm="ngForm" autocomplete="off">
+            <div class="input-field">
+              <label style="color:black;" for="linkedIn">Change LinkedIn Link: </label>
+              <input style="text-align:left;" [(ngModel)]="changeLinkedInForm.linkedIn" name="linkedIn" #name="ngModel" class="form-control" id="linkedIn" value="{{this.profile.linkedIn}}" required>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-default" [disabled]="!changeLinkedInForm.valid">Update</button>
+          </form>
+          <br />
+          <form (ngSubmit)="onChangeGithub(changeGithubForm)" #changeGithubForm="ngForm" autocomplete="off">
+            <div class="input-field">
+              <label style="color:black;" for="github">Change Github Link: </label>
+              <input style="text-align:left;" [(ngModel)]="changeGithubForm.github" name="github" #name="ngModel" class="form-control" id="github" value="{{this.profile.github}}" required>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-default" [disabled]="!changeGithubForm.valid">Update</button>
+          </form>
         </div>
-        <form (ngSubmit)="onChangeRushClass(changeRushClass)" #changeRushClassForm="ngForm" autocomplete="off">
-          <div class="input-field">
-            <label style="color:black;" for="rushClass">Change Rush Class: </label>
-            <input style="text-align:left;" [(ngModel)]="changeRushClassForm.rushClass" name="rushClass" #name="ngModel" class="form-control" id="rushClass" value="{{this.profile.rushClass}}" required>
-          </div>
-          <br />
-          <button type="submit" class="btn btn-default" [disabled]="!changeRushClassForm.valid">Update</button>
-        </form>
-        <form (ngSubmit)="onChangeLinkedIn(changeLinkedIn)" #changeLinkedInForm="ngForm" autocomplete="off">
-          <div class="input-field">
-            <label style="color:black;" for="linkedIn">Change LinkedIn Link: </label>
-            <input style="text-align:left;" [(ngModel)]="changeLinkedInForm.linkedIn" name="linkedIn" #name="ngModel" class="form-control" id="linkedIn" value="{{this.profile.linkedIn}}" required>
-          </div>
-          <br />
-          <button type="submit" class="btn btn-default" [disabled]="!changeLinkedInForm.valid">Update</button>
-        </form>
-        <form (ngSubmit)="onChangeGithub(changeGithub)" #changeGithubForm="ngForm" autocomplete="off">
-          <div class="input-field">
-            <label style="color:black;" for="github">Change Github Link: </label>
-            <input style="text-align:left;" [(ngModel)]="changeGithubForm.github" name="github" #name="ngModel" class="form-control" id="github" value="{{this.profile.github}}" required>
-          </div>
-          <br />
-          <button type="submit" class="btn btn-default" [disabled]="!changeGithubForm.valid">Update</button>
-        </form>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
@@ -84,18 +100,19 @@
           <h4 style="color:black;" class="modal-title">Edit Courses</h4>
         </div>
         <div class="modal-body">
-          <form (ngSubmit)="onAddCourse(addCourseForm)" #addCourseForm="ngForm" autocomplete="off">
+          <label style="color:rgb(145, 145, 145)">Use the format: "[CourseDepartment] [CourseNumber]", and separate courses with ", "</label>
+          <form (ngSubmit)="onAddCourses(addCourseForm)" #addCourseForm="ngForm" autocomplete="off">
             <div class="input-field">
-              <label style="color:black;" for="addCourse">Use the format: "[CourseDepartment] [CourseNumber]" </label>
+              <label style="color:black;" for="addCourse">Add Course(s): </label>
               <input style="text-align:left;" [(ngModel)]="addCourseForm.addCourse" name="addCourse" #name="ngModel" class="form-control" id="addCourse" required>
             </div>
             <br />
             <button type="submit" class="btn btn-default" [disabled]="!addCourseForm.valid">Add</button>
           </form>
           <br />
-          <form (ngSubmit)="onRemoveCourse(removeCourseForm)" #removeCourseForm="ngForm" autocomplete="off">
+          <form (ngSubmit)="onRemoveCourses(removeCourseForm)" #removeCourseForm="ngForm" autocomplete="off">
             <div class="input-field">
-              <label style="color:black;" for="removeCourse">Remove Course: </label>
+              <label style="color:black;" for="removeCourse">Remove Course(s): </label>
               <input style="text-align:left;" [(ngModel)]="removeCourseForm.removeCourse" name="removeCourse" #name="ngModel" class="form-control" id="removeCourse" required>
             </div>
             <br />
@@ -110,104 +127,106 @@
   </div>
 
   <!-- Secured Profile Page Content -->
-  <div class="container" *ngIf="this.auth.loggedIn(); else unsecured">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2">
-        <div class="profile-content">
-          <div class="row profile-header">
-            <div class="col-md-2">
-              <div *ngIf="this.profile.picture != ''; else noPic" class="profile-pic">
-                <img src="http://localhost:3000/img/{{profile.picture}}" alt="{{profile.name}}" title="{{profile.name}}"/>
-              </div>
-              <ng-template #noPic style="margin: 0 auto">
-                <div class="profile-no-pic">
-                  <span>{{profile.name.split(" ")[0].charAt(0)}}{{profile.name.split(" ")[1].charAt(0)}}</span>
+  <div *ngIf="this.profile !== null">
+    <div style="overflow-y: scroll" class="container" *ngIf="this.auth.loggedIn(); else unsecured">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div style="overflow-x: scroll" class="profile-content">
+            <div class="row profile-header">
+              <div class="col-md-2">
+                <div *ngIf="this.profile.picture !== '' || this.profile.picture === null; else noPic" class="profile-pic">
+                  <img src="http://localhost:3000/img/{{profile.picture}}" alt="{{profile.name}}" title="{{profile.name}}"/>
                 </div>
-              </ng-template>
-            </div>
-            <div class="col-md-5 col-md-offset-1 profile-detail">
-              <div class="row" style="text-align:center;">
-                <h3>{{profile.name}}</h3>
+                <ng-template #noPic style="margin: 0 auto">
+                  <div class="profile-no-pic">
+                    <span>{{this.picLetters}}</span>
+                  </div>
+                </ng-template>
               </div>
-              <div class="row profile-sub">
-                <div class="col-md-7">
-                  {{profile.email}}
+              <div class="col-md-5 col-md-offset-1 profile-detail">
+                <div class="row" style="text-align:center;">
+                  <h3>{{profile.name}}</h3>
                 </div>
-                <div class="col-md-5">
-                  {{profile.rushClass}} Class
-                </div>
-              </div>
-            </div>
-            <div class="col-md-2 col-md-offset-1 profile-btns">
-              <button *ngIf="this.auth.getCurrentUserId() == this.profile._id" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#profileSettingsModal">Settings</button>
-            </div>
-          </div>
-          <br>
-          <div class="progress-bars col-lg-12">
-            <div class="row">
-              <div class="col-lg-1 col-lg-offset-1">Hours:</div>
-              <div id="serviceBar" class="col-lg-8 col-lg-offset-1 progress-bar">
-                <div id="service" [ngStyle]="{'width': this.hoursPercent + '%'}"></div>
-              </div>
-              <span class="col-lg-1 progress-value">{{profile.serviceHours}}/10</span>
-            </div>
-            <div class="row">
-              <div class="col-lg-1 col-lg-offset-1">Points:</div>
-              <div id="pointsBar" class="col-lg-8 col-lg-offset-1 progress-bar">
-                <div id="points" [ngStyle]="{'width': this.pointsPercent + '%'}"></div>
-              </div>
-              <span class="col-lg-1 progress-value">{{profile.points}}/5</span>
-            </div>
-          </div>
-          <br />
-          <div class="row profile-info">
-            <div class="row">
-              <div class="col-lg-12 tab">
-                <div id="descBtn" class="tab-btn" type="button" (click)="openTab('description', 'descBtn')">Description</div>
-                <div id="acadBtn" class="tab-btn" type="button" (click)="openTab('academics', 'acadBtn')">Academics</div>
-                <div id="socialBtn" class="tab-btn" type="button" (click)="openTab('contact', 'socialBtn')">Contact</div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-11 tab-content" id="description" *ngIf="this.currentTabContent == 'description'">
-                <br />
-                <div class="row">
-                  <div class="col-lg-10 col-lg-offset-1">
-                      <span *ngFor="let line of this.profile.description.split('\n')">
-                        {{line}}
-                      </span>
+                <div class="row profile-sub">
+                  <div class="col-md-7">
+                    {{profile.email}}
+                  </div>
+                  <div class="col-md-5">
+                    {{profile.rushClass}} Class
                   </div>
                 </div>
               </div>
-              <div class="col-lg-11 tab-content" id="academics" *ngIf="this.currentTabContent == 'academics'">
-                <br />
-                <div class="row acad-content">
-                  <div class="col-lg-5">
-                    <span>Major: {{this.profile.major}}</span>
-                  </div>
-                  <div class="col-lg-5 col-lg-offset-2">
-                    <span>Graduation Semester: {{this.profile.gradSemester}}</span>
-                  </div>
+              <div class="col-md-2 col-md-offset-1 profile-btns">
+                <button *ngIf="this.auth.getCurrentUserId() == this.profile._id" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#profileSettingsModal">Settings</button>
+              </div>
+            </div>
+            <br>
+            <div class="progress-bars col-lg-12">
+              <div class="row">
+                <div class="col-lg-1 col-lg-offset-1">Hours:</div>
+                <div id="serviceBar" class="col-lg-8 col-lg-offset-1 progress-bar">
+                  <div id="service" [ngStyle]="{'width': this.hoursPercent + '%'}"></div>
                 </div>
-                <br />
-                <div class="row" style="margin-top: 15px;">
-                  <div class="col-lg-6">
-                    <div class="row">
-                      <button type="button" class="col-lg-offset-4 btn btn-info btn-sm ktp-btn" data-toggle="modal" data-target="#editCoursesModal">Edit Courses</button>
-                    </div>
-                    <div *ngFor="let category of this.courseCategories" class="panel panel-default">
-                      <button class="accordion" (click)="selectCourseCategory(category)">{{category}} <i class="fa fa-caret-down" style="float:right;"></i></button>
-                      <div class="panel-body" *ngIf="this.panelType == category" [innerHtml]="panelHtml"></div>
+                <span class="col-lg-1 progress-value">{{profile.serviceHours}}/10</span>
+              </div>
+              <div class="row">
+                <div class="col-lg-1 col-lg-offset-1">Points:</div>
+                <div id="pointsBar" class="col-lg-8 col-lg-offset-1 progress-bar">
+                  <div id="points" [ngStyle]="{'width': this.pointsPercent + '%'}"></div>
+                </div>
+                <span class="col-lg-1 progress-value">{{profile.points}}/5</span>
+              </div>
+            </div>
+            <br />
+            <div class="row profile-info">
+              <div class="row">
+                <div class="col-lg-12 tab">
+                  <div id="descBtn" class="tab-btn" type="button" (click)="openTab('description', 'descBtn')">Description</div>
+                  <div id="acadBtn" class="tab-btn" type="button" (click)="openTab('academics', 'acadBtn')">Academics</div>
+                  <div id="socialBtn" class="tab-btn" type="button" (click)="openTab('contact', 'socialBtn')">Contact</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-11 tab-content" id="description" *ngIf="this.currentTabContent == 'description'">
+                  <br />
+                  <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <span *ngFor="let line of this.profile.description.split('\n')">
+                          {{line}}
+                        </span>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-11 tab-content" id="contact" *ngIf="this.currentTabContent == 'contact'">
-                <br />
-                <div class="row contact-content">
-                  <div class="col-lg-12">
-                    <a href="{{profile.linkedIn}}" style="margin-right: 10px;"><img src="../../assets/img/linkedIn.png" /></a>
-                    <a href="{{profile.github}}"><img src="../../assets/img/github.png" /></a>
+                <div class="col-lg-11 tab-content" id="academics" *ngIf="this.currentTabContent == 'academics'">
+                  <br />
+                  <div class="row acad-content">
+                    <div class="col-lg-5">
+                      <span>Major: {{this.profile.major}}</span>
+                    </div>
+                    <div class="col-lg-5 col-lg-offset-2">
+                      <span>Graduation Semester: {{this.profile.gradSemester}}</span>
+                    </div>
+                  </div>
+                  <br />
+                  <div class="row" style="margin-top: 15px;">
+                    <div class="col-lg-6">
+                      <div class="row" *ngIf="this.auth.getCurrentUserId() == this.profile._id">
+                        <button type="button" class="col-lg-offset-4 btn btn-info btn-sm ktp-btn" data-toggle="modal" data-target="#editCoursesModal">Edit Courses</button>
+                      </div>
+                      <div *ngFor="let category of this.courseCategories" class="panel panel-default">
+                        <button class="accordion" (click)="selectCourseCategory(category)">{{category}} <i class="fa fa-caret-down" style="float:right;"></i></button>
+                        <div class="panel-body" *ngIf="this.panelType == category" [innerHtml]="panelHtml"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-11 tab-content" id="contact" *ngIf="this.currentTabContent == 'contact'">
+                  <br />
+                  <div class="row contact-content">
+                    <div class="col-lg-12">
+                      <a href="{{profile.linkedIn}}" style="margin-right: 10px;"><img src="../../assets/img/linkedIn.png" /></a>
+                      <a href="{{profile.github}}"><img src="../../assets/img/github.png" /></a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -217,7 +236,6 @@
       </div>
     </div>
   </div>
-
   <!-- Unsecured Profile Page -->
   <ng-template #unsecured>
     <div class="container">

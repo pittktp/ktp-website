@@ -22,6 +22,7 @@
   padding: 5px;
   color: #777;
   width: 250px;
+  margin-top: 10vh;
   /*width: calc((100% / 250)*250);*/
 }
 
@@ -42,7 +43,7 @@
   background: white;
   display: inline-block;
   margin: 10px 20px;
-  max-width: 250px;
+  width: 250px;
   border-color: transparent;
   border-radius: 0.5rem;
 }
@@ -72,6 +73,8 @@
 
 .card-body {
   text-align: center;
+  height: 90px;
+  overflow-y: scroll
 }
 
 .card-body p {
@@ -79,4 +82,9 @@
   font-size: 1em;
   padding-left: 10px;
   padding-right: 10px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
 }

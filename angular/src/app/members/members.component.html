@@ -2,7 +2,7 @@
   <div class="page-body">
 
     <div class="header">
-      <div class="card">&#8212; Members &#8212;</div>
+      <div class="card">&#8212; Spring 2019 Members &#8212;</div>
     </div>
 
     <div class="grid">
@@ -20,11 +20,11 @@
           <h3 class="card-title">{{member.name}}</h3>
           <h5 class="card-subtitle">{{member.major}}</h5>
         </div>
-        <div class="card-body">
+        <div style="margin-left: 1vw; margin-right: 1vw; border-top: 1px solid gray; border-bottom: 1px solid gray;" class="card-body">
           <p class="card-text">{{member.description}}</p>
         </div>
-        <div class="card-body">
-          <a routerLink="/profile/{{member._id}}" class="card-link">See More</a>
+        <div style="height: 50px !important" class="card-body">
+          <a *ngIf="userLoggedIn == true" routerLink="/profile/{{member._id}}" class="card-link">See More</a>
         </div>
       </div>
     </div>

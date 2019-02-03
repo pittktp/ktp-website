@@ -2,6 +2,55 @@
 
 <!------ Include the above in your HEAD tag ---------->
 
+<!-- Points Submit Modal -->
+<div class="modal fade" id="forgotPasswordModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="onForgotPassword(forgotPasswordForm)" #forgotPasswordForm="ngForm" autocomplete="off">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 style="color:black;"class="modal-title">Change password</h4>
+        </div>
+        <div class="modal-body">
+          <div style="color:black">Contact Jeremy Deppen in person or at jmd221@pitt.edu for a password reset code.</div>
+          <br />
+          <br />
+          <div class="input-field">
+            <label style="color:black" for="description">Reset code</label>
+            <input style="text-align:left;" (ngModelChange)="onCodeKey()" [(ngModel)]="forgotPasswordForm.code" name="code" #name="ngModel" type="text" class="form-control" id="code" placeholder="Code" autocomplete="off" required>
+            <div *ngIf="wrongCodeForgotPassword == true" style="color: red">Not a valid reset code</div>
+          </div>
+          <br />
+          <div class="input-field">
+            <label style="color:black" for="description">Pitt Email</label>
+            <input (ngModelChange)="onEmailKeyForgotPassword()" style="text-align:left;" [(ngModel)]="forgotPasswordForm.pittEmail" email pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" name="pittEmail" #name="ngModel" type="email" class="form-control" id="pittEmail" placeholder="Email" autocomplete="off" required>
+            <div *ngIf="validEmailForgotPassword == false" style="color: red">Not a valid email</div>
+            <div *ngIf="invalidEmailForgotPassword == true" style="color: red">Email doesn't exist in database</div>
+          </div>
+          <br />
+          <div class="input-field">
+            <label style="color:black" for="description">New password</label>
+            <input type="password" style="text-align:left;" (ngModelChange)="onPasswordConfirmKeyForgotPassword()" [(ngModel)]="forgotPasswordForm.newPassword" name="newPassword" #name="ngModel" class="form-control" id="newPassword" placeholder="New password" autocomplete="off" required>
+            <div *ngIf="shortPasswordForgotPassword == true" style="color: red">Password too short - must be atleast 6 characters</div>
+          </div>
+          <br />
+          <div class="input-field">
+            <label style="color:black" for="description">Retype new password</label>
+            <input type="password" style="text-align:left;" (ngModelChange)="onPasswordConfirmKeyForgotPassword()" [(ngModel)]="forgotPasswordForm.retypeNewPassword" name="retypeNewPassword" #name="ngModel" class="form-control" id="retypeNewPassword" placeholder="Retype new password" autocomplete="off" required>
+            <div *ngIf="passwordsMatchForgotPassword == false" style="color: red">Passwords don't match</div>
+          </div>
+          <br />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!forgotPasswordForm.valid || passwordsMatchForgotPassword == false || validCode == false || shortPasswordForgotPassword == true">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 <div class="container">
     	<div class="row">
 			<div class="col-md-6 col-md-offset-3">
@@ -35,6 +84,7 @@
 											</div>
 										</div>
 									</div>
+                  <div style="color: black; text-align:center; cursor:pointer" data-toggle="modal" data-target="#forgotPasswordModal">Forgot password?</div>
 								</form>
 								<form id="register-form" (ngSubmit)="onRegisterSubmit(registerForm)" #registerForm="ngForm" style="display: none;" autocomplete="off">
 									<div class="form-group">
@@ -46,23 +96,21 @@
                       <div *ngIf="emailInUse == true" style="color: red">Email already being used by another member</div>
                   </div>
 									<div class="form-group">
-										<input type="password" [(ngModel)]="registerForm.registerPassword" name="registerPassword" id="registerPassword" tabindex="3" class="form-control" placeholder="Password" required>
-									</div>
+										<input type="password" [(ngModel)]="registerForm.registerPassword" (ngModelChange)="onPasswordConfirmKey()" name="registerPassword" id="registerPassword" tabindex="3" class="form-control" placeholder="Password" required>
+                    <div *ngIf="shortPassword == true" style="color: red">Password too short - must be atleast 6 characters</div>
+                	</div>
 									<div class="form-group">
 										<input type="password" [(ngModel)]="registerForm.registerConfirmPassword" (ngModelChange)="onPasswordConfirmKey()" name="registerConfirmPassword" id="registerConfirmPassword" tabindex="4" class="form-control" placeholder="Confirm Password" required>
                     <div *ngIf="passwordsMatch == false" style="color: red">Passwords don't match</div>
                   </div>
                   <div class="form-group">
-                    <input type="number" [(ngModel)]="registerForm.registerStudentId" name="registerStudentId" id="registerStudentId" tabindex="5" class="form-control" placeholder="Student ID" required>
-                  </div>
-                  <div class="form-group">
-                    <input type="text" [(ngModel)]="registerForm.registerCode" (ngModelChange)="onCodeKey()" name="registerCode" id="registerCode" tabindex="6" class="form-control" placeholder="Code" required>
+                    <input type="text" (ngModelChange)="onCodeKey()" [(ngModel)]="registerForm.registerCode" name="registerCode" id="registerCode" tabindex="6" class="form-control" placeholder="Code" required>
                     <div *ngIf="validCode == false" style="color: red">Not a valid code</div>
                   </div>
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
-												<input type="submit" [disabled]="!registerForm.valid || passwordsMatch == false || validCode == false" name="register-submit" id="register-submit" tabindex="7" class="form-control btn btn-register" value="Register Now">
+												<input type="submit" [disabled]="!registerForm.valid || passwordsMatch == false || validCode == false || shortPassword == true" name="register-submit" id="register-submit" tabindex="7" class="form-control btn btn-register" value="Register Now">
 											</div>
 										</div>
 									</div>

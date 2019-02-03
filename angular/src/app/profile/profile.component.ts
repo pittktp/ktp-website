@@ -22,6 +22,7 @@ export class ProfileComponent implements OnInit {
 
   id: string
   profile: Member;
+  picLetters: string = '';
   hoursPercent: number;
   pointsPercent: number;
   currentTabContent: string;
@@ -32,24 +33,29 @@ export class ProfileComponent implements OnInit {
   courseList: Array<String> = [];
   private sub: any
 
-  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) { }
+  constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
+
+  }
 
   ngOnInit() {
-    this.loadScript('../assets/js/new-age.js');
-
-    this.route.params.forEach(params => {
-      this.id = params['id'];
-
-      // TODO: Change to its own API call for simplicity
+    this.route.params.subscribe(params => {
+      this.id = params['id']
       this.memberService.getMembers().subscribe((data: Array<object>) => {
-        var mems = data as Member[];
-        for(var i = 0; i < mems.length; i++) {
-          if(mems[i].email.split('@')[0] == this.id) {
-            this.profile = mems[i];
-            break;
+        var memberList = data as Array<Member>;
+        for(var i = 0; i < memberList.length; i++) {
+          if(memberList[i].email.split('@')[0] == this.id) {
+            this.profile = memberList[i];
           }
         }
-        // Ensure there hours and points percentage doesnt exceed 100%
+        // Ensure no name bugs
+        if(this.profile.name.indexOf(' ') >= 0) { // Has first and last
+          var splitName = this.profile.name.split(" ")
+          this.picLetters = splitName[0].charAt(0) + splitName[1].charAt(0);
+        } else { // Has only first
+          this.picLetters = this.profile.name.charAt(0);
+        }
+
+        // Ensure their hours and points percentage doesnt exceed 100%
         if(this.profile.serviceHours > 10) {
           this.hoursPercent = 100;
         } else {
@@ -73,10 +79,22 @@ export class ProfileComponent implements OnInit {
             this.courseCategories.push(courseCategory);
           }
         }
-      });
-    });
+
+        var headerElem = document.getElementById('prof-bg');
+        var serviceElem = document.getElementById('service');
+        var pointsElem = document.getElementById('points');
+        if(this.profile.color !== null) {
+          headerElem.style.setProperty('--prof-color1', this.profile.color[0]);
+          headerElem.style.setProperty('--prof-color2', this.profile.color[1]);
+          serviceElem.style.setProperty('--prof-color1', this.profile.color[0]);
+          pointsElem.style.setProperty('--prof-color2', this.profile.color[1]);
+        }
+      })
+    })
+     this.loadScript('../assets/js/new-age.js');
   }
-  
+
+  // A hacked up way to load the js script needed for this component
   loadScript(src) {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -99,24 +117,25 @@ export class ProfileComponent implements OnInit {
     targetTab.style.backgroundColor = 'rgb(231, 231, 231)';
     targetTab.style.color = '#00415d';
   }
-  
+
   selectCourseCategory(category: string) {
+    var member = this.profile
     if(this.panelHtml == '') {
       // Opens panel on first click
-      for(var i = 0; i < this.profile.courses.length; i++) {
-        var courseCategory = this.profile.courses[i].split(" ")[0];
+      for(var i = 0; i < member.courses.length; i++) {
+        var courseCategory = member.courses[i].split(" ")[0];
         if(courseCategory === category) {
-          this.panelHtml += `<p>${this.profile.courses[i]}</p>`;
+          this.panelHtml += `<p>${member.courses[i]}</p>`;
         }
       }
       this.panelType = category;
     } else if(this.panelType != category) {
       // Closes open panel and opens newly clicked panel
       this.panelHtml = '';
-      for(var i = 0; i < this.profile.courses.length; i++) {
-        var courseCategory = this.profile.courses[i].split(" ")[0];
+      for(var i = 0; i < member.courses.length; i++) {
+        var courseCategory = member.courses[i].split(" ")[0];
         if(courseCategory === category) {
-          this.panelHtml += `<p>${this.profile.courses[i]}</p>`;
+          this.panelHtml += `<p>${member.courses[i]}</p>`;
         }
       }
       this.panelType = category;
@@ -133,15 +152,14 @@ export class ProfileComponent implements OnInit {
 
   onChangePicture(form: NgForm) {
     // TODO: Ensure image is proper file type and is a square shape
-    console.log(this.targetFile.type); 
     if(this.targetFile.type != "image/jpeg" && this.targetFile.type != "image/png" && this.targetFile.type != "image/gif") {
       this.showError("Invalid Image Type");
     } else {
       // Update in DB
       this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
-        console.log('Post Sucessful!');
+        console.log(res);
         this.showMsg("Profile Image Updated!");
-        setTimeout(() => {window.location.reload();}, 2500);
+        setTimeout(() => {window.location.reload();}, 1500);
       }, error => {
         console.error(error);
         this.showError("Failed to Update Image!");
@@ -152,8 +170,9 @@ export class ProfileComponent implements OnInit {
   onChangeDescription(form: NgForm) {
     var member = this.profile;
     member.description = form.value.description;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Description Updated!");
     }, error => {
       console.error(error);
@@ -161,11 +180,64 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  onChangeColors(form: NgForm) {
+    var member = this.profile;
+    var color1 = form.value.color1;
+    var color2 = form.value.color2;
+
+
+    if(color1 === null || color1 === undefined) {
+      color1 = member.color[0];
+    }
+    if(color2 === null || color2 === undefined) {
+      color2 = member.color[1];
+    }
+
+    var isValid = this.validateColors(color1, color2);
+    if(isValid) {
+      member.color = [color1, color2];
+    }
+
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      this.showMsg("Reloading...");
+      this.showMsg("Colors Updated");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }, error => {
+      console.error(error);
+      this.showError("Failed to Update Colors!");
+    })
+  }
+
+  validateColors(color1: string, color2: string) {
+    // Ensure both colors are base-16
+    if(color1.indexOf("#") === -1) {
+      this.showError("Color 1 is not a Hexadecimal Value!");
+      return false;
+    }
+    if(color2.indexOf("#") === -1) {
+      this.showError("Color 2 is not a Hexadecimal Value!");
+      return false;
+    }
+    // Ensure both colors have 6 hex digits and a digit for #
+    if(color1.length != 7) {
+      this.showError("Color 1 is invalid!")
+      return false;
+    }
+    if(color2.length != 7) {
+      this.showError("Color 2 is invalid!")
+      return false;
+    }
+    return true;
+  }
+
   onChangeMajor(form: NgForm) {
     var member = this.profile;
     member.major = form.value.major;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Major Updated!");
     }, error => {
       console.error(error);
@@ -176,8 +248,9 @@ export class ProfileComponent implements OnInit {
   onChangeGraduation(form: NgForm) {
     var member = this.profile;
     member.gradSemester = form.value.gradSemester;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Grad Semester Updated!");
     }, error => {
       console.error(error);
@@ -188,8 +261,9 @@ export class ProfileComponent implements OnInit {
   onChangeRushClass(form: NgForm) {
     var member = this.profile;
     member.rushClass = form.value.rushClass;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Rush Class Updated!");
     }, error => {
       console.error(error);
@@ -200,8 +274,9 @@ export class ProfileComponent implements OnInit {
   onChangeLinkedIn(form: NgForm) {
     var member = this.profile;
     member.linkedIn = form.value.linkedIn;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("LinkedIn Link Updated!");
     }, error => {
       console.error(error);
@@ -212,8 +287,9 @@ export class ProfileComponent implements OnInit {
   onChangeGithub(form: NgForm) {
     var member = this.profile;
     member.github = form.value.github;
+
+    // Update User
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
       this.showMsg("Github Link Updated!");
     }, error => {
       console.log(error);
@@ -221,58 +297,154 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  onAddCourse(form: NgForm) {
-    var course = form.value.addCourse;
+  onAddCourses(form: NgForm) {
+    var courseList = form.value.addCourse;
+    if(courseList.indexOf(", ") == -1) {
+      // There is only 1 course
+      this.onAddCourse(courseList);
+    } else {
+      // There are multiple courses
+      var courses = courseList.split(", ");
+      var member = this.profile;
+      for(var i = 0; i < courses.length; i++) {
+        // Validate Course
+        var isValid = this.validateAdd(courses[i]);
+
+        if(isValid) {
+          // Add course
+          member.courses.push(courses[i]);
+        } else {
+          for(var j = 0; j < i; j++) {
+            member.courses.pop();
+          }
+          break;
+        }
+      }
+      // Update User if all courses are valid
+      if(isValid) {
+        this.updateAdd(member);
+      }
+    }
+  }
+
+  onAddCourse(course: string) {
+    var member = this.profile;
+    // Validate Course
+    var isValid = this.validateAdd(course);
+    // Add course and update user if valid
+    if(isValid) {
+      member.courses.push(course);
+      this.updateAdd(member);
+    }
+  }
+
+  onRemoveCourses(form: NgForm) {
+    var courseList = form.value.removeCourse;
+    if(courseList.indexOf(", ") == -1) {
+      // There is only 1 course
+      this.onRemoveCourse(courseList);
+    } else {
+      // There are multiple courses
+      var courses = courseList.split(", ");
+      var member = this.profile;
+      for(var i = 0; i < courses.length; i++) {
+        // Validate course
+        var isValid = this.validateRemove(courses[i]);
+
+        if(isValid) {
+          // Remove Course
+          member.courses.splice(member.courses.indexOf(courses[i]), 1);
+        } else {
+          for(var j = 0; j < i; j++) {
+            member.courses.push(courses[j])
+          }
+          break;
+        }
+      }
+      // Update User if all Courses are valid
+      if(isValid) {
+        this.updateRemove(member);
+      }
+    }
+  }
+
+  onRemoveCourse(course: string) {
     var member = this.profile;
 
+    // Validate Course
+    var isValid = this.validateRemove(course)
+
+    if(isValid) {
+      // Remove course and update user
+      member.courses.splice(member.courses.indexOf(course), 1);
+      this.updateRemove(member);
+    }
+  }
+
+  updateAdd(member: Member) {
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      this.showMsg("Added Course(s)!");
+      // Updates the current member to reflect the new course(s) added
+      this.memberService.getMemberById(this.profile._id).subscribe((res) => {
+        this.profile = res as Member;
+      });
+    }, error => {
+      console.error(error);
+      this.showError("Failed to add Course(s)!");
+    });
+  }
+
+  updateRemove(member: Member) {
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      this.showMsg("Course(s) Removed!");
+      // Updates the current member to reflect the course(s) deleted
+      this.memberService.getMemberById(this.profile._id).subscribe((res) => {
+        this.profile = res as Member;
+      });
+    }, error => {
+      console.error(error);
+      this.showError("Failed to Remove Course(s)!");
+    });
+  }
+
+  // Returns true on successful validation, false otherwise
+  validateAdd(course: string) {
+    var member = this.profile;
     // Check that course isnt already in courselist
     if(member.courses.indexOf(course) != -1) {
       // Display snackbar error
       this.showError("Course Already Exists!");
-      return;
+      return false;
     }
 
     // Ensure course follows proper format
     if(!course.match(/^[A-Z]* \d{4}$/)) {
       // Display snackbar error
       this.showError("Invalid Course Format!");
-      return;
+      return false;
     }
 
-    // Add course and update in DB
-    member.courses.push(course);
-    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
-      this.showMsg("Course Added!");
-      window.location.reload();
-    }, error => {
-      console.error(error);
-      this.showError("Failed to Add Course!");
-    });
+    return true;
   }
 
-  onRemoveCourse(form: NgForm) {
-    // Get course
-    var course = form.value.removeCourse;
+  // Returns true if course doesn't already exist, false otherwise
+  validateRemove(course: string) {
     var member = this.profile;
+
+    // Ensure course follows proper format
+    if(!course.match(/^[A-Z]* \d{4}$/)) {
+      // Display snackbar error
+      this.showError("Invalid Course Format!");
+      return false;
+    }
 
     // Throw error if invalid course
     if(member.courses.indexOf(course) == -1) {
       // Display snackbar error
       this.showError("Invalid Course!");
-      return;
+      return false;
     }
-
-    // Remove course from the list, update in DB
-    member.courses.splice(member.courses.indexOf(course), 1);
-    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      console.log('Put Successful!');
-      this.showMsg("Course Removed!");
-      window.location.reload();
-    }, error => {
-      console.error(error);
-      this.showError("Failed to Remove Course!");
-    });
+    return true;
   }
 
   showMsg(msg: string) {
