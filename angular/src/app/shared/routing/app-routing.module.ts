@@ -10,7 +10,6 @@ import { EditMembersComponent } from '../../edit-members/edit-members.component'
 import { MembersComponent } from '../../members/members.component';
 import { NavComponent } from '../../nav/nav.component';
 import { AuthGuard } from '../auth/auth.guard';
-import { MembersComponent } from '../../members/members.component';
 
 // Class that handles how endpoints should route to their respective components.
 // For example, if https://pitt-kappathetapi.com/points is accessed, it'll show the PointsComponent.
