@@ -17,13 +17,18 @@ declare var $: any;
   templateUrl: './edit-members.component.html',
   styleUrls: ['./edit-members.component.css']
 })
+
+// The component that allows "admins" (anyone on eboard) to directly edit members of the frat.
+// A use case for this would be if someone registers themselves and forgets to include their last name,
+// an admin could edit this information in the database via this component.
 export class EditMembersComponent implements OnInit {
 
   private memberClicked: Member;
   private userId: string;
   private userRole: string = '';
 
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private memberService: MemberService, private sharedService: SharedService) {
+  // Constructor -> checks if user is logged in, if so, then retrieve their member object from the database.
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
 
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
@@ -36,15 +41,16 @@ export class EditMembersComponent implements OnInit {
           this.router.navigate(['home']);
         }
       });
-    }
-
+    }  
   }
 
+  // Pretty much like a constructor -> this gets a list of all members from DB everytime the component is loaded/refreshed
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');
     this.getMembers();
   }
 
+  // A hacked up way to load the js script needed to perform the scrolling animations
   loadScript(src) {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -52,9 +58,11 @@ export class EditMembersComponent implements OnInit {
     script.src = src;
   }
 
+  // Gets all members from the DB and uses that response to update MemberService's members array property.
+  // This function also alphabetizes this list of members based on name
   getMembers() {
     this.memberService.getMembers().subscribe((data: Array<object>) => {
-      var mems = data as Member[]
+      var mems = data as Member[];
       mems.sort(function(a, b) {
         var textA = a.name.toUpperCase();
         var textB = b.name.toUpperCase();
@@ -64,10 +72,11 @@ export class EditMembersComponent implements OnInit {
     });
   }
 
+  // When a member is clicked, mark them as current member clicked on and populate the
+  // modal with their properties from DB.
   onMemberClicked(member: Member) {
     this.memberClicked = member;
 
-    $('#studentId').val(this.memberClicked.studentId);
     $('#points').val(this.memberClicked.points);
     $('#serviceHours').val(this.memberClicked.serviceHours);
     $('#absences').val(this.memberClicked.absences);
@@ -77,6 +86,8 @@ export class EditMembersComponent implements OnInit {
     $("#memberEditSubmitModal").modal("show");
   }
 
+  // Deletes a member from the database then calls getMembers() to get the new list of
+  // members without the deleted member
   onDeleteMember() {
     if(confirm("Delete member " + this.memberClicked.name + "?")) {
       if(this.userId == this.memberClicked._id)
@@ -91,6 +102,8 @@ export class EditMembersComponent implements OnInit {
     }
   }
 
+  // Called when the member is edited. Create a new Member object, get the information from the modal input fields,
+  // and set the other properties to what they were before. Then PUT this new member to the DB and call getMembers() to reflect the change
   onEditMemberSubmit(form: NgForm) {
 
     var updatedMember: Member = new Member();
@@ -98,11 +111,19 @@ export class EditMembersComponent implements OnInit {
     updatedMember.email = this.memberClicked.email;
 
     updatedMember.name = $('#name').val();
-    updatedMember.studentId = $('#studentId').val();
     updatedMember.points = $('#points').val();
     updatedMember.serviceHours = $('#serviceHours').val();
     updatedMember.absences = $('#absences').val();
     updatedMember.role = $('#role').val();
+    updatedMember.rushClass = this.memberClicked.rushClass;
+    updatedMember.picture = this.memberClicked.picture;
+    updatedMember.linkedIn = this.memberClicked.linkedIn;
+    updatedMember.github = this.memberClicked.github;
+    updatedMember.gradSemester = this.memberClicked.gradSemester;
+    updatedMember.major = this.memberClicked.major;
+    updatedMember.description = this.memberClicked.description;
+    updatedMember.courses = this.memberClicked.courses;
+    updatedMember.color = this.memberClicked.color;
 
     if(confirm("Finish editing member " + updatedMember.name + "?")) {
       this.memberService.putMember(this.memberClicked._id, updatedMember).subscribe((res) => {

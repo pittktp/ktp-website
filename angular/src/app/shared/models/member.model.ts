@@ -1,3 +1,5 @@
+// Class to represent a Member object
+
 export class Member {
 
   _id: string;
@@ -6,9 +8,18 @@ export class Member {
   password: string;
   points: number;
   serviceHours: number;
-  studentId: number;
   role: string;
+  code: string;
   absences: number;
+  rushClass: string;
+  picture: string;
+  courses: Array<string>;
+  linkedIn: string;
+  github: string;
+  gradSemester: string;
+  major: string;
+  description: string;
+  color: Array<string>;
 
   constructor() { }
 

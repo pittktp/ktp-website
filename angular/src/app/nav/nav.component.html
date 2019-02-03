@@ -12,21 +12,25 @@
         <li>
           <a class="page-scroll" href="#mission" (click)="onHomeClicked()">Mission</a>
         </li>
-        <li class="divide">
+        <li>
           <a class="page-scroll" href="#contact" (click)="onHomeClicked()">Contact</a>
+        </li>
+        <li class="divide">
+          <a style="cursor: pointer" (click)="onMembersClicked()">Members</a>
         </li>
         <li *ngIf="user == ''">
           <a class="pointer" (click)="onLoginClicked()">Login/Register</a>
         </li>
         <li *ngIf="user != ''" class="nav-item dropdown divider">
-          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ user }}<i class="fa fa-caret-down"></i></a>
-          <div class="dropdown-menu">
+          <a (click)="onDropdown()" class="nav-link dropdown-toggle" href="javascript:;" id="navbardrop">{{ user }}<i class="fa fa-caret-down"></i></a>
+          <ul id="guy" class="dropdown-menu">
+            <li><a class="pointer dropdown-item" (click)="onProfileClicked()">My Profile</a></li>
             <li><a class="pointer dropdown-item" (click)="onPointsClicked()">View/Log Points</a></li>
             <li *ngIf="userRole == 'admin'"><a class="pointer dropdown-item" (click)="onEditMembersClicked()">Edit Members</a></li>
             <li *ngIf="userRole == 'admin'"><a class="pointer dropdown-item" (click)="onAttendanceClicked()">Take Attendance</a></li>
             <li role="separator" class="divider"></li>
             <li><a class="pointer dropdown-item" (click)="onLogout()">Logout</a></li>
-          </div>
+          </ul>
         </li>
       </ul>
     </div>
@@ -49,7 +53,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let member of memberService.members">
+            <tr *ngFor="let member of expectedMembers">
               <td *ngIf="!membersNotHere.includes(member)">{{ member.name }}</td>
               <td *ngIf="!membersNotHere.includes(member)">
                 <button type="button" id="notHere" class="btn btn-default" (click)="onNotHere(member)">Not Here</button>

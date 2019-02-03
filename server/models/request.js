@@ -1,3 +1,5 @@
+// Represents a request object in our database
+
 const mongoose = require('mongoose');
 
 var Request = mongoose.model('Request', {

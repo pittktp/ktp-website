@@ -1,3 +1,5 @@
+// Class to represent a Request object
+
 export class Request {
 
   _id: string;
