@@ -27,6 +27,7 @@
   .container {
     margin-top: 20vh;
     height: 100vh;
+    overflow: scroll;
   }
   .profile-no-pic {
     margin: 0 auto;

@@ -127,7 +127,7 @@
   </div>
 
   <!-- Secured Profile Page Content -->
-  <div style="overflow-y: scroll"  *ngIf="this.profile !== null">
+  <div *ngIf="this.profile !== null">
     <div class="container" *ngIf="this.auth.loggedIn(); else unsecured">
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
