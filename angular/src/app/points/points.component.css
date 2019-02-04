@@ -36,3 +36,8 @@
 #denyPoints:hover {
   background-color: rgba(255, 0, 0, 0.3) !important;
 }
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
