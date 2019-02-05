@@ -36,7 +36,7 @@ export class PointsComponent implements OnInit {
         var member = res as Member;
         this.user = member.name;
         this.userRole = member.admin;
-        if(member.role == 'admin') { this.getRequests(); }
+        if(member.admin = true) { this.getRequests(); }
       });
     }
   }
@@ -44,7 +44,7 @@ export class PointsComponent implements OnInit {
   ngOnInit() {
     this.loadScript('../assets/js/new-age.js');
     this.getMembers();
-    if(this.userRole == 'admin') {
+    if(this.admin == true) {
       this.getRequests();
      }
   }

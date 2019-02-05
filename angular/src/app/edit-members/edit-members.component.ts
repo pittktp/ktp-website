@@ -104,13 +104,9 @@ export class EditMembersComponent implements OnInit {
     updatedMember.absences = $('#absences').val();
     updatedMember.role = $('#role').val();
 
-
-//TODO permission updating not working
     if(updatedMember.role == "Brother" || updatedMember.role == "Alumni" || updatedMember.role == "Inactive") {
-        alert("not admin");
         updatedMember.admin = false;
     } else {
-      alert("admin");
         updatedMember.admin = true;
     }
 
@@ -121,6 +117,29 @@ export class EditMembersComponent implements OnInit {
         this.toastr.success('Successfully edited member ' + res.name);
       });
     }
+  }
+
+  onZeroDatabase(){
+    if(confirm("Are you sure you want to clear the point values? This function will zero out all Brotherhood Points, Service Hours, and Absences. It should only be used at the end of the semester.") {
+      if(confirm("Are you sure you're sure? This cannot be undone.")){
+        //iteratre through the array of members and set each field to 0
+
+          var mems = this.memberService.members;
+          for(var i = 0; i < this.memberService.members.length; i++) {
+            mems[i].points = 0;
+            mems[i].serviceHours = 0;
+            mems[i].absences = 0;
+            this.memberService.putMember(mems[i]._id, mems[i]).subscribe((res) => {
+              //this.toastr.success(res.name + ' unexcused absence');
+            });
+          }
+
+          this.toastr.success("The database has been zeroed out.");
+      } else
+        this.toastr.error("The database was not altered.");
+    } else
+      this.toastr.error("The database was not altered.");
+
   }
 
 }

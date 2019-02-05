@@ -21,7 +21,7 @@ export class NavComponent implements OnInit {
 
   private membersNotHere: Array<object> = [];
   private user = '';
-  private userRole = '';
+  private admin = false;
   private expectedMembers: Member[];
 
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, private requestsService: RequestsService, private memberService: MemberService, private sharedService: SharedService) {
@@ -30,12 +30,12 @@ export class NavComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userRole = member.admin;
+        this.admin = member.admin;
       });
     }
     else {
       this.user = '';
-      this.userRole = '';
+      this.admin = false;
     }
 
     this.sharedService.changeEmitted$.subscribe(
