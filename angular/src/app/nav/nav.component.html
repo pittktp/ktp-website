@@ -19,7 +19,7 @@
           <a style="cursor: pointer" (click)="onMembersClicked()">Members</a>
         </li>
         <li *ngIf="user == ''">
-          <a class="pointer" (click)="onLoginClicked()">Login/Register</a>
+          <a class="pointer" (click)="onLoginClicked()">Login</a>
         </li>
         <li *ngIf="user != ''" class="nav-item dropdown divider">
           <a (click)="onDropdown()" class="nav-link dropdown-toggle" href="javascript:;" id="navbardrop">{{ user }}<i class="fa fa-caret-down"></i></a>
