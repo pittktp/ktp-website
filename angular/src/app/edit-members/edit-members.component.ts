@@ -25,7 +25,7 @@ export class EditMembersComponent implements OnInit {
 
   private memberClicked: Member;
   private userId: string;
-  private userRole: string = '';
+  private admin: boolean;
 
   // Constructor -> checks if user is logged in, if so, then retrieve their member object from the database.
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
@@ -35,13 +35,13 @@ export class EditMembersComponent implements OnInit {
       this.userId = currentUserId;
       this.memberService.getMemberById(this.userId).subscribe(res => {
         var member = res as Member;
-        this.userRole = member.role;
-        if(this.userRole != 'admin') {
+        this.admin = member.admin;
+        if(!this.admin) {
           alert('You do not have permission to access this page');
           this.router.navigate(['home']);
         }
       });
-    }  
+    }
   }
 
   // Pretty much like a constructor -> this gets a list of all members from DB everytime the component is loaded/refreshed
@@ -132,6 +132,28 @@ export class EditMembersComponent implements OnInit {
         this.toastr.success('Successfully edited member ' + res.name);
       });
     }
+  }
+
+
+  onZeroDatabase(){
+    if(confirm("Are you sure you want to clear the point values? This function will zero out all Brotherhood Points, Service Hours, and Absences. It should only be used at the end of the semester.")) {
+      if(confirm("Are you SURE you're sure? This cannot be undone.")) {
+
+          //Get the array of members from MemberService
+          var mems = this.memberService.members;
+          //Iterate through array and zero out all fields
+          for(var i = 0; i < this.memberService.members.length; i++) {
+            mems[i].points = 0;
+            mems[i].serviceHours = 0;
+            mems[i].absences = 0;
+            //Push updated member to the DB
+            this.memberService.putMember(mems[i]._id, mems[i]).subscribe((res) => {});
+          }
+          this.toastr.success("The database has been zeroed out.");
+      } else
+        this.toastr.error("The database was not altered.");
+    } else
+      this.toastr.error("The database was not altered.");
   }
 
 }

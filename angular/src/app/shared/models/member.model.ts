@@ -9,6 +9,7 @@ export class Member {
   points: number;
   serviceHours: number;
   role: string;
+  admin: boolean;
   code: string;
   absences: number;
   rushClass: string;

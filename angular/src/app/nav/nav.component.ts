@@ -25,7 +25,7 @@ export class NavComponent implements OnInit {
   private membersNotHere: Array<object> = [];
   public user = '';
   public userId = '';
-  public userRole = '';
+  public admin = false;
   private expanded = false;
   private expectedMembers: Member[];
 
@@ -36,13 +36,13 @@ export class NavComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userRole = member.role;
+        this.admin = member.admin;
         this.userId = member.email.split('@')[0];
       });
     }
     else {
       this.user = '';
-      this.userRole = '';
+      this.admin = false;
       this.userId = '';
     }
 
@@ -52,7 +52,7 @@ export class NavComponent implements OnInit {
     this.sharedService.changeEmitted$.subscribe(
       change => {
         this.user = change.name;
-        this.userRole = change.role;
+        this.admin = change.admin;
         this.userId = change.id;
       }
     );

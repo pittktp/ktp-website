@@ -26,8 +26,8 @@
           <ul id="guy" class="dropdown-menu">
             <li><a class="pointer dropdown-item" (click)="onProfileClicked()">My Profile</a></li>
             <li><a class="pointer dropdown-item" (click)="onPointsClicked()">View/Log Points</a></li>
-            <li *ngIf="userRole == 'admin'"><a class="pointer dropdown-item" (click)="onEditMembersClicked()">Edit Members</a></li>
-            <li *ngIf="userRole == 'admin'"><a class="pointer dropdown-item" (click)="onAttendanceClicked()">Take Attendance</a></li>
+            <li *ngIf="admin == true"><a class="pointer dropdown-item" (click)="onEditMembersClicked()">Edit Members</a></li>
+            <li *ngIf="admin == true"><a class="pointer dropdown-item" (click)="onAttendanceClicked()">Take Attendance</a></li>
             <li role="separator" class="divider"></li>
             <li><a class="pointer dropdown-item" (click)="onLogout()">Logout</a></li>
           </ul>

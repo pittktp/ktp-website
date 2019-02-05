@@ -28,7 +28,7 @@ export class PointsComponent implements OnInit {
 
   userId: string;
   user: string;
-  userRole: string;
+  admin: boolean;
   requestForm: Request = new Request();
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
@@ -41,8 +41,8 @@ export class PointsComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userRole = member.role;
-        if(member.role == 'admin') { this.getRequests(); }
+        this.admin = member.admin;
+        if(member.admin == true) { this.getRequests(); }
       });
     }
   }
@@ -55,13 +55,13 @@ export class PointsComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userRole = member.role;
-        if(member.role == 'admin') { this.getRequests(); }
+        this.admin = member.admin;
+        if(member.admin == true) { this.getRequests(); }
       });
     }
     this.loadScript('../assets/js/new-age.js');
     this.getMembers();
-    if(this.userRole == 'admin') {
+    if(this.admin == true) {
       this.getRequests();
     }
   }
