@@ -203,35 +203,42 @@ export class PointsComponent implements OnInit {
   onAcceptRequest(request: Request) {
     this.memberService.getMemberById(request.submittedById).subscribe((res) => {
       var member = res as Member;
-      if(request.type == "Brotherhood Points") {
-        member.points = member.points + request.value;
-      }
-      else if(request.type == "Service Hours") {
-        member.serviceHours = member.serviceHours + request.value;
-      }
-      this.memberService.putMember(request.submittedById, member).subscribe((res) => {
-        if(request.type == "Brotherhood Points") { this.toastr.success('Brotherhood point request accepted for ' + request.submittedBy); }
-        else if(request.type == "Excused Absence") { this.toastr.success('Excused absence request accepted for ' + request.submittedBy); }
-        else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
-        request.approved = 1;
-        this.requestsService.putRequest(request._id, request).subscribe((res) => {
-          this.refreshRequests();
-          this.getMembers();
+      if(confirm("Accept " + request.type + " request for " + member.name + "?")) {
+        if(request.type == "Brotherhood Points") {
+          member.points = member.points + request.value;
+        }
+        else if(request.type == "Service Hours") {
+          member.serviceHours = member.serviceHours + request.value;
+        }
+        this.memberService.putMember(request.submittedById, member).subscribe((res) => {
+          if(request.type == "Brotherhood Points") { this.toastr.success('Brotherhood point request accepted for ' + request.submittedBy); }
+          else if(request.type == "Excused Absence") { this.toastr.success('Excused absence request accepted for ' + request.submittedBy); }
+          else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
+          request.approved = 1;
+          this.requestsService.putRequest(request._id, request).subscribe((res) => {
+            this.refreshRequests();
+            this.getMembers();
+          });
         });
-      });
+      }
     });
   }
 
   // Don't update member's points or service hours and delete the request from the DB because we don't keep track of denied requests
   onDenyRequest(request: Request) {
-    this.requestsService.deleteRequest(request._id).subscribe((res) => {
-      this.refreshRequests();
-      if(request.type == "Brotherhood Points")
-        this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
-      else if(request.type == "Service Hours")
-        this.toastr.error('Service hour request denied for ' + request.submittedBy);
-      else if(request.type == "Excused Absence")
-        this.toastr.error('Excused absence request denied for ' + request.submittedBy);
+    this.memberService.getMemberById(request.submittedById).subscribe((res) => {
+      var member = res as Member;
+      if(confirm("Deny " + request.type + " request for " + member.name + "?")) {
+        this.requestsService.deleteRequest(request._id).subscribe((res) => {
+          this.refreshRequests();
+          if(request.type == "Brotherhood Points")
+            this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
+          else if(request.type == "Service Hours")
+            this.toastr.error('Service hour request denied for ' + request.submittedBy);
+          else if(request.type == "Excused Absence")
+            this.toastr.error('Excused absence request denied for ' + request.submittedBy);
+        });
+      }
     });
   }
 
