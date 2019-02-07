@@ -180,7 +180,8 @@
                   <tr *ngFor="let request of membersRequests">
                     <td>{{ request.submittedDate }}</td>
                     <td>{{ request.type }}</td>
-                    <td>{{ request.value }}</td>
+                    <td *ngIf="request.type == 'Excused Absence'">{{ request.value.toString().substring(4, 6) }}/{{ request.value.toString().substring(6, 8) }}/{{ request.value.toString().substring(0, 4) }}</td>
+                    <td *ngIf="request.type != 'Excused Absence'">{{ request.value }}</td>
                     <td>{{ request.description }}</td>
                   </tr>
                 </tbody>
@@ -224,7 +225,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let member of memberService.members">
-              <td>{{ member.name }}</td>
+              <td data-toggle="tooltip" data-placement="top" title="Click for history" onmouseover="" style="cursor: pointer;" (click)="onShowHistory(member._id)">{{ member.name }}</td>
               <td>{{ member.email }}</td>
               <td>{{ member.points }}</td>
               <td>{{ member.serviceHours }}</td>
