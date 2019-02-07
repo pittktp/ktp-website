@@ -245,13 +245,17 @@ export class PointsComponent implements OnInit {
   // Shows the history of the member clicked on -> shows the history of all approved requests for this member
   onShowHistory(id) {
     this.getRequests();
-    $("#historyModal").modal("show");
-    for(var i = 0; i < this.requestsService.requests.length; i++) {
-      if(this.requestsService.requests[i].submittedById == id && this.requestsService.requests[i].approved == 1) {
-        this.currentHistoryMember = this.requestsService.requests[i].submittedBy;
-        this.membersRequests.push(this.requestsService.requests[i]);
+    this.memberService.getMemberById(id).subscribe((res) => {
+      var member = res as Member;
+      this.currentHistoryMember = member.name;
+      $("#historyModal").modal("show");
+      for(var i = 0; i < this.requestsService.requests.length; i++) {
+        if(this.requestsService.requests[i].submittedById == id && this.requestsService.requests[i].approved == 1) {
+          this.currentHistoryMember = this.requestsService.requests[i].submittedBy;
+          this.membersRequests.push(this.requestsService.requests[i]);
+        }
       }
-    }
+    });
   }
 
   // Called when the history modal is closed -> resets membersRequests to empty
