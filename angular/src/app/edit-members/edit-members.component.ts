@@ -8,14 +8,12 @@ import { SharedService } from '../shared/shared.service';
 import { Member } from '../shared/models/member.model';
 import { ToastrService } from 'ngx-toastr';
 
-import '../../assets/js/new-age.min.js';
-
 declare var $: any;
 
 @Component({
   selector: 'app-edit-members',
   templateUrl: './edit-members.component.html',
-  styleUrls: ['./edit-members.component.css']
+  styleUrls: ['./edit-members.component.scss']
 })
 
 // The component that allows "admins" (anyone on eboard) to directly edit members of the frat.

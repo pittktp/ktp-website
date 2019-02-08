@@ -9,14 +9,12 @@ import { SharedService } from '../shared/shared.service';
 import { Member } from '../shared/models/member.model';
 import { ToastrService } from 'ngx-toastr';
 
-import '../../assets/js/new-age.min.js';
-
 declare var $: any;
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
 

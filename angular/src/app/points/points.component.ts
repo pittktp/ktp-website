@@ -11,14 +11,12 @@ import { AuthService } from '../shared/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { BsDatepickerModule } from 'ngx-bootstrap';
 
-import '../../assets/js/new-age.min.js';
-
 declare var $: any;
 
 @Component({
   selector: 'app-points',
   templateUrl: './points.component.html',
-  styleUrls: ['./points.component.css']
+  styleUrls: ['./points.component.scss']
 })
 
 // Component only accessible when logged in. Shows a list of all members and their information.

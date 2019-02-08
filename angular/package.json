@@ -32,7 +32,7 @@
     "gulp-less": "^3.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.4",
-    "jquery": "^1.11.3",
+    "jquery": "^1.12.4",
     "jwt-decode": "^2.2.0",
     "ng-snotify": "^4.3.1",
     "ngx-bootstrap": "^3.2.0",

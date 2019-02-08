@@ -8,7 +8,11 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -23,9 +27,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/sass/styles.scss"
             ],
             "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js"
             ]
           },
           "configurations": {
@@ -73,7 +78,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/sass/styles.scss"
             ],
             "scripts": [],
             "assets": [

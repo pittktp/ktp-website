@@ -6,7 +6,7 @@ import { AuthService } from '../shared/auth/auth.service';
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
-  styleUrls: ['./members.component.css']
+  styleUrls: ['./members.component.scss']
 })
 
 // Component that can be viewed by anyone that lists all members and their name, description, and major.

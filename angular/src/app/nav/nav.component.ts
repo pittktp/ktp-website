@@ -16,7 +16,7 @@ declare var $: any;
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  styleUrls: ['./nav.component.scss']
 })
 
 // Component that acts as the navbar. It is always on screen at the top and acts as navigation throughout our site.
@@ -41,6 +41,7 @@ export class NavComponent implements OnInit {
       });
     }
     else {
+
       this.user = '';
       this.userRole = '';
       this.userId = '';
@@ -59,16 +60,8 @@ export class NavComponent implements OnInit {
 
   }
 
-  // A hacked up way to load the js script needed for this component
-  loadScript(src) {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    document.getElementsByTagName("body")[0].appendChild(script);
-    script.src = src;
-  }
-
   ngOnInit() {
-    this.expanded = $(".collapse").is(":visible");
+    //this.expanded = $(".collapse").is(":visible");
   }
 
   // Gets and sorts members based on first name

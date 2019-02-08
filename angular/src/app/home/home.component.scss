@@ -1,0 +1,59 @@
+ 
+header {
+  color: white;
+}
+
+section {
+  height: 100vh;
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 80px;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.rush-image {
+  width: 300px;
+}
+
+.feature-item {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
+  max-width: 325px
+}
+
+.side-image {
+  max-width: 400px;
+}
+
+.cathy-background {
+  
+  &:before {
+    $black: #000000;
+    background-color: rgba($black, 1.0);
+  }
+  
+  background: url(../../assets/img/cath.jpg);
+  background-size: cover;
+  color: white;
+  height: 100vh;
+}

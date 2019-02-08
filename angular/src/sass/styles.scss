@@ -1,0 +1,26 @@
+@import url(https://fonts.googleapis.com/css?family=Catamaran:200|Lato:700|Muli);
+
+@import 'variables';
+@import 'mixins';
+@import "~bootstrap/scss/bootstrap";
+
+.background, header {
+  background: url("../assets/img/bg-pattern.png"), linear-gradient(to left,#28B463,#145BBD) !important;
+}
+
+header {
+	height: 100vh;
+}
+
+.vertical-center {
+	@include vertical-center;
+}
+
+.header-description {
+	position: absolute;
+	bottom: 30px;
+	width: 100%;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+

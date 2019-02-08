@@ -10,15 +10,13 @@ import { HttpResponse } from  '@angular/common/http';
 import { Member } from '../shared/models/member.model';
 import { ToastrService } from 'ngx-toastr';
 
-import '../../assets/js/new-age.min.js';
-
 
 declare var $: any;
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 
 // Component that can be viewed when not logged in. It handles the logging in, registering, and forgot password functionality
