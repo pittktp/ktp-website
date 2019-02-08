@@ -132,7 +132,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let request of requestsService.requests">
-                    <td data-toggle="tooltip" data-placement="top" title="Click for history" onmouseover="" style="cursor: pointer;" (click)="onShowHistory(request.submittedById)" *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
+                    <td data-toggle="tooltip" data-placement="top" title="Click for history" onmouseover="" style="cursor: pointer;" (click)="onShowHistory(request.submittedById, true)" *ngIf="request.approved == 0">{{ request.submittedBy }}</td>
                     <td *ngIf="request.approved == 0">{{ request.submittedDate }}</td>
                     <td *ngIf="request.approved == 0">{{ request.type }}</td>
                     <td *ngIf="request.approved == 0 && request.type == 'Excused Absence'">{{ request.value.toString().substring(4, 6) }}/{{ request.value.toString().substring(6, 8) }}/{{ request.value.toString().substring(0, 4) }}</td>
@@ -178,11 +178,11 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let request of membersRequests">
-                    <td>{{ request.submittedDate }}</td>
-                    <td>{{ request.type }}</td>
-                    <td *ngIf="request.type == 'Excused Absence'">{{ request.value.toString().substring(4, 6) }}/{{ request.value.toString().substring(6, 8) }}/{{ request.value.toString().substring(0, 4) }}</td>
+                    <td *ngIf="request.type != 'Excused Absence' || request.type == 'Excused Absence' && showExcusedAbsenceRequests">{{ request.submittedDate }}</td>
+                    <td *ngIf="request.type != 'Excused Absence' || request.type == 'Excused Absence' && showExcusedAbsenceRequests">{{ request.type }}</td>
+                    <td *ngIf="request.type == 'Excused Absence' && showExcusedAbsenceRequests">{{ request.value.toString().substring(4, 6) }}/{{ request.value.toString().substring(6, 8) }}/{{ request.value.toString().substring(0, 4) }}</td>
                     <td *ngIf="request.type != 'Excused Absence'">{{ request.value }}</td>
-                    <td>{{ request.description }}</td>
+                    <td *ngIf="request.type != 'Excused Absence' || request.type == 'Excused Absence' && showExcusedAbsenceRequests">{{ request.description }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -225,7 +225,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let member of memberService.members">
-              <td data-toggle="tooltip" data-placement="top" title="Click for history" onmouseover="" style="cursor: pointer;" (click)="onShowHistory(member._id)">{{ member.name }}</td>
+              <td data-toggle="tooltip" data-placement="top" title="Click for history" onmouseover="" style="cursor: pointer;" (click)="onShowHistory(member._id, false)">{{ member.name }}</td>
               <td>{{ member.email }}</td>
               <td>{{ member.points }}</td>
               <td>{{ member.serviceHours }}</td>

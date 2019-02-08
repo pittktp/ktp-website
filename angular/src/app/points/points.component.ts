@@ -32,6 +32,7 @@ export class PointsComponent implements OnInit {
   requestForm: Request = new Request();
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
+  showExcusedAbsenceRequests: boolean;
 
   // Gets user's info if logged in
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, private router: Router) {
@@ -243,7 +244,8 @@ export class PointsComponent implements OnInit {
   }
 
   // Shows the history of the member clicked on -> shows the history of all approved requests for this member
-  onShowHistory(id) {
+  onShowHistory(id, showExcusedAbsenceReqs) {
+    this.showExcusedAbsenceRequests = showExcusedAbsenceReqs;
     this.getRequests();
     this.memberService.getMemberById(id).subscribe((res) => {
       var member = res as Member;
