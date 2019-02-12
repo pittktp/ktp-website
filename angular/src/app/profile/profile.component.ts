@@ -94,7 +94,7 @@ export class ProfileComponent implements OnInit {
         }
       })
     })
-     this.loadScript('../assets/js/new-age.js');
+    this.loadScript('../assets/js/new-age.js');
   }
 
   // A hacked up way to load the js script needed for this component
@@ -159,7 +159,9 @@ export class ProfileComponent implements OnInit {
       this.showError("Invalid Image Type");
     } else {
       // Update in DB
-      this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile).subscribe(res => {
+      var fileType = this.targetFile.name.split(".")[1];
+      var fileName = this.id + "." + fileType;
+      this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile, this.id, fileName).subscribe(res => {
         console.log(res);
         this.showMsg("Profile Image Updated!");
         setTimeout(() => {window.location.reload();}, 1500);

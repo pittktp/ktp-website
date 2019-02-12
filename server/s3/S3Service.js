@@ -3,8 +3,10 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 
 aws.config.update({
-  secretAccessKey: process.env.AWS_SECRET,
-  accessKeyId: process.env.AWS_ID,
+  // secretAccessKey: process.env.AWS_SECRET,
+  // accessKeyId: process.env.AWS_ID,
+  secretAccessKey: "TjRAoeg8OWqkXujz1I9laMT0DYtXciIxz4sFQNhL",
+  accessKeyId: "AKIAJGV4ZCC5RKTFHROQ",
   region: 'us-east-1'
 });
 
@@ -29,7 +31,9 @@ const upload = multer({
       cb(null, {fieldName: 'TESTING_METADATA'});
     },
     key: function (req, file, cb) {
-      var fullPath = "img/profile/" + file.originalname;
+      console.log(req.body.username);
+      console.log(req.body.newFileName);
+      var fullPath = "img/profile/" + req.body.username + "/" + req.body.newFileName;
       cb(null, fullPath)
     }
   })

@@ -6,7 +6,8 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var { Member } = require('../models/member');
 
-const singleUpload = upload.single('image')
+const singleUpload = upload.single('image');
+//const deleteFolder = upload;
 
 // GET all Members --> localhost:3000/members
 // PROTECTED endpoint
@@ -195,71 +196,92 @@ router.delete('/:id', require('../auth/auth.js'), (req, res) => {
 // POST upload Member profile image --> localhost:3000/api/member/*id*/image
 // Must be a POST request since files must be sent via POST
 // PROTECTED endpoint
-router.post('/:id/image', require('../auth/auth.js'), (req, res) => {
-  if(!ObjectId.isValid(req.params.id)) {
-    return res.status(404).send('No record with given id: ' + req.params.id);
-  }
+// router.post('/:id/image', require('../auth/auth.js'), (req, res) => {
+//   if(!ObjectId.isValid(req.params.id)) {
+//     return res.status(404).send('No record with given id: ' + req.params.id);
+//   }
+//
+//   var form = formidable.IncomingForm();
+//   form.parse(req, function(err, fields, file) {
+//     if(err) { console.error('Form failed to parse with following error: ', err); }
+//     res.end(util.inspect({fields: fields, file: file}))
+//   });
+//
+//   form.on('end', function(fields, file) {
+//     var id = ""
+//     var tempPath = this.openedFiles[0].path;
+//     var fileExt = this.openedFiles[0].name.split('.')[1];
+//     Member.findById(req.params.id, function(err, member) {
+//       if(err) { console.error('File failed to copy with following error: ', err); }
+//       id = member.email.split('@')[0];
+//       var oldPic = member.picture;
+//       var newPath = `../server/public/img/${id}.${fileExt}`;
+//       var fileName = id + '.' + fileExt;
+//
+//       fs.copyFile(tempPath, newPath, function(err) {
+//         if(err) { console.error('File failed to copy with following error: ', err); }
+//         else {
+//           Member.findByIdAndUpdate(req.params.id, {picture: fileName}, function(err, raw) {
+//             if(err) { console.error('Failed to update mmeber picture with following error: ', err); }
+//             console.log(raw);
+//           });
+//         }
+//       });
+//
+//       // Remove old picture if user had one
+//       if(oldPic != null || oldPic != "") {
+//         fs.unlink(`../server/public/img/${oldPic}`, (err) => {
+//           if(err) { console.error('Failed to remove old image with error: ', err); }
+//         });
+//       }
+//     });
+//   });
+// });
+//
+// // Gets a member's image given the member's ID
+// // PROTECTED endpoint
+// router.get('/:id/image', require('../auth/auth.js'), (req, res) => {
+//   if(!ObjectId.isValid(req.params.id)) {
+//     return res.status(404).send('No record with given id: ' + req.params.id);
+//   }
+//
+//   Member.findById(req.params.id, function(err, member) {
+//     if(err) { console.error('Failed to find member with following error: ', err); }
+//     res.render('ProfileImg.pug', {
+//       imgSrc: '../../../img/' + member.picture
+//     });
+//   });
+// });
 
-  var form = formidable.IncomingForm();
-  form.parse(req, function(err, fields, file) {
-    if(err) { console.error('Form failed to parse with following error: ', err); }
-    res.end(util.inspect({fields: fields, file: file}))
-  });
 
-  form.on('end', function(fields, file) {
-    var id = ""
-    var tempPath = this.openedFiles[0].path;
-    var fileExt = this.openedFiles[0].name.split('.')[1];
-    Member.findById(req.params.id, function(err, member) {
-      if(err) { console.error('File failed to copy with following error: ', err); }
-      id = member.email.split('@')[0];
-      var oldPic = member.picture;
-      var newPath = `../server/public/img/${id}.${fileExt}`;
-      var fileName = id + '.' + fileExt;
-
-      fs.copyFile(tempPath, newPath, function(err) {
-        if(err) { console.error('File failed to copy with following error: ', err); }
-        else {
-          Member.findByIdAndUpdate(req.params.id, {picture: fileName}, function(err, raw) {
-            if(err) { console.error('Failed to update mmeber picture with following error: ', err); }
-            console.log(raw);
-          });
-        }
-      });
-
-      // Remove old picture if user had one
-      if(oldPic != null || oldPic != "") {
-        fs.unlink(`../server/public/img/${oldPic}`, (err) => {
-          if(err) { console.error('Failed to remove old image with error: ', err); }
-        });
-      }
-    });
-  });
-});
-
-// Gets a member's image given the member's ID
-// PROTECTED endpoint
-router.get('/:id/image', require('../auth/auth.js'), (req, res) => {
-  if(!ObjectId.isValid(req.params.id)) {
-    return res.status(404).send('No record with given id: ' + req.params.id);
-  }
-
-  Member.findById(req.params.id, function(err, member) {
-    if(err) { console.error('Failed to find member with following error: ', err); }
-    res.render('ProfileImg.pug', {
-      imgSrc: '../../../img/' + member.picture
-    });
-  });
-});
-
-router.post('/image-upload', function(req, res) {
-  singleUpload(req, res, function(err, some) {
+// POST endpoint that receives a file in the body to be saved to S3 that represent's the member's new profile picture.
+// Also the member's ID is sent in the body so that we can update him/her in the DB to reflect the new picture URL
+router.post('/image', function(req, res) {
+  //req.body.username = req.username;
+  singleUpload(req, res, function(err, some) {  // Uses S3Service.js to do the actual uploading to S3
+    //console.log(req.body)
     if (err) {
       return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
     }
 
-    //return res.json({'imageUrl': req.file.location});
-    return res.status(200).send();
+    //No upload error (image successfully in S3) -> now find the Member by ID and update their picture field and save them back to DB
+    Member.findById(req.body._id, (err, doc) => {
+      if(!err) {
+        var member = doc;
+        member.picture = "https://pitt-kappathetapi.com/s3/img/profile/" + req.body.username + "/" + req.body.newFileName;  // The link to the picture in S3
+
+        // Update the member in the DB
+        Member.findByIdAndUpdate(member._id, { $set: member }, { new: true }, (err, doc) => {
+          if(!err)
+            return res.status(200).json({'imageUrl': member.picture}).send();
+          else
+            console.log('Error in Member picture UPDATE: ' + JSON.stringify(err, undefined, 2));
+        });
+      }
+      else {
+        console.log('Error in Retriving Member: ' + JSON.stringify(err, undefined, 2));
+      }
+    });
   });
 })
 

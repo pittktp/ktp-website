@@ -61,14 +61,17 @@ export class MemberService {
     return this.httpClient.delete(`${this.API_URL}` + id, { headers: headers });
   }
 
-  postFile(id: string, targetFile: File) {
+  postFile(id: string, targetFile: File, username: string, newFileName: string) {
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set("authorization", token);
 
     var formData: FormData = new FormData();
-    formData.append('image', targetFile, targetFile.name);
+    formData.append('_id', id);
+    formData.append('newFileName', newFileName);
+    formData.append('username', username);
+    formData.append('image', targetFile);
 
-    return this.httpClient.post(`${this.API_URL}/${id}/image`, formData, { headers: headers });
+    return this.httpClient.post(`${this.API_URL}/image`, formData, { headers: headers });
   }
 
 }
