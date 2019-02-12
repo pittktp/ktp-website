@@ -1,9 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
+const upload = require('../s3/S3Service.js');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var { Member } = require('../models/member');
+
+const singleUpload = upload.single('image')
 
 // GET all Members --> localhost:3000/members
 // PROTECTED endpoint
@@ -39,7 +42,7 @@ router.get('/basic', (req, res) => {
 
 // GET Member by ID --> localhost:3000/members/*id-number*
 router.get('/:id', (req, res) => {
-  
+
     // Not a valid ID
     if(!ObjectId.isValid(req.params.id))
       return res.status(404).send('No record with given id: ' + req.params.id);
@@ -248,5 +251,16 @@ router.get('/:id/image', require('../auth/auth.js'), (req, res) => {
     });
   });
 });
+
+router.post('/image-upload', function(req, res) {
+  singleUpload(req, res, function(err, some) {
+    if (err) {
+      return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+    }
+
+    //return res.json({'imageUrl': req.file.location});
+    return res.status(200).send();
+  });
+})
 
 module.exports = router;

@@ -74,4 +74,8 @@ export class MembersComponent implements OnInit {
     const names = fullName.split(' ');
     return names[0][0] + names[names.length - 1][0];
   }
+
+  getMemberPicture(member: Member) {
+    return member.picture;
+  }
 }

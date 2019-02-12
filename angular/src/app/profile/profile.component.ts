@@ -20,6 +20,8 @@ declare var $: any;
 })
 export class ProfileComponent implements OnInit {
 
+  private picture = "";
+
   id: string
   profile: Member;
   picLetters: string = '';
@@ -31,7 +33,7 @@ export class ProfileComponent implements OnInit {
   panelType: string = '';
   targetFile: File = null;
   courseList: Array<String> = [];
-  private sub: any
+  private sub: any;
 
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, private requestService: RequestsService, private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
 
@@ -45,6 +47,7 @@ export class ProfileComponent implements OnInit {
         for(var i = 0; i < memberList.length; i++) {
           if(memberList[i].email.split('@')[0] == this.id) {
             this.profile = memberList[i];
+            this.picture = this.profile.picture;
           }
         }
         // Ensure no name bugs

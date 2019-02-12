@@ -135,7 +135,7 @@
             <div class="row profile-header">
               <div class="col-md-2">
                 <div *ngIf="this.profile.picture !== '' || this.profile.picture === null; else noPic" class="profile-pic">
-                  <img src="http://localhost:3000/img/{{profile.picture}}" alt="{{profile.name}}" title="{{profile.name}}"/>
+                  <img [src]="picture" alt="{{profile.name}}" title="{{profile.name}}"/>
                 </div>
                 <ng-template #noPic style="margin: 0 auto">
                   <div class="profile-no-pic">
