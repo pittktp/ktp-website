@@ -134,7 +134,6 @@ export class EditMembersComponent implements OnInit {
     }
   }
 
-
   onZeroDatabase(){
     if(confirm("Are you sure you want to clear the point values? This function will zero out all Brotherhood Points, Service Hours, and Absences. It should only be used at the end of the semester.")) {
       if(confirm("Are you SURE you're sure? This cannot be undone.")) {
