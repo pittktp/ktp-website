@@ -163,6 +163,7 @@ export class ProfileComponent implements OnInit {
       var fileName = this.id + "." + fileType;
       this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile, this.id, fileName).subscribe(res => {
         console.log(res);
+        this.showMsg("Reloading...");
         this.showMsg("Profile Image Updated!");
         setTimeout(() => {window.location.reload();}, 1500);
       }, error => {

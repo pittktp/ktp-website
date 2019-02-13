@@ -193,67 +193,6 @@ router.delete('/:id', require('../auth/auth.js'), (req, res) => {
   });
 });
 
-// POST upload Member profile image --> localhost:3000/api/member/*id*/image
-// Must be a POST request since files must be sent via POST
-// PROTECTED endpoint
-// router.post('/:id/image', require('../auth/auth.js'), (req, res) => {
-//   if(!ObjectId.isValid(req.params.id)) {
-//     return res.status(404).send('No record with given id: ' + req.params.id);
-//   }
-//
-//   var form = formidable.IncomingForm();
-//   form.parse(req, function(err, fields, file) {
-//     if(err) { console.error('Form failed to parse with following error: ', err); }
-//     res.end(util.inspect({fields: fields, file: file}))
-//   });
-//
-//   form.on('end', function(fields, file) {
-//     var id = ""
-//     var tempPath = this.openedFiles[0].path;
-//     var fileExt = this.openedFiles[0].name.split('.')[1];
-//     Member.findById(req.params.id, function(err, member) {
-//       if(err) { console.error('File failed to copy with following error: ', err); }
-//       id = member.email.split('@')[0];
-//       var oldPic = member.picture;
-//       var newPath = `../server/public/img/${id}.${fileExt}`;
-//       var fileName = id + '.' + fileExt;
-//
-//       fs.copyFile(tempPath, newPath, function(err) {
-//         if(err) { console.error('File failed to copy with following error: ', err); }
-//         else {
-//           Member.findByIdAndUpdate(req.params.id, {picture: fileName}, function(err, raw) {
-//             if(err) { console.error('Failed to update mmeber picture with following error: ', err); }
-//             console.log(raw);
-//           });
-//         }
-//       });
-//
-//       // Remove old picture if user had one
-//       if(oldPic != null || oldPic != "") {
-//         fs.unlink(`../server/public/img/${oldPic}`, (err) => {
-//           if(err) { console.error('Failed to remove old image with error: ', err); }
-//         });
-//       }
-//     });
-//   });
-// });
-//
-// // Gets a member's image given the member's ID
-// // PROTECTED endpoint
-// router.get('/:id/image', require('../auth/auth.js'), (req, res) => {
-//   if(!ObjectId.isValid(req.params.id)) {
-//     return res.status(404).send('No record with given id: ' + req.params.id);
-//   }
-//
-//   Member.findById(req.params.id, function(err, member) {
-//     if(err) { console.error('Failed to find member with following error: ', err); }
-//     res.render('ProfileImg.pug', {
-//       imgSrc: '../../../img/' + member.picture
-//     });
-//   });
-// });
-
-
 // POST endpoint that receives a file in the body to be saved to S3 that represent's the member's new profile picture.
 // Also the member's ID is sent in the body so that we can update him/her in the DB to reflect the new picture URL
 router.post('/image', function(req, res) {
