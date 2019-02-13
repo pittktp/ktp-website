@@ -33,6 +33,9 @@ export class PointsComponent implements OnInit {
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
 
+  selectedView: Member[];
+  filter = "Active Members";
+
   // Gets user's info if logged in
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, private router: Router) {
     if(this.auth.loggedIn()) {
@@ -45,6 +48,8 @@ export class PointsComponent implements OnInit {
         if(member.admin == true) { this.getRequests(); }
       });
     }
+
+
   }
 
   // Gets user's info if logged in
@@ -64,6 +69,11 @@ export class PointsComponent implements OnInit {
     if(this.admin == true) {
       this.getRequests();
     }
+
+    this.memberService.getMembers().subscribe((data: Array<object>) => {
+      this.memberService.members = data as Member[];
+      this.onChangeView(this.filter);  //Init to show active members
+    });
   }
 
   // A hacked up way to load the js script needed for this component
@@ -94,6 +104,7 @@ export class PointsComponent implements OnInit {
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       });
       this.memberService.members = mems;
+      this.onChangeView(this.filter);
     });
   }
 
@@ -251,5 +262,44 @@ export class PointsComponent implements OnInit {
   onHistoryClosed() {
     this.membersRequests = [];
   }
+
+  onChangeView(option) {
+  //  this.selected = ""
+//  alert(option);
+
+    this.filter = option;
+
+    if(option == "Active Members") {
+
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.memberService.members.length; i++) {
+        if(this.memberService.members[i].role != "Alumni" && this.memberService.members[i].role != "Inactive")
+          this.selectedView.push(this.memberService.members[i]);
+      }
+    }
+
+    if(option == "Alumni") {
+
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.memberService.members.length; i++) {
+        if(this.memberService.members[i].role == "Alumni")
+          this.selectedView.push(this.memberService.members[i]);
+      }
+    }
+
+    if(option == "Inactive") {
+
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.memberService.members.length; i++) {
+        if(this.memberService.members[i].role == "Inactive")
+          this.selectedView.push(this.memberService.members[i]);
+      }
+    }
+
+
+  }
+
+
+
 
 }
