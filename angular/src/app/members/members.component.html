@@ -8,7 +8,7 @@
     <div class="grid">
       <div *ngFor="let member of members" class="card">
 
-        <ng-container *ngIf="member.picture != ''; then img; else noImg"></ng-container>
+        <ng-container *ngIf="member.picture && member.picture != ''; then img; else noImg"></ng-container>
         <ng-template #img>
           <img class="card-img-top card-img-circle" [src]="getMemberPicture(member)">
         </ng-template>

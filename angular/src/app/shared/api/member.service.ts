@@ -4,6 +4,8 @@ import { HttpClient, HttpResponse, HttpHeaders } from  '@angular/common/http';
 import { Member } from '../models/member.model';
 import { stringify } from '@angular/compiler/src/util';
 
+import * as aws4 from 'aws4';
+
 @Injectable({
   providedIn: 'root'
 })
