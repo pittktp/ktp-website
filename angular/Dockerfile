@@ -8,7 +8,6 @@ WORKDIR /angular_app
 RUN npm install
 RUN $(npm bin)/ng build
 
-
 #STAGE 2 - the nginx webserver image
 FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
