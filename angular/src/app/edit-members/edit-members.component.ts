@@ -125,7 +125,22 @@ export class EditMembersComponent implements OnInit {
     updatedMember.courses = this.memberClicked.courses;
     updatedMember.color = this.memberClicked.color;
 
+
+
     if(confirm("Finish editing member " + updatedMember.name + "?")) {
+
+  /*      //Alumni Lockout ---- Marking all changes as Alumni??
+      if (updatedMember.role = "Alumni"){
+        confirm("Are you sure this member is an Alumni? Changing their role to Alumni " +
+              "will zero out their point values and delete their password so they " +
+              "will be unable to log back in. Their profile will remain in tact.");
+
+              updatedMember.points = 0
+              updatedMember.serviceHours = 0;
+              updatedMember.absences = 0;
+              updatedMember.password = " ";  //Empty string makes them unable to log back in.
+      }
+  */
       this.memberService.putMember(this.memberClicked._id, updatedMember).subscribe((res) => {
         this.getMembers();
         $("#memberEditSubmitModal").modal("hide");
@@ -135,8 +150,10 @@ export class EditMembersComponent implements OnInit {
   }
 
   onZeroDatabase(){
-    if(confirm("Are you sure you want to clear the point values? This function will zero out all Brotherhood Points, Service Hours, and Absences. It should only be used at the end of the semester.")) {
-      if(confirm("Are you SURE you're sure? This cannot be undone.")) {
+    if(confirm("Are you sure you want to clear the point values? This function" +
+     "will zero out all Brotherhood Points, Service Hours, and Absences. It" +
+     "should only be used at the end of the semester.")) {
+      if(confirm("Are you SURE that you're sure? This cannot be undone.")) {
 
           //Get the array of members from MemberService
           var mems = this.memberService.members;

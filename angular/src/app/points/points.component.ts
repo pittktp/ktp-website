@@ -29,12 +29,13 @@ export class PointsComponent implements OnInit {
   userId: string;
   user: string;
   admin: boolean;
+  alumni: boolean;  //Used to disable alumni ability to submit requests
   requestForm: Request = new Request();
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
 
-  selectedView: Member[];
-  filter = "Active Members";
+  selectedView: Member[];     //Array to store the current filter selection
+  filter = "Active Members";  //Default filter view
 
   // Gets user's info if logged in
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, private router: Router) {
@@ -45,6 +46,7 @@ export class PointsComponent implements OnInit {
         var member = res as Member;
         this.user = member.name;
         this.admin = member.admin;
+        this.alumni = (member.role === "Alumni") ? true : false;
         if(member.admin == true) { this.getRequests(); }
       });
     }
@@ -263,14 +265,12 @@ export class PointsComponent implements OnInit {
     this.membersRequests = [];
   }
 
+  //Called when user changes the Display option on the page
   onChangeView(option) {
-  //  this.selected = ""
-//  alert(option);
 
     this.filter = option;
 
     if(option == "Active Members") {
-
       this.selectedView = []; //clear arr
       for (var i = 0; i < this.memberService.members.length; i++) {
         if(this.memberService.members[i].role != "Alumni" && this.memberService.members[i].role != "Inactive")
@@ -279,7 +279,6 @@ export class PointsComponent implements OnInit {
     }
 
     if(option == "Alumni") {
-
       this.selectedView = []; //clear arr
       for (var i = 0; i < this.memberService.members.length; i++) {
         if(this.memberService.members[i].role == "Alumni")
@@ -287,8 +286,7 @@ export class PointsComponent implements OnInit {
       }
     }
 
-    if(option == "Inactive") {
-
+    if(option == "Inactive Members") {
       this.selectedView = []; //clear arr
       for (var i = 0; i < this.memberService.members.length; i++) {
         if(this.memberService.members[i].role == "Inactive")
@@ -296,10 +294,6 @@ export class PointsComponent implements OnInit {
       }
     }
 
-
   }
-
-
-
 
 }

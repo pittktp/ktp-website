@@ -73,7 +73,7 @@ router.post('/', (req, res) => {
         //Check the registration code for admin / brother permissions and role
         if(req.body.code == "ky1fgkqq61") { admin = true; role = "E Board"; }
         else if(req.body.code == "yy3dlxwiz6") { admin = false; role = "Brother"; }
-        else { return res.status(401).send('Incorrect code'); }
+        else { return res.status(401).send('Invalid code'); }
 
         // Create new member object
         var member = new Member({
