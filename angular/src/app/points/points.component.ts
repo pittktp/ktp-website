@@ -29,7 +29,6 @@ export class PointsComponent implements OnInit {
   userId: string;
   user: string;
   admin: boolean;
-  alumni: boolean;  //Used to disable alumni ability to submit requests
   requestForm: Request = new Request();
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
@@ -46,7 +45,6 @@ export class PointsComponent implements OnInit {
         var member = res as Member;
         this.user = member.name;
         this.admin = member.admin;
-        this.alumni = (member.role === "Alumni") ? true : false;
         if(member.admin == true) { this.getRequests(); }
       });
     }

@@ -26,6 +26,7 @@ export class NavComponent implements OnInit {
   public user = '';
   public userId = '';
   public admin = false;
+  public alumni = false;
   private expanded = false;
   private expectedMembers: Member[];
 
@@ -37,6 +38,7 @@ export class NavComponent implements OnInit {
         var member = res as Member;
         this.user = member.name;
         this.admin = member.admin;
+        this.alumni = (member.role === "Alumni") ? true : false;
         this.userId = member.email.split('@')[0];
       });
     }
