@@ -34,7 +34,7 @@ Currently we are hosted on GitHub but have an intention in the very near future 
 ## Ok cool, but how do I run this?
 In order to run this locally, you have to install some dependencies for all layers of the application (Angular6, NodeJS, and MongoDB). Start by cloning this project to your local machine with:
 ```
-git clone https://github.com/jdepp/ktp-website.git
+git clone https://github.com/pittktp/ktp-website.git
 ```
 And then navigate to this directory.
 
@@ -77,7 +77,7 @@ This isn't required but is super helpful. It's basically just a program that sho
 
 
 ### NodeJS (backend)
-The backend isn't as heavy code-wise as the frontend, as it's only really responsible for taking stuff from the frontend and saving it to the database, or pulling from the database and giving it to the frontend. Set up your dependencies with: 
+The backend isn't as heavy code-wise as the frontend, as it's only really responsible for taking stuff from the frontend and saving it to the database, or pulling from the database and giving it to the frontend. Set up your dependencies with:
 ```
 npm install
 ```
