@@ -12,3 +12,8 @@ node_modules/
 
 # macOS Files
 .DS_Store
+
+
+*/data/
+
+docker-compose.yml
