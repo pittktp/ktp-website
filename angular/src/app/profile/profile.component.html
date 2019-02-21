@@ -14,8 +14,10 @@
               <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" accept="image/*" required>
             </div>
             <br />
-            <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid">Upload</button>
+            <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid" data-toggle="tooltip" data-placement="top" title="Upload the selected picture">Upload Picture</button>
           </form>
+          <button (click)="onDefaultPicture()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Set picture to show member's initials">Default picture</button>
+          <br />
           <br />
           <form (ngSubmit)="onChangeDescription(changeDescForm)" #changeDescForm="ngForm" autocomplete="off">
             <div class="input-field">

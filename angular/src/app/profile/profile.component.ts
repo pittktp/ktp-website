@@ -158,12 +158,12 @@ export class ProfileComponent implements OnInit {
     if(this.targetFile.type != "image/jpeg" && this.targetFile.type != "image/png" && this.targetFile.type != "image/gif") {
       this.showError("Invalid Image Type");
     } else {
+      this.toastr.show("Processing...");
+
       // Update in DB
       var fileType = this.targetFile.name.split(".")[1];
       var fileName = this.id + "." + fileType;
       this.memberService.postFile(this.auth.getCurrentUserId(), this.targetFile, this.id, fileName).subscribe(res => {
-        console.log(res);
-        this.showMsg("Reloading...");
         this.showMsg("Profile Image Updated!");
         setTimeout(() => {window.location.reload();}, 1500);
       }, error => {
@@ -171,6 +171,18 @@ export class ProfileComponent implements OnInit {
         this.showError("Failed to Update Image!");
       });
     }
+  }
+
+  onDefaultPicture() {
+    var member = this.profile;
+    member.picture = "";
+
+    this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
+      this.showMsg("Now using default picture");
+    }, error => {
+      console.error(error);
+      this.showError("Failed to set default picture");
+    });
   }
 
   onChangeDescription(form: NgForm) {
@@ -205,7 +217,6 @@ export class ProfileComponent implements OnInit {
     }
 
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
-      this.showMsg("Reloading...");
       this.showMsg("Colors Updated");
       setTimeout(() => {
         window.location.reload();

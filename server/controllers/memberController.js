@@ -120,7 +120,7 @@ router.put('/password', (req, res) => {
         return res.status(404).send();
       }
       else {
-        bcrypt.hash(req.body.password, 10, function(err, hash) {
+        bcrypt.hash(req.body.password, null, null, function(err, hash) {
 
           var member = doc;
           member.password = hash;
