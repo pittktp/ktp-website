@@ -39,7 +39,7 @@ router.get('/basic', (req, res) => {
 
 // GET Member by ID --> localhost:3000/members/*id-number*
 router.get('/:id', (req, res) => {
-  
+
     // Not a valid ID
     if(!ObjectId.isValid(req.params.id))
       return res.status(404).send('No record with given id: ' + req.params.id);
@@ -116,7 +116,7 @@ router.put('/password', (req, res) => {
         return res.status(404).send();
       }
       else {
-        bcrypt.hash(req.body.password, 10, function(err, hash) {
+        bcrypt.hash(req.body.password, null, null, function(err, hash) {
 
           var member = doc;
           member.password = hash;
