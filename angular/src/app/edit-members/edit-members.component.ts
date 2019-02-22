@@ -150,22 +150,25 @@ export class EditMembersComponent implements OnInit {
   }
 
   onZeroDatabase(){
-    if(confirm("Are you sure you want to clear the point values? This function" +
-     "will zero out all Brotherhood Points, Service Hours, and Absences. It" +
-     "should only be used at the end of the semester.")) {
+    if(confirm("Are you sure you want to clear the point values? This function " +
+     "will zero out all Brotherhood Points, Service Hours, and Absences for all members. It " +
+     "should only be used at the end of each semester.")) {
       if(confirm("Are you SURE that you're sure? This cannot be undone.")) {
-
-          //Get the array of members from MemberService
-          var mems = this.memberService.members;
-          //Iterate through array and zero out all fields
-          for(var i = 0; i < this.memberService.members.length; i++) {
-            mems[i].points = 0;
-            mems[i].serviceHours = 0;
-            mems[i].absences = 0;
-            //Push updated member to the DB
-            this.memberService.putMember(mems[i]._id, mems[i]).subscribe((res) => {});
+          if(confirm("I hope you know what you're doing...")) {
+            //Get the array of members from MemberService
+            var mems = this.memberService.members;
+            //Iterate through array and zero out all fields
+            for(var i = 0; i < this.memberService.members.length; i++) {
+              mems[i].points = 0;
+              mems[i].serviceHours = 0;
+              mems[i].absences = 0;
+              //Push updated member to the DB
+              this.memberService.putMember(mems[i]._id, mems[i]).subscribe((res) => {});
+            }
+            this.toastr.success("The database has been zeroed out.");
           }
-          this.toastr.success("The database has been zeroed out.");
+          else
+            this.toastr.error("The database was not altered.");
       } else
         this.toastr.error("The database was not altered.");
     } else

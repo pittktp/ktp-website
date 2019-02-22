@@ -71,7 +71,13 @@ export class PointsComponent implements OnInit {
     }
 
     this.memberService.getMembers().subscribe((data: Array<object>) => {
-      this.memberService.members = data as Member[];
+      var mems = data as Member[];
+      mems.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
+      this.memberService.members = mems;
       this.onChangeView(this.filter);  //Init to show active members
     });
   }
