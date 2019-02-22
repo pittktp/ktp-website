@@ -8,14 +8,16 @@
           <h4 style="color:black;" class="modal-title">Settings</h4>
         </div>
         <div class="modal-body" style="overflow-y: auto">
-          <!-- <form (ngSubmit)="onChangePicture(changePicForm)" #changePicForm="ngForm" autocomplete="off">
+          <form (ngSubmit)="onChangePicture(changePicForm)" #changePicForm="ngForm" autocomplete="off">
             <div class="input-field">
               <label style="color:black;" for="profilePic">Picture to Upload: </label>
               <input style="text-align:left;" [(ngModel)]="changePicForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" accept="image/*" required>
             </div>
             <br />
-            <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid">Upload</button>
-          </form> -->
+            <button type="submit" class="btn btn-default" [disabled]="!changePicForm.valid" data-toggle="tooltip" data-placement="top" title="Upload the selected picture">Upload Picture</button>
+          </form>
+          <button (click)="onDefaultPicture()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Set picture to show member's initials">Default picture</button>
+          <br />
           <br />
           <form (ngSubmit)="onChangeDescription(changeDescForm)" #changeDescForm="ngForm" autocomplete="off">
             <div class="input-field">
@@ -135,7 +137,7 @@
             <div class="row profile-header">
               <div class="col-md-2">
                 <div *ngIf="this.profile.picture !== '' || this.profile.picture === null; else noPic" class="profile-pic">
-                  <img src="http://localhost:3000/img/{{profile.picture}}" alt="{{profile.name}}" title="{{profile.name}}"/>
+                  <img [src]="picture" alt="{{profile.name}}" title="{{profile.name}}"/>
                 </div>
                 <ng-template #noPic style="margin: 0 auto">
                   <div class="profile-no-pic">

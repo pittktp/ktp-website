@@ -46,16 +46,30 @@ export class MembersComponent implements OnInit {
   // Gets all members from DB using the backend API endpoint that only returns a list of members
   // with properties "name", "major", and "description"
   getMembers() {
-    this.memberService.getBasicMembers().subscribe((data: Array<object>) => {
-      this.members = data as Member[];
-      this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
+    if(!this.userLoggedIn) {
+      this.memberService.getBasicMembers().subscribe((data: Array<object>) => {
+        this.members = data as Member[];
+        this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
 
-      this.members.sort(function(a, b) {
-        var textA = a.name.toUpperCase();
-        var textB = b.name.toUpperCase();
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        this.members.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
       });
-    });
+    }
+    else {
+      this.memberService.getMembers().subscribe((data: Array<object>) => {
+        this.members = data as Member[];
+        this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
+
+        this.members.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+      });
+    }
   }
 
   // Fills each member card with the member's name, major, and description.
@@ -73,5 +87,9 @@ export class MembersComponent implements OnInit {
   initialsFrom(fullName: string): string {
     const names = fullName.split(' ');
     return names[0][0] + names[names.length - 1][0];
+  }
+
+  getMemberPicture(member: Member) {
+    return member.picture;
   }
 }

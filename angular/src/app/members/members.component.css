@@ -1,7 +1,7 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
 .background {
-  background: url("../../assets/img/bg-pattern.png"), linear-gradient(to left,#28B463,#145BBD) !important;
+  background: url("../../assets/img/BackgroundPattern.png"), linear-gradient(to left,#28B463,#145BBD) !important;
   min-height: 100%;
 }
 
