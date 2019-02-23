@@ -31,7 +31,8 @@ router.get('/basic', (req, res) => {
   // Gets all members in DB but only includes the properties "description", "email", "picture", and "major"
   // Also, exludes the _id property -> since this is unprotected, someone not logged in will be able to see these properties,
   // and if they get the _id, they can access the unprotected getById and then get the list of members with all the properties.
-  Member.find({}, '-_id name description email major', (err, docs) => {
+
+  Member.find({}, '-_id name role description email picture major', (err, docs) => {
     if(!err) {
       res.send(docs);
     }
@@ -68,12 +69,16 @@ router.post('/', (req, res) => {
       res.status(409).send('Conflict');
     else {  // If not, save new Member
       bcrypt.hash(req.body.password, null, null, function(err, hash) {
-        var userRole = "";
+        var role = "";
+        var admin = false;
 
-        // Does the register code checking here
-        if(req.body.code == "ky1fgkqq61") { userRole = "admin"; }
-        else if(req.body.code == "yy3dlxwiz6") { userRole = "member"; }
-        else { return res.status(401).send('Incorrect code'); }
+
+        //TODO fix the role not filling in upon registration
+
+        //Check the registration code for admin / brother permissions and role
+        if(req.body.code == "ky1fgkqq61") { admin = true; role = "E Board"; }
+        else if(req.body.code == "yy3dlxwiz6") { admin = false; role = "Brother"; }
+        else { return res.status(401).send('Invalid code'); }
 
         // Create new member object
         var member = new Member({
@@ -82,7 +87,8 @@ router.post('/', (req, res) => {
           password: hash,
           points: req.body.points,
           serviceHours: req.body.serviceHours,
-          role: userRole,
+          role: role,
+          admin: admin,
           absences: req.body.absences,
           rushClass: req.body.ruchClass,
           picture: req.body.picture,
@@ -95,7 +101,7 @@ router.post('/', (req, res) => {
           color: req.body.color
         });
 
-        // Actually saves to the DB
+        //Actually saves to the DB
         member.save((err, doc) =>{
           if(!err)
             res.send(doc);
@@ -143,10 +149,18 @@ router.put('/password', (req, res) => {
 // PUT update Member --> localhost:3000/members/*id-number*
 // PROTECTED endpoint
 router.put('/:id', require('../auth/auth.js'), (req, res) => {
+  var admin = false;
 
   // Check if member is already in the DB -> if not, send back 404 NOT FOUND error
   if(!ObjectId.isValid(req.params.id))
     return res.status(404).send('No record with given id: ' + req.params.id);
+
+    if(req.body.role == "Brother" || req.body.role == "Alumni" || req.body.role == "Inactive") {
+        admin = false;
+    } else {
+        admin = true;
+    }
+
 
   // Create a new member object to represent the updated member
   var member = {
@@ -155,6 +169,7 @@ router.put('/:id', require('../auth/auth.js'), (req, res) => {
     points: req.body.points,
     serviceHours: req.body.serviceHours,
     role: req.body.role,
+    admin: admin,
     absences: req.body.absences,
     rushClass: req.body.rushClass,
     picture: req.body.picture,

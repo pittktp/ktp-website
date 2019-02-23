@@ -4,8 +4,10 @@ import { NgForm } from '@angular/forms';
 
 import { AuthService } from '../shared/auth/auth.service';
 import { MemberService } from '../shared/api/member.service';
+import { RequestsService } from '../shared/api/requests.service';
 import { SharedService } from '../shared/shared.service';
 import { Member } from '../shared/models/member.model';
+import { Request } from '../shared/models/request.model';
 import { ToastrService } from 'ngx-toastr';
 
 import '../../assets/js/new-age.min.js';
@@ -25,23 +27,23 @@ export class EditMembersComponent implements OnInit {
 
   private memberClicked: Member;
   private userId: string;
-  private userRole: string = '';
+  private admin: boolean;
 
   // Constructor -> checks if user is logged in, if so, then retrieve their member object from the database.
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private requestsService: RequestsService, private sharedService: SharedService) {
 
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
       this.userId = currentUserId;
       this.memberService.getMemberById(this.userId).subscribe(res => {
         var member = res as Member;
-        this.userRole = member.role;
-        if(this.userRole != 'admin') {
+        this.admin = member.admin;
+        if(!this.admin) {
           alert('You do not have permission to access this page');
           this.router.navigate(['home']);
         }
       });
-    }  
+    }
   }
 
   // Pretty much like a constructor -> this gets a list of all members from DB everytime the component is loaded/refreshed
@@ -125,13 +127,62 @@ export class EditMembersComponent implements OnInit {
     updatedMember.courses = this.memberClicked.courses;
     updatedMember.color = this.memberClicked.color;
 
+
+
     if(confirm("Finish editing member " + updatedMember.name + "?")) {
+
+  /*      //Alumni Lockout ---- Marking all changes as Alumni??
+      if (updatedMember.role = "Alumni"){
+        confirm("Are you sure this member is an Alumni? Changing their role to Alumni " +
+              "will zero out their point values and delete their password so they " +
+              "will be unable to log back in. Their profile will remain in tact.");
+
+              updatedMember.points = 0
+              updatedMember.serviceHours = 0;
+              updatedMember.absences = 0;
+              updatedMember.password = " ";  //Empty string makes them unable to log back in.
+      }
+  */
       this.memberService.putMember(this.memberClicked._id, updatedMember).subscribe((res) => {
         this.getMembers();
         $("#memberEditSubmitModal").modal("hide");
         this.toastr.success('Successfully edited member ' + res.name);
       });
     }
+  }
+
+  onZeroDatabase(){
+    if(confirm("Are you sure you want to clear the point values? This function " +
+     "will zero out all Brotherhood Points, Service Hours, and Absences for all members. It " +
+     "should only be used at the end of each semester.")) {
+      if(confirm("Are you SURE that you're sure? This cannot be undone.")) {
+          if(confirm("I hope you know what you're doing...")) {
+            // Get the array of members from MemberService
+            var mems = this.memberService.members;
+            // Iterate through array and zero out all fields and then save the member back to DB
+            for(var i = 0; i < this.memberService.members.length; i++) {
+              mems[i].points = 0;
+              mems[i].serviceHours = 0;
+              mems[i].absences = 0;
+              // Push updated member to the DB
+              this.memberService.putMember(mems[i]._id, mems[i]).subscribe((res) => {});
+            }
+
+            // Delete ALL requests in the DB
+            this.requestsService.getRequests().subscribe((res) => {
+              var reqs = res as Request[];
+              for(var i = 0; i < reqs.length; i++) {
+                this.requestsService.deleteRequest(reqs[i]._id).subscribe((res) => {})
+              }
+            })
+            this.toastr.success("The database has been zeroed out.");
+          }
+          else
+            this.toastr.error("The database was not altered.");
+      } else
+        this.toastr.error("The database was not altered.");
+    } else
+      this.toastr.error("The database was not altered.");
   }
 
 }

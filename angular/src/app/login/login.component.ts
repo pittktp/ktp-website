@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
         var currentUserId = this.auth.getCurrentUserId();
         this.memberService.getMemberById(currentUserId).subscribe((res) => {
           var member = res as Member;
-          this.sharedService.emitChange({"name": member.name, "role": member.role, "id": member.email.split('@')[0]});
+          this.sharedService.emitChange({"name": member.name, "admin": member.admin, "id": member.email.split('@')[0], "role": member.role});
           this.router.navigate(['home']);
           this.toastr.show('Hello ' + member.name + "!");
         });
@@ -140,7 +140,7 @@ export class LoginComponent implements OnInit {
             var currentUserId = this.auth.getCurrentUserId();
             this.memberService.getMemberById(currentUserId).subscribe((res) => {
               var member = res as Member;
-              this.sharedService.emitChange({"name": member.name, "role": member.role, "id": member.email.split('@')[0]});
+              this.sharedService.emitChange({"name": member.name, "admin": member.admin, "id": member.email.split('@')[0]});
               this.memberService.user = member.name;
               this.memberService.userRole = member.role;
               this.router.navigate(['home']);

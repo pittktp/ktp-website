@@ -28,11 +28,14 @@ export class PointsComponent implements OnInit {
 
   userId: string;
   user: string;
-  userRole: string;
+  admin: boolean;
   requestForm: Request = new Request();
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
   showExcusedAbsenceRequests: boolean;
+
+  selectedView: Member[];     //Array to store the current filter selection
+  filter = "Active Members";  //Default filter view
 
   // Gets user's info if logged in
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, private router: Router) {
@@ -42,10 +45,12 @@ export class PointsComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userRole = member.role;
-        if(member.role == 'admin') { this.getRequests(); }
+        this.admin = member.admin;
+        if(member.admin == true) { this.getRequests(); }
       });
     }
+
+
   }
 
   // Gets user's info if logged in
@@ -56,15 +61,26 @@ export class PointsComponent implements OnInit {
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
-        this.userRole = member.role;
-        if(member.role == 'admin') { this.getRequests(); }
+        this.admin = member.admin;
+        if(member.admin == true) { this.getRequests(); }
       });
     }
     this.loadScript('../assets/js/new-age.js');
     this.getMembers();
-    if(this.userRole == 'admin') {
+    if(this.admin == true) {
       this.getRequests();
     }
+
+    this.memberService.getMembers().subscribe((data: Array<object>) => {
+      var mems = data as Member[];
+      mems.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
+      this.memberService.members = mems;
+      this.onChangeView(this.filter);  //Init to show active members
+    });
   }
 
   // A hacked up way to load the js script needed for this component
@@ -95,6 +111,7 @@ export class PointsComponent implements OnInit {
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       });
       this.memberService.members = mems;
+      this.onChangeView(this.filter);
     });
   }
 
@@ -263,6 +280,37 @@ export class PointsComponent implements OnInit {
   // Called when the history modal is closed -> resets membersRequests to empty
   onHistoryClosed() {
     this.membersRequests = [];
+  }
+
+  //Called when user changes the Display option on the page
+  onChangeView(option) {
+
+    this.filter = option;
+
+    if(option == "Active Members") {
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.memberService.members.length; i++) {
+        if(this.memberService.members[i].role != "Alumni" && this.memberService.members[i].role != "Inactive")
+          this.selectedView.push(this.memberService.members[i]);
+      }
+    }
+
+    if(option == "Alumni") {
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.memberService.members.length; i++) {
+        if(this.memberService.members[i].role == "Alumni")
+          this.selectedView.push(this.memberService.members[i]);
+      }
+    }
+
+    if(option == "Inactive Members") {
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.memberService.members.length; i++) {
+        if(this.memberService.members[i].role == "Inactive")
+          this.selectedView.push(this.memberService.members[i]);
+      }
+    }
+
   }
 
 }

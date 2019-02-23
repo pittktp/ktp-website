@@ -3,6 +3,9 @@
   <div class="container">
     <div class="col-xs-12">
       <div class="row">
+        <div class="col-xs-20 text-center">
+          <button type="button" class="btn btn-info btn-sm" (click)="onZeroDatabase()" data-toggle="tooltip" data-placement="top" title="Clear all service hours, brotherhood points, and absences for each member">Zero Database</button>
+      </div>
         <div class="col-xs-8">
           <h2>Edit Members</h2>
         </div>
@@ -64,11 +67,23 @@
               <input style="text-align:left;" [(ngModel)]="memberEditForm.absences" name="absences" #name="ngModel" type="number" class="form-control" id="absences" autocomplete="off">
             </div>
             <br />
-            <div class="input-field">
-              <label style="color:black" for="role">Role ("member" or "admin")</label>
-              <input style="text-align:left;" [(ngModel)]="memberEditForm.role" name="role" #name="ngModel" type="text" class="form-control" id="role" autocomplete="off">
-            </div>
-            <br />
+            <label style="color:black" for="member-role-list">Select User Role:</label>
+            <input style="margin:15px; color:black;" list="member-roles" id="role" name="member-role-list" />
+
+            <datalist id="member-roles">
+                <option value="Brother">
+                <option value="Alumni">
+                <option value="Inactive">
+                <option value="President">
+                <option value="Vice President">
+                <option value="Technology Chair">
+                <option value="Business Chair">
+                <option value="Public Relations Chair">
+                <option value="Outreach Chair">
+                <option value="Recruitment Chair">
+            </datalist>
+
+              <br />
           </div>
           <div class="modal-footer">
             <button (click)="onDeleteMember()" type="button" class="btn btn-danger pull-left">Delete</button>
