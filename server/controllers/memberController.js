@@ -32,7 +32,7 @@ router.get('/basic', (req, res) => {
   // Also, exludes the _id property -> since this is unprotected, someone not logged in will be able to see these properties,
   // and if they get the _id, they can access the unprotected getById and then get the list of members with all the properties.
 
-  Member.find({}, '-_id name role description email picture major', (err, docs) => {
+  Member.find({}, '-_id name role description email major', (err, docs) => {
     if(!err) {
       res.send(docs);
     }
