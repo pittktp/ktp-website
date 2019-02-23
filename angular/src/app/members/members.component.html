@@ -12,8 +12,6 @@
     <div class="grid">
       <div *ngFor="let member of selectedView" class="card">
 
-        <div *ngIf="member.admin == true" style="float: right; margin-right: 6px; color: #777;">{{ member.role }}</div>
-
         <ng-container *ngIf="member.picture && member.picture != ''; then img; else noImg"></ng-container>
         <ng-template #img>
           <img class="card-img-top card-img-circle" [src]="getMemberPicture(member)">
