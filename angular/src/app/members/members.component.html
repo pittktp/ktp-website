@@ -2,15 +2,21 @@
   <div class="page-body">
 
     <div class="header">
-      <div class="card">&#8212; Spring 2019 Members &#8212;</div>
+      <select (change) = "onChangeView($event.target.value)" class="card" data-toggle="tooltip" data-placement="top" title="Click to filter members" style="cursor: pointer;">
+        <option value="Active Members">&nbsp; &nbsp; Spring 2019 Members</option>
+        <option value="Inactive Members">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Inactive Members</option>
+        <option value="Alumni">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Alumni</option>
+      </select>
     </div>
 
     <div class="grid">
-      <div *ngFor="let member of members" class="card">
+      <div *ngFor="let member of selectedView" class="card">
 
-        <ng-container *ngIf="member.picture != ''; then img; else noImg"></ng-container>
+        <div *ngIf="member.admin == true" style="float: right; margin-right: 6px; color: #777;">{{ member.role }}</div>
+
+        <ng-container *ngIf="member.picture && member.picture != ''; then img; else noImg"></ng-container>
         <ng-template #img>
-          <img class="card-img-top card-img-circle" src="http://localhost:3000/img/{{member.picture}}">
+          <img class="card-img-top card-img-circle" [src]="getMemberPicture(member)">
         </ng-template>
         <ng-template #noImg>
           <div class="card-img-top card-img-circle initials">{{initialsFrom(member.name)}}</div>

@@ -25,7 +25,7 @@
           <a (click)="onDropdown()" class="nav-link dropdown-toggle" href="javascript:;" id="navbardrop">{{ user }}<i class="fa fa-caret-down"></i></a>
           <ul id="guy" class="dropdown-menu">
             <li><a class="pointer dropdown-item" (click)="onProfileClicked()">My Profile</a></li>
-            <li *ngIf="!alumni"><a class="pointer dropdown-item" (click)="onPointsClicked()">View/Log Points</a></li>
+            <li *ngIf="role != 'Alumni' && role!= 'Inactive'"><a class="pointer dropdown-item" (click)="onPointsClicked()">View/Log Points</a></li>
             <li *ngIf="admin == true"><a class="pointer dropdown-item" (click)="onEditMembersClicked()">Edit Members</a></li>
             <li *ngIf="admin == true"><a class="pointer dropdown-item" (click)="onAttendanceClicked()">Take Attendance</a></li>
             <li role="separator" class="divider"></li>

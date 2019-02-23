@@ -18,6 +18,8 @@ export class MembersComponent implements OnInit {
   private readonly majorPlaceholder = 'Undeclared';
   private readonly descriptionPlaceholder = 'This person doesn\'t have a bio, but it\'s safe to assume they love technology.';
 
+  private filter = 'Active Members';
+  private selectedView: Member[];     //Array to store the current filter selection
   private userLoggedIn = false;
   protected members: Member[] = [];
 
@@ -41,21 +43,62 @@ export class MembersComponent implements OnInit {
   ngOnInit() {
     MembersComponent.loadScript('../assets/js/new-age.js');
     this.getMembers();
+
+    if(!this.userLoggedIn) {
+      this.memberService.getBasicMembers().subscribe((data: Array<object>) => {
+        this.members = data as Member[];
+        this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
+
+        this.members.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        this.onChangeView(this.filter);
+      });
+    }
+    else {
+      this.memberService.getMembers().subscribe((data: Array<object>) => {
+        this.members = data as Member[];
+        this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
+
+        this.members.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        this.onChangeView(this.filter);
+      });
+    }
   }
 
   // Gets all members from DB using the backend API endpoint that only returns a list of members
   // with properties "name", "major", and "description"
   getMembers() {
-    this.memberService.getBasicMembers().subscribe((data: Array<object>) => {
-      this.members = data as Member[];
-      this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
+    if(!this.userLoggedIn) {
+      this.memberService.getBasicMembers().subscribe((data: Array<object>) => {
+        this.members = data as Member[];
+        this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
 
-      this.members.sort(function(a, b) {
-        var textA = a.name.toUpperCase();
-        var textB = b.name.toUpperCase();
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        this.members.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
       });
-    });
+    }
+    else {
+      this.memberService.getMembers().subscribe((data: Array<object>) => {
+        this.members = data as Member[];
+        this.members = this.members.map((m) => this.fillWithPlaceholderData(m));
+
+        this.members.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+      });
+    }
   }
 
   // Fills each member card with the member's name, major, and description.
@@ -74,4 +117,39 @@ export class MembersComponent implements OnInit {
     const names = fullName.split(' ');
     return names[0][0] + names[names.length - 1][0];
   }
+
+  getMemberPicture(member: Member) {
+    return member.picture;
+  }
+
+  onChangeView(option) {
+
+    this.filter = option;
+
+    if(option == "Active Members") {
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.members.length; i++) {
+        if(this.members[i].role != "Alumni" && this.members[i].role != "Inactive")
+          this.selectedView.push(this.members[i]);
+      }
+    }
+
+    if(option == "Alumni") {
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.members.length; i++) {
+        if(this.members[i].role == "Alumni")
+          this.selectedView.push(this.members[i]);
+      }
+    }
+
+    if(option == "Inactive Members") {
+      this.selectedView = []; //clear arr
+      for (var i = 0; i < this.members.length; i++) {
+        if(this.members[i].role == "Inactive")
+          this.selectedView.push(this.members[i]);
+      }
+    }
+
+  }
+
 }

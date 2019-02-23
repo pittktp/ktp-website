@@ -4,8 +4,10 @@ import { NgForm } from '@angular/forms';
 
 import { AuthService } from '../shared/auth/auth.service';
 import { MemberService } from '../shared/api/member.service';
+import { RequestsService } from '../shared/api/requests.service';
 import { SharedService } from '../shared/shared.service';
 import { Member } from '../shared/models/member.model';
+import { Request } from '../shared/models/request.model';
 import { ToastrService } from 'ngx-toastr';
 
 import '../../assets/js/new-age.min.js';
@@ -28,7 +30,7 @@ export class EditMembersComponent implements OnInit {
   private admin: boolean;
 
   // Constructor -> checks if user is logged in, if so, then retrieve their member object from the database.
-  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private sharedService: SharedService) {
+  constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public memberService: MemberService, private requestsService: RequestsService, private sharedService: SharedService) {
 
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
@@ -155,16 +157,24 @@ export class EditMembersComponent implements OnInit {
      "should only be used at the end of each semester.")) {
       if(confirm("Are you SURE that you're sure? This cannot be undone.")) {
           if(confirm("I hope you know what you're doing...")) {
-            //Get the array of members from MemberService
+            // Get the array of members from MemberService
             var mems = this.memberService.members;
-            //Iterate through array and zero out all fields
+            // Iterate through array and zero out all fields and then save the member back to DB
             for(var i = 0; i < this.memberService.members.length; i++) {
               mems[i].points = 0;
               mems[i].serviceHours = 0;
               mems[i].absences = 0;
-              //Push updated member to the DB
+              // Push updated member to the DB
               this.memberService.putMember(mems[i]._id, mems[i]).subscribe((res) => {});
             }
+
+            // Delete ALL requests in the DB
+            this.requestsService.getRequests().subscribe((res) => {
+              var reqs = res as Request[];
+              for(var i = 0; i < reqs.length; i++) {
+                this.requestsService.deleteRequest(reqs[i]._id).subscribe((res) => {})
+              }
+            })
             this.toastr.success("The database has been zeroed out.");
           }
           else
