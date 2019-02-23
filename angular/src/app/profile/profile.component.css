@@ -63,7 +63,7 @@
   }
 }
 #prof-bg {
-  background: url(../../assets/img/bg-pattern.png), linear-gradient(to left, var(--prof-color1), var(--prof-color2))
+  background: url(../../assets/img/BackgroundPattern.png), linear-gradient(to left, var(--prof-color1), var(--prof-color2))
 }
 body {
   padding-top: 90px;

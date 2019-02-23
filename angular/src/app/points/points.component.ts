@@ -32,6 +32,7 @@ export class PointsComponent implements OnInit {
   requestForm: Request = new Request();
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
+  showExcusedAbsenceRequests: boolean;
 
   selectedView: Member[];     //Array to store the current filter selection
   filter = "Active Members";  //Default filter view
@@ -220,48 +221,60 @@ export class PointsComponent implements OnInit {
   onAcceptRequest(request: Request) {
     this.memberService.getMemberById(request.submittedById).subscribe((res) => {
       var member = res as Member;
-      if(request.type == "Brotherhood Points") {
-        member.points = member.points + request.value;
-      }
-      else if(request.type == "Service Hours") {
-        member.serviceHours = member.serviceHours + request.value;
-      }
-      this.memberService.putMember(request.submittedById, member).subscribe((res) => {
-        if(request.type == "Brotherhood Points") { this.toastr.success('Brotherhood point request accepted for ' + request.submittedBy); }
-        else if(request.type == "Excused Absence") { this.toastr.success('Excused absence request accepted for ' + request.submittedBy); }
-        else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
-        request.approved = 1;
-        this.requestsService.putRequest(request._id, request).subscribe((res) => {
-          this.refreshRequests();
-          this.getMembers();
+      if(confirm("Accept " + request.type + " request for " + member.name + "?")) {
+        if(request.type == "Brotherhood Points") {
+          member.points = member.points + request.value;
+        }
+        else if(request.type == "Service Hours") {
+          member.serviceHours = member.serviceHours + request.value;
+        }
+        this.memberService.putMember(request.submittedById, member).subscribe((res) => {
+          if(request.type == "Brotherhood Points") { this.toastr.success('Brotherhood point request accepted for ' + request.submittedBy); }
+          else if(request.type == "Excused Absence") { this.toastr.success('Excused absence request accepted for ' + request.submittedBy); }
+          else if(request.type == "Service Hours") { this.toastr.success('Service hours request accepted for ' + request.submittedBy); }
+          request.approved = 1;
+          this.requestsService.putRequest(request._id, request).subscribe((res) => {
+            this.refreshRequests();
+            this.getMembers();
+          });
         });
-      });
+      }
     });
   }
 
   // Don't update member's points or service hours and delete the request from the DB because we don't keep track of denied requests
   onDenyRequest(request: Request) {
-    this.requestsService.deleteRequest(request._id).subscribe((res) => {
-      this.refreshRequests();
-      if(request.type == "Brotherhood Points")
-        this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
-      else if(request.type == "Service Hours")
-        this.toastr.error('Service hour request denied for ' + request.submittedBy);
-      else if(request.type == "Excused Absence")
-        this.toastr.error('Excused absence request denied for ' + request.submittedBy);
+    this.memberService.getMemberById(request.submittedById).subscribe((res) => {
+      var member = res as Member;
+      if(confirm("Deny " + request.type + " request for " + member.name + "?")) {
+        this.requestsService.deleteRequest(request._id).subscribe((res) => {
+          this.refreshRequests();
+          if(request.type == "Brotherhood Points")
+            this.toastr.error('Brotherhood point request denied for ' + request.submittedBy);
+          else if(request.type == "Service Hours")
+            this.toastr.error('Service hour request denied for ' + request.submittedBy);
+          else if(request.type == "Excused Absence")
+            this.toastr.error('Excused absence request denied for ' + request.submittedBy);
+        });
+      }
     });
   }
 
   // Shows the history of the member clicked on -> shows the history of all approved requests for this member
-  onShowHistory(id) {
+  onShowHistory(id, showExcusedAbsenceReqs) {
+    this.showExcusedAbsenceRequests = showExcusedAbsenceReqs;
     this.getRequests();
-    $("#historyModal").modal("show");
-    for(var i = 0; i < this.requestsService.requests.length; i++) {
-      if(this.requestsService.requests[i].submittedById == id && this.requestsService.requests[i].approved == 1) {
-        this.currentHistoryMember = this.requestsService.requests[i].submittedBy;
-        this.membersRequests.push(this.requestsService.requests[i]);
+    this.memberService.getMemberById(id).subscribe((res) => {
+      var member = res as Member;
+      this.currentHistoryMember = member.name;
+      $("#historyModal").modal("show");
+      for(var i = 0; i < this.requestsService.requests.length; i++) {
+        if(this.requestsService.requests[i].submittedById == id && this.requestsService.requests[i].approved == 1) {
+          this.currentHistoryMember = this.requestsService.requests[i].submittedBy;
+          this.membersRequests.push(this.requestsService.requests[i]);
+        }
       }
-    }
+    });
   }
 
   // Called when the history modal is closed -> resets membersRequests to empty

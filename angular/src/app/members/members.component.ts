@@ -121,7 +121,7 @@ export class MembersComponent implements OnInit {
   getMemberPicture(member: Member) {
     return member.picture;
   }
-
+  
   onChangeView(option) {
 
     this.filter = option;

@@ -2,7 +2,7 @@
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i></button> <a class="navbar-brand page-scroll" href="#page-top" (click)="onHomeClicked()"><img src="../assets/img/ktp-logo-white.png"></a>
+      <button class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i></button> <a class="navbar-brand page-scroll" href="#page-top" (click)="onHomeClicked()"><img src="../assets/img/KtpNavLogo.png"></a>
     </div><!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
@@ -19,7 +19,7 @@
           <a style="cursor: pointer" (click)="onMembersClicked()">Members</a>
         </li>
         <li *ngIf="user == ''">
-          <a class="pointer" (click)="onLoginClicked()">Login/Register</a>
+          <a class="pointer" (click)="onLoginClicked()">Login</a>
         </li>
         <li *ngIf="user != ''" class="nav-item dropdown divider">
           <a (click)="onDropdown()" class="nav-link dropdown-toggle" href="javascript:;" id="navbardrop">{{ user }}<i class="fa fa-caret-down"></i></a>
