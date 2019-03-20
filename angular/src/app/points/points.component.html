@@ -49,6 +49,11 @@
               <input style="text-align:left;" [(ngModel)]="pointsForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these points?" autocomplete="off" required>
             </div>
             <br />
+            <div class="input-field">
+              <label style="color:black;" for="picture">Picture to Upload: </label>
+              <input style="text-align:left;" [(ngModel)]="pointsForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" accept="image/*">
+            </div>
+            <br />
             <br />
             <div>
               <div>
@@ -95,6 +100,11 @@
             <div class="input-field">
               <label style="color:black" for="description">Description</label>
               <input style="text-align:left;" [(ngModel)]="serviceHoursForm.description" name="description" #name="ngModel" type="text" class="form-control" id="description" placeholder="What did you do to earn these service hours?" autocomplete="off" required>
+            </div>
+            <br />
+            <div class="input-field">
+              <label style="color:black;" for="picture">Picture to Upload: </label>
+              <input style="text-align:left;" [(ngModel)]="serviceHoursForm.picture" name="picture" #name="ngModel" type="file" class="form-control" id="picture" (change)="handleFileUpload($event.target.files)" accept="image/*">
             </div>
             <br />
           </div>

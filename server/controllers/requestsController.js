@@ -1,8 +1,11 @@
 const express = require('express');
+const requestUpload = require('../s3/S3Service.js');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var { Request } = require('../models/request');
+
+const singleUpload = requestUpload.single('image');
 
 // GET all PointRequests --> localhost:3000/points
 // PROTECTED endpoint
@@ -43,6 +46,7 @@ router.post('/', require('../auth/auth.js'), (req, res) => {
   var request = new Request({
     type: req.body.type,
     value: req.body.value,
+    picture: '',
     description: req.body.description,
     submittedBy: req.body.submittedBy,
     submittedById: req.body.submittedById,
@@ -50,14 +54,33 @@ router.post('/', require('../auth/auth.js'), (req, res) => {
     approved: req.body.approved
   });
 
-  // Saves the request obj to DB
-  request.save((err, doc) =>{
-    if(!err)
-      res.send(doc);
-    else {
-      console.log('Error in Request POST: ' + JSON.stringify(err, undefined, 2));
-    }
-  });
+  // upload request picture to s3 if user submitted a photo
+  if(req.body.picture) {
+    singleUpload(req, res, function(err, some) {
+      if(err) {
+        return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+      }
+      request.doc = "https://pitt-kappathetapi.com/s3/img/requests/" + req.body.submittedBy.username + "/" + req.body.newFileName;
+
+      // Saves the request obj to DB
+      request.save((err, doc) =>{
+        if(!err)
+          res.send(doc);
+        else {
+          console.log('Error in Image Request POST: ' + JSON.stringify(err, undefined, 2));
+        }
+      });
+    });
+  } else {
+    // Saves the request obj to DB
+    request.save((err, doc) =>{
+      if(!err)
+        res.send(doc);
+      else {
+        console.log('Error in Request POST: ' + JSON.stringify(err, undefined, 2));
+      }
+    });
+  }
 });
 
 // PUT update PointRequest --> localhost:3000/points/*id-number*
@@ -72,6 +95,7 @@ router.put('/:id', require('../auth/auth.js'), (req, res) => {
   var request = {
     value: req.body.value,
     description: req.body.description,
+    picture: req.body.picture,
     submittedBy: req.body.submittedBy,
     submittedById: req.body.submittedById,
     submittedDate: req.body.submittedDate,

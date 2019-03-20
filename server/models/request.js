@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 var Request = mongoose.model('Request', {
   type: { type: String },
   value: { type: Number },
+  picture: { type: String },
   description: { type: String },
   submittedBy: { type: String },
   submittedById: { type: String },

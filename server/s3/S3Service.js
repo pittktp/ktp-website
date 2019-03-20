@@ -13,10 +13,10 @@ aws.config.update({
 const s3 = new aws.S3();
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/gif') {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type, only JPEG and PNG is allowed!'), false);
+    cb(new Error('Invalid file type, only JPEG, PNG, and GIF is allowed!'), false);
   }
 }
 
@@ -39,4 +39,24 @@ const upload = multer({
   })
 });
 
-module.exports = upload;
+const request = multer({
+  fileFilter,
+  storage: multerS3({
+    acl: 'public-read',
+    s3:s3,
+    bucket: 'pitt-ktp',
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: 'TESTING_METADATA' });
+    },
+    key: function (req, file, cb) {
+      console.log(req.body.submittedBy);
+      console.log(req.body.newFileName);
+      var fullPath = "img/requests/" + req.body.submittedBy.username + "/" + req.body.newFileName;
+      cb(null, fullPath);
+    }
+  })
+});
+
+module.exports.upload = upload;
+module.exports.request = request;

@@ -26,6 +26,8 @@ declare var $: any;
 // and allows admins to accept/deny them.
 export class PointsComponent implements OnInit {
 
+  private picture = "";
+
   userId: string;
   user: string;
   userRole: string;
@@ -33,6 +35,7 @@ export class PointsComponent implements OnInit {
   membersRequests: Array<object> = [];
   currentHistoryMember: string;
   showExcusedAbsenceRequests: boolean;
+  targetFile: File = null;
 
   // Gets user's info if logged in
   constructor(private toastr: ToastrService, private auth: AuthService, public memberService: MemberService, public requestsService: RequestsService, private router: Router) {
@@ -103,6 +106,10 @@ export class PointsComponent implements OnInit {
     this.refreshRequests();
   }
 
+  handleFileUpload(files: FileList) {
+    this.targetFile = files.item(0);
+  }
+
   // Makes a new Request of type Excused Absence and saves it to the database.
   // Takes an excused absence date of, for example, January 2nd, 2019 and turns it into 20190102 so that it can be saved as a number in the DB
   onExcuseRequestSubmit(form: NgForm) {
@@ -143,15 +150,33 @@ export class PointsComponent implements OnInit {
     request.type = "Brotherhood Points";
     request.value = form.value.points;
     request.description = form.value.description;
+    request.picture = "";
     request.submittedById = this.userId;
     request.submittedBy = this.user;
     request.submittedDate = this.getCurrentDateTime();
     request.approved = 0;
-    this.requestsService.postRequest(request).subscribe((res) => {
-      $("#pointsSubmitModal").modal("hide");
-      this.getRequests();
-      this.toastr.success('Point request submitted');
-    });
+
+    if(this.targetFile != null && this.targetFile.type != "image/jpeg" && this.targetFile.type != "image/png" && this.targetFile.type != "image/gif") {
+      this.toastr.error("Invalid Image Type");
+    } else if(this.targetFile != null) {
+      var fileType = this.targetFile.name.split(".")[1];
+      var fileName = request.submittedDate + "." + fileType;
+      this.requestsService.postImageRequest(request, this.targetFile, fileName).subscribe(res => {
+        console.log(res);
+        $("#pointsSubmitModal").modal("hide");
+        this.getRequests();
+        this.toastr.success("Point request submitted");
+      }, error => {
+        console.error(error);
+        this.toastr.error("Failed to Create Point Request!")
+      });
+    } else {
+      this.requestsService.postRequest(request).subscribe((res) => {
+        $("#pointsSubmitModal").modal("hide");
+        this.getRequests();
+        this.toastr.success('Point request submitted');
+      });
+    }
   }
 
   // Saves the Request of type Service Hours to the DB
@@ -160,15 +185,33 @@ export class PointsComponent implements OnInit {
     request.type = "Service Hours";
     request.value = form.value.serviceHours;
     request.description = form.value.description;
+    request.picture = "";
     request.submittedById = this.userId;
     request.submittedBy = this.user;
     request.submittedDate = this.getCurrentDateTime();
     request.approved = 0;
-    this.requestsService.postRequest(request).subscribe((res) => {
-      $("#serviceHoursSubmitModal").modal("hide");
-      this.getRequests();
-      this.toastr.success('Service Hours request submitted');
-    });
+
+    if(this.targetFile != null && this.targetFile.type != "image/jpeg" && this.targetFile.type != "image/png" && this.targetFile.type != "image/gif") {
+      this.toastr.error("Invalid Image Type");
+    } else if(this.targetFile != null) {
+      var fileType = this.targetFile.name.split(".")[1];
+      var fileName = request.submittedDate + "." + fileType;
+      this.requestsService.postImageRequest(request, this.targetFile, fileName).subscribe(res => {
+        console.log(res);
+        $("#serviceHoursSubmitModal").modal("hide");
+        this.getRequests();
+        this.toastr.success("Request Submitted!");
+      }, error => {
+        console.error(error);
+        this.toastr.error("Failed to Create Request!")
+      });
+    } else {
+      this.requestsService.postRequest(request).subscribe((res) => {
+        $("#serviceHoursSubmitModal").modal("hide");
+        this.getRequests();
+        this.toastr.success('Service Hours request submitted');
+      });
+    }
   }
 
   // Gets the current date and time

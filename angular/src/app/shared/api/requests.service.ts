@@ -36,6 +36,18 @@ export class RequestsService {
     return this.httpClient.post<Request>(`${this.API_URL}`, request, { headers: headers });
   }
 
+  postImageRequest(request: Request, targetFile: File, newFileName: string) {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set("authorization", token);
+
+    var formData: FormData = new FormData();
+    Object.keys(request).forEach(key => formData.append(key, request[key]));
+    formData.append('newFileName', newFileName);
+    formData.append('image', targetFile);
+
+    return this.httpClient.post<Request>(`${this.API_URL}`, formData, { headers: headers });
+  }
+
   putRequest(id: string, modifiedRequest: Request) {
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set("authorization", token);
