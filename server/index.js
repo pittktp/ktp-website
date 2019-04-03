@@ -5,7 +5,9 @@ const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 const util = require('util')
-const { mongoose } = require('./db.js');
+var AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'});
+//const { mongoose } = require('./db.js');
 
 /* The class that runs the nodejs backend server - run this file when starting the server */
 
@@ -39,19 +41,42 @@ app.use('/api/requests', requestsController);
 app.post('/api/auth', function(req, res) {
   const body = req.body;
 
-  var query = { 'email' : body.email.toLowerCase() };
-  Member.findOne(query, function(err, item) {
-    if(!item) return res.sendStatus(401);  // A member with this email doesn't exist in DB - return 401 UNAUTHORIZED error
-
+  var searchDocClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+  var params = {
+    TableName : "KtpMembers",
+    FilterExpression: "email = :email",
+    ExpressionAttributeValues:{
+        ":email": req.body.email
+    }
+  };
+  searchDocClient.scan(params, function(err, data) {
+    if(!data) return res.sendStatus(401);  // A member with this email doesn't exist in DB - return 401 UNAUTHORIZED error
+    //console.log(data)
     else {   // Found a member with this email!
-      bcrypt.compare(body.password, item.password, function(err, match) {  // bcrypt hashes the supplied password and compares it to the hash of the member's password in the DB
+      bcrypt.compare(body.password, data.Items[0].password, function(err, match) {  // bcrypt hashes the supplied password and compares it to the hash of the member's password in the DB
         if(match) {  // Hashes of passwords match -> send a JWT token back to the frontend sayin "you all good homie you can talk to me"
-          var token = jwt.sign({userID: item._id}, 'ktp-secret', {expiresIn: '3h'});
+          var token = jwt.sign({userID: data.Items[0]._id}, 'ktp-secret', {expiresIn: '3h'});
           res.send({token});
         }
         else return res.sendStatus(401);  // The passwords don't match for this member -> return 401 UNAUTHORIZED error
       });
     }
-
   });
+
+
+  // var query = { 'email' : body.email.toLowerCase() };
+  // Member.findOne(query, function(err, item) {
+  //   if(!item) return res.sendStatus(401);  // A member with this email doesn't exist in DB - return 401 UNAUTHORIZED error
+  //
+  //   else {   // Found a member with this email!
+  //     bcrypt.compare(body.password, item.password, function(err, match) {  // bcrypt hashes the supplied password and compares it to the hash of the member's password in the DB
+  //       if(match) {  // Hashes of passwords match -> send a JWT token back to the frontend sayin "you all good homie you can talk to me"
+  //         var token = jwt.sign({userID: item._id}, 'ktp-secret', {expiresIn: '3h'});
+  //         res.send({token});
+  //       }
+  //       else return res.sendStatus(401);  // The passwords don't match for this member -> return 401 UNAUTHORIZED error
+  //     });
+  //   }
+  //
+  // });
 });
