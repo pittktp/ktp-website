@@ -293,12 +293,12 @@ router.post('/image', function(req, res) {
     if (err) {
       return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
     }
-
+    
     var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
     var params = {
      TableName: 'KtpMembers',
      Key: {
-       '_id': req.params.id
+       '_id': req.body._id
      }
     };
     docClient.get(params, function(err, data) {  // Get Member from DB by Id
@@ -318,7 +318,7 @@ router.post('/image', function(req, res) {
           },
           UpdateExpression: "set picture=:picture",
           ExpressionAttributeValues: {
-              ":picture": "https://pitt-kappathetapi.com/s3/img/profile/" + req.body.username + "/" + req.body.newFileName  // The link to the picture in S3
+              ":picture": "https://pittkappathetapi.com/s3/img/profile/" + req.body.username + "/" + req.body.newFileName  // The link to the picture in S3
           },
           ReturnValues:"UPDATED_NEW"
         };

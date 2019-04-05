@@ -22,10 +22,10 @@ app.use(bodyParser.json());
 
 
 // Test - use when running this locally
-app.use(cors({ origin: 'http://localhost:4200' }));
+//app.use(cors({ origin: 'http://localhost:4200' }));
 
 // Production - use when running in production in AWS
-//app.use(cors({ origin: ['https://pitt-kappathetapi.com', 'https://www.pitt-kappathetapi.com'] }));
+app.use(cors({ origin: ['https://pittkappathetapi.com', 'https://www.pittkappathetapi.com'] }));
 
 
 // Port that the server is listening for requests on

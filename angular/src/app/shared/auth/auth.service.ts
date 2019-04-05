@@ -16,10 +16,10 @@ import { Member } from '../models/member.model';
 export class AuthService {
 
   // Dev - use this url when running locally on your own computer
-  API_URL = 'http://localhost:3000/api/auth';
+  //API_URL = 'http://localhost:3000/api/auth';
 
   // // Production - use this url when running in production on AWS
-  //API_URL = 'https://pitt-kappathetapi.com/api/auth/';
+  API_URL = 'https://pittkappathetapi.com/api/auth/';
 
   constructor(private http: HttpClient) { }
 
