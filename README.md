@@ -60,4 +60,8 @@ The backend isn't as heavy code-wise as the frontend, as it's only really respon
 ```
 npm install
 ```
+and run the application with 
+```
+node index.js
+```
 
