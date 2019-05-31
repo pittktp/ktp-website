@@ -5,11 +5,10 @@ var router = express.Router();
 var AWS = require('aws-sdk');
 const crypto = require('crypto');
 
-AWS.config.update({
-  secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  region: 'us-east-1'
-});
+AWS.config = new AWS.Config();
+AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+AWS.config.secretAccessKey = process.env.AWS_ACCESS_KEY_SECRET;
+AWS.config.region = "us-east-1";
 
 
 const singleUpload = upload.single('image');
