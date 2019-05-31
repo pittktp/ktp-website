@@ -3,8 +3,13 @@ const bcrypt = require('bcrypt-nodejs');
 const upload = require('../s3/S3Service.js');
 var router = express.Router();
 var AWS = require('aws-sdk');
-AWS.config.update({region: 'us-east-1'});
 const crypto = require('crypto');
+
+AWS.config.update({
+  secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  region: 'us-east-1'
+});
 
 
 const singleUpload = upload.single('image');

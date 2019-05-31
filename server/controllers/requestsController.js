@@ -2,8 +2,13 @@ const express = require('express');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 var AWS = require('aws-sdk');
-AWS.config.update({region: 'us-east-1'});
 const crypto = require('crypto');
+
+AWS.config.update({
+  secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  region: 'us-east-1'
+});
 
 var { Request } = require('../models/request');
 
