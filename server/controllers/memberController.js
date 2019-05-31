@@ -33,7 +33,7 @@ router.get('/', /*require('../auth/auth.js'),*/ (req, res) => {
 // GET all Members --> localhost:3000/members/basic
 // Unprotected route to get stripped down Member with only properties name, description, email, role, and major
 router.get('/basic', (req, res) => {
-  
+
   // Gets all members in DB but only includes the properties "description", "email", "role", and "major"
   // Also, exludes the _id property -> since this is unprotected, someone not logged in will be able to see these properties,
   // and if they get the _id, they can access the unprotected getById member endpoint and then get that member with all the properties.
@@ -102,8 +102,8 @@ router.post('/', (req, res) => {
         let id = crypto.createHash('md5').update(req.body.email).digest("hex").toString();  // Creates an MD5 hash of the member's email to be used as the primary key in the DB
 
         // Check the registration code for admin / brother permissions and role
-        if(req.body.code == "ky1fgkqq61") { admin = true; role = "E Board"; }
-        else if(req.body.code == "yy3dlxwiz6") { admin = false; role = "Brother"; }
+        if(req.body.code == process.env.SIGN_UP_CODE_ADMIN) { admin = true; role = "E Board"; }
+        else if(req.body.code == process.env.SIGN_UP_CODE_MEMBER) { admin = false; role = "Brother"; }
         else { return res.status(401).send('Invalid code'); }
 
         // Create the new member in the DB
@@ -160,7 +160,7 @@ router.post('/', (req, res) => {
 // Has to be unprotected endpoint because user won't be logged in if they can't remember their password, thus they won't have a JWT token to provide
 router.put('/password', (req, res) => {
 
-  if(req.body.code == "8tr2g5m9fe") {  // Check if it's a valid password reset code
+  if(req.body.code == process.env.PASSWORD_RESET_CODE) {  // Check if it's a valid password reset code
     var searchDocClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
     var params = {
       TableName : "KtpMembers",
