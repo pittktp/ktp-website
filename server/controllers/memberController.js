@@ -5,11 +5,7 @@ var router = express.Router();
 var AWS = require('aws-sdk');
 const crypto = require('crypto');
 
-AWS.config = new AWS.Config();
-AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-AWS.config.secretAccessKey = process.env.AWS_ACCESS_KEY_SECRET;
-AWS.config.region = "us-east-1";
-
+AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET, region: 'us-east-1'});
 
 const singleUpload = upload.single('image');
 //const deleteFolder = upload;
@@ -37,7 +33,7 @@ router.get('/', /*require('../auth/auth.js'),*/ (req, res) => {
 // GET all Members --> localhost:3000/members/basic
 // Unprotected route to get stripped down Member with only properties name, description, email, role, and major
 router.get('/basic', (req, res) => {
-
+  
   // Gets all members in DB but only includes the properties "description", "email", "role", and "major"
   // Also, exludes the _id property -> since this is unprotected, someone not logged in will be able to see these properties,
   // and if they get the _id, they can access the unprotected getById member endpoint and then get that member with all the properties.
