@@ -200,7 +200,6 @@ router.put('/password', (req, res) => {
               res.status(400).send('Unable to update item');
             }
             else {
-              console.log("UpdateItem succeeded");
               res.status(200).send({ 'message': 'Successfully updated item in the DB' });
             }
           });
@@ -293,7 +292,7 @@ router.post('/image', function(req, res) {
     if (err) {
       return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
     }
-    
+
     var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
     var params = {
      TableName: 'KtpMembers',

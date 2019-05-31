@@ -61,13 +61,14 @@ router.post('/', /*require('../auth/auth.js'),*/ (req, res) => {
   });
 
   let id = crypto.createHash('md5').update(req.body.submittedDate).digest("hex").toString();  // Creates an MD5 hash of the request's timestamp since it'll be unique to be used as the primary key in the DB
+  console.log(req.body)
   var params = {
     TableName: 'KtpRequests',
     Item: {
       '_id': id,
       'type': req.body.type,
       'value': req.body.value,
-      'description': req.body.type,
+      'description': req.body.description,
       'submittedBy': req.body.submittedBy,
       'submittedById': req.body.submittedById,
       'submittedDate': req.body.submittedDate,

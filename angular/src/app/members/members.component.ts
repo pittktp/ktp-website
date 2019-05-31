@@ -105,7 +105,6 @@ export class MembersComponent implements OnInit {
   // If they don't have their major or description set, it'll fill it with placeholder text
   fillWithPlaceholderData(member: Member): Member {
     const filledMember = {...member};
-    console.log(member)
     filledMember.description = (member.description === null) ? this.descriptionPlaceholder : member.description;
     filledMember.major = (member.major === null) ? this.majorPlaceholder : member.major;
     filledMember._id = member.email.split('@')[0];
