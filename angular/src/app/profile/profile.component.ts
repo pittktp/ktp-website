@@ -175,7 +175,7 @@ export class ProfileComponent implements OnInit {
 
   onDefaultPicture() {
     var member = this.profile;
-    member.picture = "";
+    member.picture = null;
 
     this.memberService.putMember(this.auth.getCurrentUserId(), member).subscribe(res => {
       this.showMsg("Now using default picture");

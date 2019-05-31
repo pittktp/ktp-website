@@ -12,10 +12,10 @@ import { Request } from '../models/request.model';
 export class RequestsService {
 
   // Dev - use this url when running locally on your own computer
-  API_URL = 'http://localhost:3000/api/requests/';
+  //API_URL = 'http://localhost:3000/api/requests/';
 
   // Production - use this url when running in production on AWS
-  //API_URL = 'https://pitt-kappathetapi.com/api/requests/';
+  API_URL = 'https://pittkappathetapi.com/api/requests/';
 
   requests: Request[];
   numRequestsAvailable = 0;

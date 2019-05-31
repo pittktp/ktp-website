@@ -2,115 +2,154 @@ const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
 const upload = require('../s3/S3Service.js');
 var router = express.Router();
-var ObjectId = require('mongoose').Types.ObjectId;
+var AWS = require('aws-sdk');
+const crypto = require('crypto');
 
-var { Member } = require('../models/member');
+AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET, region: 'us-east-1'});
 
 const singleUpload = upload.single('image');
 //const deleteFolder = upload;
 
 // GET all Members --> localhost:3000/members
 // PROTECTED endpoint
-router.get('/', require('../auth/auth.js'), (req, res) => {
+router.get('/', /*require('../auth/auth.js'),*/ (req, res) => {
 
-  // Gets all members in DB and sends them as a list called docs
-  Member.find((err, docs) => {
-    if(!err) {
-      res.send(docs);
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const params = {
+    TableName: "KtpMembers"
+  };
+  docClient.scan(params, function(err, data) {
+    if (err) {
+      console.log("Error getting all members in DB");
+      res.status(400).send("Error getting all members in DB");
     }
-    else
-      console.log('Error in Retriving Members for auth: ' + JSON.stringify(err, undefined, 2));
+    else {
+      res.status(200).send(data.Items);
+    }
   });
 
 });
 
 // GET all Members --> localhost:3000/members/basic
-// Unprotected route to get stripped down Member with only properties name, description, email, picture, and major
+// Unprotected route to get stripped down Member with only properties name, description, email, role, and major
 router.get('/basic', (req, res) => {
-
-  // Gets all members in DB but only includes the properties "description", "email", "picture", and "major"
+  
+  // Gets all members in DB but only includes the properties "description", "email", "role", and "major"
   // Also, exludes the _id property -> since this is unprotected, someone not logged in will be able to see these properties,
-  // and if they get the _id, they can access the unprotected getById and then get the list of members with all the properties.
+  // and if they get the _id, they can access the unprotected getById member endpoint and then get that member with all the properties.
 
-  Member.find({}, '-_id name role description email major', (err, docs) => {
-    if(!err) {
-      res.send(docs);
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const params = {
+    TableName: "KtpMembers"
+  };
+  docClient.scan(params, function(err, data) {
+    if (err) {
+      console.log("Error getting all members in DB");
+      res.status(400).send("Error getting all members in DB");
     }
-    else
-      console.log('Error in Retriving Members for auth: ' + JSON.stringify(err, undefined, 2));
+    else {
+      var basicMembers = [];
+      for(var i = 0; i < data.Items.length; i++) {
+        var item = data.Items[i];
+        basicMembers.push({ "name": item.name, "description": item.description, "email": item.email, "role": item.role, "major": item.major });
+      }
+      res.status(200).send(basicMembers);
+    }
   });
 
 });
 
 // GET Member by ID --> localhost:3000/members/*id-number*
 router.get('/:id', (req, res) => {
+  var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
-    // Not a valid ID
-    if(!ObjectId.isValid(req.params.id))
-      return res.status(404).send('No record with given id: ' + req.params.id);
+  var params = {
+   TableName: 'KtpMembers',
+   Key: {'_id': req.params.id}
+  };
 
-    Member.findById(req.params.id, (err, doc) => {
-      if(!err) {
-        return res.send(doc);
-      }
-      else {
-        console.log('Error in Retriving Member: ' + JSON.stringify(err, undefined, 2));
-      }
-    });
+  docClient.get(params, function(err, data) {
+    if (err) {
+      console.log("Error", err);
+      res.status(404).send("Item with this id not found");
+    }
+    else {
+      res.status(200).send(data.Item);
+    }
+  });
 
 });
 
 // POST create new Member --> localhost:3000/members/
-// Unprotected route because a user registering him/herself won't be logged in and thus wont have a JWT token.
+// Unprotected route because a user registering him/herself won't be logged in and thus wont have a JWT token yet.
 router.post('/', (req, res) => {
 
-  Member.findOne({'email': req.body.email}, (err, doc) => {  // Check if email is being used by another
-    if(doc)  // Someone else is using this email - return 409 conflict error
-      res.status(409).send('Conflict');
-    else {  // If not, save new Member
+  // First search in the DB if a member already has this email before creating the member
+  var searchDocClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+  var params = {
+    TableName : "KtpMembers",
+    FilterExpression: "email = :email",
+    ExpressionAttributeValues:{
+        ":email": req.body.email
+    }
+  };
+
+  searchDocClient.scan(params, function(err, data) {  // Scans the DB for a member with this email
+    if (data.Items.length == 0) {  // Email not in use - create the member
       bcrypt.hash(req.body.password, null, null, function(err, hash) {
         var role = "";
         var admin = false;
+        let id = crypto.createHash('md5').update(req.body.email).digest("hex").toString();  // Creates an MD5 hash of the member's email to be used as the primary key in the DB
 
-
-        //TODO fix the role not filling in upon registration
-
-        //Check the registration code for admin / brother permissions and role
+        // Check the registration code for admin / brother permissions and role
         if(req.body.code == "ky1fgkqq61") { admin = true; role = "E Board"; }
         else if(req.body.code == "yy3dlxwiz6") { admin = false; role = "Brother"; }
         else { return res.status(401).send('Invalid code'); }
 
-        // Create new member object
-        var member = new Member({
-          name: req.body.name,
-          email: req.body.email.toLowerCase(),
-          password: hash,
-          points: req.body.points,
-          serviceHours: req.body.serviceHours,
-          role: role,
-          admin: admin,
-          absences: req.body.absences,
-          rushClass: req.body.ruchClass,
-          picture: req.body.picture,
-          courses: req.body.courses,
-          linkedIn: req.body.linkedIn,
-          github: req.body.github,
-          gradSemester: req.body.gradSemester,
-          major: req.body.major,
-          description: req.body.description,
-          color: req.body.color
+        // Create the new member in the DB
+        var docClient = new AWS.DynamoDB.DocumentClient( {
+            convertEmptyValues: true,
+            apiVersion: '2012-08-10'
         });
+        var params = {
+          TableName: 'KtpMembers',
+          Item: {
+            '_id': id ,
+            'name': req.body.name,
+            'email': req.body.email,
+            'password': hash,
+            'points': req.body.points,
+            'serviceHours': req.body.serviceHours,
+            'role': role,
+            'admin': admin,
+            'absences':req.body.absences,
+            'rushClass': req.body.rushClass,
+            'picture': req.body.picture,
+            'courses': req.body.courses,
+            'linkedIn': req.body.linkedIn,
+            'github': req.body.github,
+            'gradSemester': req.body.gradSemester,
+            'major': req.body.major,
+            'description': req.body.description,
+            'color': req.body.color,
+          }
+        };
 
-        //Actually saves to the DB
-        member.save((err, doc) =>{
-          if(!err)
-            res.send(doc);
-          else {
-            console.log('Error in Member POST: ' + JSON.stringify(err, undefined, 2));
+        // Call DynamoDB to create the item in the table
+        docClient.put(params, function(err, data) {
+          if (err) {
+            console.log("Error", err);
+            res.status(400).send('Error creating item in the DB')
+          } else {
+            res.status(200).send({'message': 'Successfully create item in the DB' });
           }
         });
 
       });
+    }
+    else {  // Email in use! - send back a 409 Conflict error
+      console.log("409 conflict - email already in use");
+      res.status(409).send('Email already in use');
     }
   });
 
@@ -120,92 +159,129 @@ router.post('/', (req, res) => {
 // User changing their own password - searches for Member by email and hashes and sets their new password if the correct reset password code is provided
 // Has to be unprotected endpoint because user won't be logged in if they can't remember their password, thus they won't have a JWT token to provide
 router.put('/password', (req, res) => {
+
   if(req.body.code == "8tr2g5m9fe") {  // Check if it's a valid password reset code
-    Member.findOne({'email': req.body.email}, (err, doc) => {
-      if(!doc) {  // No user with this email exists -> send back a 404 NOT FOUND error
-        return res.status(404).send();
+    var searchDocClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+    var params = {
+      TableName : "KtpMembers",
+      FilterExpression: "email = :email",
+      ExpressionAttributeValues:{
+          ":email": req.body.email
       }
-      else {
+    };
+    searchDocClient.scan(params, function(err, data) {
+      if(!data) return res.status(404).send(); // No user with this email exists -> send back a 404 NOT FOUND error
+
+      else {   // Found a member with this email!
         bcrypt.hash(req.body.password, null, null, function(err, hash) {
 
-          var member = doc;
+          var member = data.Items[0];
           member.password = hash;
 
-          Member.findByIdAndUpdate(member._id, { $set: member }, { new: true }, (err, doc) => {
-            if(!err)
-              res.send(doc);
-            else
-              console.log('Error in Member UPDATE: ' + JSON.stringify(err, undefined, 2));
+          var updateDocClient = new AWS.DynamoDB.DocumentClient( {
+              convertEmptyValues: true,  // Without this, Dynamo doesn't let you have empty strings for properties
+              apiVersion: '2012-08-10'
+          });
+          var params = {
+            TableName: 'KtpMembers',
+            Key: {
+                "_id": member._id
+            },
+            UpdateExpression: "set password=:password",
+            ExpressionAttributeValues: {
+                ":password": hash
+            },
+            ReturnValues:"UPDATED_NEW"
+          };
+
+          updateDocClient.update(params, function(err, data) {
+            if (err) {
+              console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+              res.status(400).send('Unable to update item');
+            }
+            else {
+              res.status(200).send({ 'message': 'Successfully updated item in the DB' });
+            }
           });
         });
       }
     });
   }
-  else {  // Incorrect reset password code -> send back a 401 NOT FOUND code
-    return res.status(401).send();
-  }
+
 });
 
 // PUT update Member --> localhost:3000/members/*id-number*
 // PROTECTED endpoint
-router.put('/:id', require('../auth/auth.js'), (req, res) => {
+router.put('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
   var admin = false;
 
-  // Check if member is already in the DB -> if not, send back 404 NOT FOUND error
-  if(!ObjectId.isValid(req.params.id))
-    return res.status(404).send('No record with given id: ' + req.params.id);
+  if(req.body.role == "Brother" || req.body.role == "Alumni" || req.body.role == "Inactive") { admin = false; }
+  else { admin = true; }
 
-    if(req.body.role == "Brother" || req.body.role == "Alumni" || req.body.role == "Inactive") {
-        admin = false;
-    } else {
-        admin = true;
-    }
-
-
-  // Create a new member object to represent the updated member
-  var member = {
-    name: req.body.name,
-    email: req.body.email,
-    points: req.body.points,
-    serviceHours: req.body.serviceHours,
-    role: req.body.role,
-    admin: admin,
-    absences: req.body.absences,
-    rushClass: req.body.rushClass,
-    picture: req.body.picture,
-    courses: req.body.courses,
-    linkedIn: req.body.linkedIn,
-    github: req.body.github,
-    gradSemester: req.body.gradSemester,
-    major: req.body.major,
-    description: req.body.description,
-    color: req.body.color
+  var docClient = new AWS.DynamoDB.DocumentClient( {
+      convertEmptyValues: true,  // Without this, Dynamo doesn't let you have empty strings for properties
+      apiVersion: '2012-08-10'
+  });
+  var params = {
+    TableName: 'KtpMembers',
+    Key: {
+        "_id": req.params.id
+    },
+    UpdateExpression: "set #name=:n, email=:email, points=:points, serviceHours=:serviceHours, #role=:r, admin=:admin, absences=:absences, rushClass=:rushClass, picture=:picture, courses=:courses, linkedIn=:linkedIn, github=:github, gradSemester=:gradSemester, major=:major, description=:description, color=:color",
+    ExpressionAttributeValues: {
+        ":n": req.body.name,
+        ":email": req.body.email,
+        ":points": req.body.points,
+        ":serviceHours": req.body.serviceHours,
+        ":r": req.body.role,
+        ":admin": admin,
+        ":absences": req.body.absences,
+        ":rushClass": req.body.rushClass,
+        ":picture": req.body.picture,
+        ":courses": req.body.courses,
+        ":linkedIn": req.body.linkedIn,
+        ":github": req.body.github,
+        ":gradSemester": req.body.gradSemester,
+        ":major": req.body.major,
+        ":description": req.body.description,
+        ":color": req.body.color
+    },
+    ExpressionAttributeNames: {  // A workaround because you can't use 'name' or 'role' because they're Dynamo reserved attributes
+      "#role": "role",
+      "#name": "name"
+    },
+    ReturnValues:"UPDATED_NEW"
   };
 
-  // Finds the member in the DB and updates him/her with the newly created member obj
-  Member.findByIdAndUpdate(req.params.id, { $set: member }, { new: true }, (err, doc) => {
-    if(!err)
-      res.send(doc);
-    else
-      console.log('Error in Member UPDATE: ' + JSON.stringify(err, undefined, 2));
+  docClient.update(params, function(err, data) {
+    if (err) {
+      console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+      res.status(400).send('Unable to update item');
+    }
+    else {
+      res.status(200).send({ 'message': 'Successfully updated item in the DB' });
+    }
   });
+
 });
 
 // DELETE Member --> localhost:3000/member/*id-number*
 // PROTECTED endpoint
-router.delete('/:id', require('../auth/auth.js'), (req, res) => {
+router.delete('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
 
-  // Looks for this member in the DB -> if not found send back 404 NOT FOUND error
-  if(!ObjectId.isValid(req.params.id))
-    return res.status(400).send('No record with given id: ' + req.params.id);
+  var documentClient = new AWS.DynamoDB.DocumentClient();
+  var params = {
+    TableName : 'KtpMembers',
+    Key: {
+      '_id': req.params.id
+    }
+  };
 
-  // Finds the member in the DB and deletes him/her
-  Member.findByIdAndRemove(req.params.id, (err, doc) => {
-    if(!err)
-      res.send(doc);
-    else
-      console.log('Error in Member DELETE: ' + JSON.stringify(err, undefined, 2));
+  documentClient.delete(params, function(err, data) {
+    if (err) res.status(400).send('Error deleting item in the DB');
+    else res.status(200).send({ 'message': 'Successfully deleted item in the DB' });
   });
+
 });
 
 // POST endpoint that receives a file in the body to be saved to S3 that represent's the member's new profile picture.
@@ -213,29 +289,52 @@ router.delete('/:id', require('../auth/auth.js'), (req, res) => {
 router.post('/image', function(req, res) {
   //req.body.username = req.username;
   singleUpload(req, res, function(err, some) {  // Uses S3Service.js to do the actual uploading to S3
-    //console.log(req.body)
     if (err) {
       return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
     }
 
-    //No upload error (image successfully in S3) -> now find the Member by ID and update their picture field and save them back to DB
-    Member.findById(req.body._id, (err, doc) => {
-      if(!err) {
-        var member = doc;
-        member.picture = "https://pitt-kappathetapi.com/s3/img/profile/" + req.body.username + "/" + req.body.newFileName;  // The link to the picture in S3
+    var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+    var params = {
+     TableName: 'KtpMembers',
+     Key: {
+       '_id': req.body._id
+     }
+    };
+    docClient.get(params, function(err, data) {  // Get Member from DB by Id
+      if (err) {
+        console.log("Error", err);
+        res.status(404).send("Item with this id not found");
+      }
+      else {  // Found the Member - update their picture property
+        var updateDocClient = new AWS.DynamoDB.DocumentClient( {
+            convertEmptyValues: true,  // Without this, Dynamo doesn't let you have empty strings for properties
+            apiVersion: '2012-08-10'
+        });
+        var params = {
+          TableName: 'KtpMembers',
+          Key: {
+              "_id": data.Item._id
+          },
+          UpdateExpression: "set picture=:picture",
+          ExpressionAttributeValues: {
+              ":picture": "https://pittkappathetapi.com/s3/img/profile/" + req.body.username + "/" + req.body.newFileName  // The link to the picture in S3
+          },
+          ReturnValues:"UPDATED_NEW"
+        };
 
-        // Update the member in the DB
-        Member.findByIdAndUpdate(member._id, { $set: member }, { new: true }, (err, doc) => {
-          if(!err)
-            return res.status(200).json({'imageUrl': member.picture}).send();
-          else
-            console.log('Error in Member picture UPDATE: ' + JSON.stringify(err, undefined, 2));
+        updateDocClient.update(params, function(err, data) {
+          if (err) {
+            console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+            res.status(400).send('Unable to update item');
+          }
+          else {
+            console.log("UpdateItem succeeded");
+            res.status(200).send({ 'message': 'Successfully updated item in the DB' });
+          }
         });
       }
-      else {
-        console.log('Error in Retriving Member: ' + JSON.stringify(err, undefined, 2));
-      }
     });
+
   });
 })
 

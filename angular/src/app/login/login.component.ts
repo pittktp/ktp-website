@@ -194,11 +194,13 @@ export class LoginComponent implements OnInit {
   // If backend returns a 401 UNAUTHORIZED error, the user supplied a wrong password reset code.
   // If backend returns a 404 NOT FOUND error, the email the user provided does not exist in the DB.
   onForgotPassword(form: NgForm) {
+  console.log('in method')
     this.memberService.updateMemberPassword(form.value.pittEmail, form.value.newPassword, form.value.code).subscribe((res) => {
         $("#forgotPasswordModal").modal("hide");
         this.toastr.success('Successfully changed password! Try logging in again');
       },
       (err) => {
+        console.log(err)
         if(err.status == 401)
           this.wrongCodeForgotPassword = true;
         else if(err.status == 404)

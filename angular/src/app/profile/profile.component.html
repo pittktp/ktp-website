@@ -136,7 +136,7 @@
           <div style="overflow-x: scroll" class="profile-content">
             <div class="row profile-header">
               <div class="col-md-2">
-                <div *ngIf="this.profile.picture !== '' || this.profile.picture === null; else noPic" class="profile-pic">
+                <div *ngIf="this.profile.picture !== null; else noPic" class="profile-pic">
                   <img [src]="picture" alt="{{profile.name}}" title="{{profile.name}}"/>
                 </div>
                 <ng-template #noPic style="margin: 0 auto">
@@ -193,9 +193,11 @@
                   <br />
                   <div class="row">
                     <div class="col-lg-10 col-lg-offset-1">
+                      <div *ngIf="this.profile.description !== null">
                         <span *ngFor="let line of this.profile.description.split('\n')">
                           {{line}}
                         </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -246,7 +248,7 @@
             <div class="profile-content">
               <div class="row profile-header">
                 <div class="col-md-2">
-                  <div *ngIf="this.profile.picture != ''; else noPic" class="profile-pic">
+                  <div *ngIf="this.profile.picture !== null; else noPic" class="profile-pic">
                     <img src="http://localhost:3000/img/{{profile.picture}}" alt=`{{profile.name}}`/>
                   </div>
                   <ng-template #noPic style="margin: 0 auto">
