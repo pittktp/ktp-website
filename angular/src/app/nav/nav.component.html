@@ -54,8 +54,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let member of expectedMembers">
-              <td *ngIf="!membersNotHere.includes(member)">{{ member.name }}</td>
-              <td *ngIf="!membersNotHere.includes(member)">
+              <td *ngIf="!membersNotHere.includes(member) && member.role != 'Alumni' && member.role != 'Inactive'">{{ member.name }}</td>
+              <td *ngIf="!membersNotHere.includes(member) && member.role != 'Alumni' && member.role != 'Inactive'">
                 <button type="button" id="notHere" class="btn btn-default" (click)="onNotHere(member)">Not Here</button>
               </td>
             </tr>

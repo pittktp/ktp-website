@@ -35,6 +35,8 @@ export class NavComponent implements OnInit {
   constructor(private toastr: ToastrService, private auth: AuthService, private router: Router, public requestsService: RequestsService, public memberService: MemberService, private sharedService: SharedService) {
     if(this.auth.loggedIn()) {
       var currentUserId = this.auth.getCurrentUserId();
+      this.getMembers();
+      this.expectedMembers = this.memberService.members;
       this.memberService.getMemberById(currentUserId).subscribe((res) => {
         var member = res as Member;
         this.user = member.name;
@@ -146,15 +148,14 @@ export class NavComponent implements OnInit {
     this.onDropup();
     if(!this.auth.isTokenExpired()) {
       this.getMembers();
-      $("#attendanceModal").modal("show");
+
+      var membersApprovedAbsence: Member[];  // array of members that did submit an excused absence for the current day
+      var mems = this.memberService.members;
+      this.expectedMembers = mems;  // array of members who are expected to be present -> use this array to render the members in the modal
 
       // Gets up-to-date list of requests from the DB
       this.requestsService.getRequests().subscribe((res) => {
         var requests = res as Request[];
-        var membersApprovedAbsence: Member[];  // array of members that did submit an excused absence for the current day
-        var mems = this.memberService.members;
-        this.expectedMembers = mems;  // array of members who are expected to be present -> use this array to render the members in the modal
-
         // Iterate thru array of requests -> if the current request is of type "Excused Absence" AND the request is approved, AND
         // The request's value (the date expected to miss) is equal to the current date, then this member is all good to miss today.
         for (var i = 0; i < requests.length; i++) {
@@ -165,6 +166,7 @@ export class NavComponent implements OnInit {
             });
           }
         }
+        $("#attendanceModal").modal("show");
       });
     }
     else {
