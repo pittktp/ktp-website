@@ -90,7 +90,7 @@ router.post('/', (req, res) => {
     TableName : "KtpMembers",
     FilterExpression: "email = :email",
     ExpressionAttributeValues:{
-        ":email": req.body.email
+        ":email": req.body.email.toLowerCase()
     }
   };
 
