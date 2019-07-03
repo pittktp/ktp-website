@@ -102,7 +102,7 @@ router.post('/', (req, res) => {
         let id = crypto.createHash('md5').update(req.body.email).digest("hex").toString();  // Creates an MD5 hash of the member's email to be used as the primary key in the DB
 
         // Check the registration code for admin / brother permissions and role
-        if(req.body.code == process.env.SIGN_UP_CODE_ADMIN) { admin = true; role = "E Board"; }
+        if(req.body.code == "ky1fgkqq61") { admin = true; role = "E Board"; }
         else if(req.body.code == process.env.SIGN_UP_CODE_MEMBER) { admin = false; role = "Brother"; }
         else { return res.status(401).send('Invalid code'); }
 
@@ -116,7 +116,7 @@ router.post('/', (req, res) => {
           Item: {
             '_id': id ,
             'name': req.body.name,
-            'email': req.body.email,
+            'email': req.body.email.toLowerCase(),
             'password': hash,
             'points': req.body.points,
             'serviceHours': req.body.serviceHours,

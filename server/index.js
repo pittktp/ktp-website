@@ -51,8 +51,9 @@ app.post('/api/auth', function(req, res) {
   };
   searchDocClient.scan(params, function(err, data) {
     if(!data) return res.sendStatus(401);  // A member with this email doesn't exist in DB - return 401 UNAUTHORIZED error
-    //console.log(data)
+    
     else {   // Found a member with this email!
+      console.log(data)
       bcrypt.compare(body.password, data.Items[0].password, function(err, match) {  // bcrypt hashes the supplied password and compares it to the hash of the member's password in the DB
         if(match) {  // Hashes of passwords match -> send a JWT token back to the frontend sayin "you all good homie you can talk to me"
           var token = jwt.sign({userID: data.Items[0]._id}, 'ktp-secret', {expiresIn: '3h'});

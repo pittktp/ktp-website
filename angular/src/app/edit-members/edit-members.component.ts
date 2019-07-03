@@ -37,7 +37,6 @@ export class EditMembersComponent implements OnInit {
       this.userId = currentUserId;
       this.memberService.getMemberById(this.userId).subscribe(res => {
         var member = res as Member;
-        console.log(res)
         this.admin = member.admin;
         if(!this.admin) {
           alert('You do not have permission to access this page');
