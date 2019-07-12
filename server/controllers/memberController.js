@@ -212,7 +212,7 @@ router.put('/password', (req, res) => {
 
 // PUT update Member --> localhost:3000/members/*id-number*
 // PROTECTED endpoint
-router.put('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
+router.put('/:id', require('../auth/auth.js'), (req, res) => {
   var admin = false;
 
   if(req.body.role == "Brother" || req.body.role == "Alumni" || req.body.role == "Inactive") { admin = false; }
@@ -267,7 +267,7 @@ router.put('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
 
 // DELETE Member --> localhost:3000/member/*id-number*
 // PROTECTED endpoint
-router.delete('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
+router.delete('/:id', require('../auth/auth.js'), (req, res) => {
 
   var documentClient = new AWS.DynamoDB.DocumentClient();
   var params = {
