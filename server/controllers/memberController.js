@@ -12,7 +12,7 @@ const singleUpload = upload.single('image');
 
 // GET all Members --> localhost:3000/members
 // PROTECTED endpoint
-router.get('/', /*require('../auth/auth.js'),*/ (req, res) => {
+router.get('/', require('../auth/auth.js'), (req, res) => {
 
   const docClient = new AWS.DynamoDB.DocumentClient();
   const params = {
