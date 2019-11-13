@@ -12,7 +12,7 @@ const singleUpload = upload.single('image');
 
 // GET all Members --> localhost:3000/members
 // PROTECTED endpoint
-router.get('/', /*require('../auth/auth.js'),*/ (req, res) => {
+router.get('/', require('../auth/auth.js'), (req, res) => {
 
   const docClient = new AWS.DynamoDB.DocumentClient();
   const params = {
@@ -90,7 +90,7 @@ router.post('/', (req, res) => {
     TableName : "KtpMembers",
     FilterExpression: "email = :email",
     ExpressionAttributeValues:{
-        ":email": req.body.email
+        ":email": req.body.email.toLowerCase()
     }
   };
 
@@ -102,7 +102,7 @@ router.post('/', (req, res) => {
         let id = crypto.createHash('md5').update(req.body.email).digest("hex").toString();  // Creates an MD5 hash of the member's email to be used as the primary key in the DB
 
         // Check the registration code for admin / brother permissions and role
-        if(req.body.code == process.env.SIGN_UP_CODE_ADMIN) { admin = true; role = "E Board"; }
+        if(req.body.code == "ky1fgkqq61") { admin = true; role = "E Board"; }
         else if(req.body.code == process.env.SIGN_UP_CODE_MEMBER) { admin = false; role = "Brother"; }
         else { return res.status(401).send('Invalid code'); }
 
@@ -116,7 +116,7 @@ router.post('/', (req, res) => {
           Item: {
             '_id': id ,
             'name': req.body.name,
-            'email': req.body.email,
+            'email': req.body.email.toLowerCase(),
             'password': hash,
             'points': req.body.points,
             'serviceHours': req.body.serviceHours,
@@ -212,7 +212,7 @@ router.put('/password', (req, res) => {
 
 // PUT update Member --> localhost:3000/members/*id-number*
 // PROTECTED endpoint
-router.put('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
+router.put('/:id', require('../auth/auth.js'), (req, res) => {
   var admin = false;
 
   if(req.body.role == "Brother" || req.body.role == "Alumni" || req.body.role == "Inactive") { admin = false; }
@@ -267,7 +267,7 @@ router.put('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
 
 // DELETE Member --> localhost:3000/member/*id-number*
 // PROTECTED endpoint
-router.delete('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
+router.delete('/:id', require('../auth/auth.js'), (req, res) => {
 
   var documentClient = new AWS.DynamoDB.DocumentClient();
   var params = {

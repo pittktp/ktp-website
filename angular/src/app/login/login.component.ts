@@ -133,7 +133,7 @@ export class LoginComponent implements OnInit {
 
     this.emailInUse = false;
     this.memberService.postMember(newMember).subscribe((res) => {
-        this.auth.login(newMember.email, newMember.password)
+        this.auth.login(newMember.email.toLowerCase(), newMember.password)
           .pipe(first())
           .subscribe((result) => {
             this.showIncorrectLogin = false;

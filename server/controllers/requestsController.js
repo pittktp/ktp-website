@@ -11,7 +11,7 @@ var { Request } = require('../models/request');
 
 // GET all PointRequests --> localhost:3000/points
 // PROTECTED endpoint
-router.get('/', /*require('../auth/auth.js'),*/ (req, res) => {
+router.get('/', require('../auth/auth.js'), (req, res) => {
 
   // Gets all requests from DB and sends them back as a list called docs
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -32,7 +32,7 @@ router.get('/', /*require('../auth/auth.js'),*/ (req, res) => {
 
 // GET PointRequest by ID --> localhost:3000/points/*id-number*
 // PROTECTED endpoint
-router.get('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
+router.get('/:id', require('../auth/auth.js'), (req, res) => {
 
   var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
@@ -55,7 +55,7 @@ router.get('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
 
 // POST create new PointRequest --> localhost:3000/points/
 // PROTECTED endpoint
-router.post('/', /*require('../auth/auth.js'),*/ (req, res) => {
+router.post('/', require('../auth/auth.js'), (req, res) => {
 
   var docClient = new AWS.DynamoDB.DocumentClient( {
       convertEmptyValues: true,
@@ -92,7 +92,7 @@ router.post('/', /*require('../auth/auth.js'),*/ (req, res) => {
 
 // PUT update PointRequest --> localhost:3000/points/*id-number*
 // PROTECTED endpoint
-router.put('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
+router.put('/:id', require('../auth/auth.js'), (req, res) => {
 
   var docClient = new AWS.DynamoDB.DocumentClient( {
       convertEmptyValues: true,  // Without this, Dynamo doesn't let you have empty strings for properties
@@ -134,7 +134,7 @@ router.put('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
 
 // DELETE PointRequest --> localhost:3000/points/*id-number*
 // PROTECTED endpoint
-router.delete('/:id', /*require('../auth/auth.js'),*/ (req, res) => {
+router.delete('/:id', require('../auth/auth.js'), (req, res) => {
 
   var documentClient = new AWS.DynamoDB.DocumentClient();
   var params = {
