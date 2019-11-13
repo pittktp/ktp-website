@@ -1,0 +1,48 @@
+<header class="background-color:rgba(0,0,0,0.5);">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-login">
+          <div class="panel-heading">
+            <div class="row">
+              <h1>Rush KTP</h1>
+            </div>
+            <hr>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-lg-12">
+                <form id="rush-form" (ngSubmit)="onSubmit(rushForm)" #rushForm="ngForm" style="display: block;" autocomplete="off">
+                  <div class="form-group">
+                    <input type="text" [(ngModel)]="rushForm.name" name="name" id="name" tabindex="1" class="form-control" placeholder="Name" value="" required>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" [(ngModel)]="rushForm.email" name="email" id="email" tabindex="1" class="form-control" placeholder="Pitt Email" value="" required>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" [(ngModel)]="rushForm.year" name="year" id="year" tabindex="1" class="form-control" placeholder="Year" value="" required>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" [(ngModel)]="rushForm.major" name="major" id="major" tabindex="1" class="form-control" placeholder="Major" value="" required>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" [(ngModel)]="rushForm.ref" name="ref" id="ref" tabindex="1" class="form-control" placeholder="Reference" value="" >
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm-6 col-sm-offset-3">
+                        <input type="submit" [disabled]="!rushForm.valid" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Submit">
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</header>

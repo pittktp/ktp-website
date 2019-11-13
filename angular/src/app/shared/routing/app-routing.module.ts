@@ -9,6 +9,7 @@ import { PointsComponent } from '../../points/points.component';
 import { EditMembersComponent } from '../../edit-members/edit-members.component';
 import { MembersComponent } from '../../members/members.component';
 import { NavComponent } from '../../nav/nav.component';
+import { RushFormComponent } from '../../rush-form/rush-form.component';
 import { AuthGuard } from '../auth/auth.guard';
 
 // Class that handles how endpoints should route to their respective components.
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'members', component: MembersComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'rush', component: RushFormComponent },
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ];

@@ -19,6 +19,8 @@ import { AppRoutingModule } from './shared/routing/app-routing.module';
 import { EditMembersComponent } from './edit-members/edit-members.component';
 import { MembersComponent } from './members/members.component';
 import { ProfileComponent } from './profile/profile.component';
+import { RushFormComponent } from './rush-form/rush-form.component';
+
 
 
 export function tokenGetter() {
@@ -34,7 +36,8 @@ export function tokenGetter() {
     NavComponent,
     EditMembersComponent,
     MembersComponent,
-    ProfileComponent
+    ProfileComponent,
+    RushFormComponent
   ],
   imports: [
     CommonModule,
